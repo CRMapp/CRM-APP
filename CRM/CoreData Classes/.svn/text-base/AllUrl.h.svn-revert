@@ -1,0 +1,22 @@
+//
+//  AllUrl.h
+//  CRM
+//
+//  Created by Sheetal's iMac on 16/05/13.
+//  Copyright (c) 2013 Sheetal's iMac. All rights reserved.
+//
+
+#import <Foundation/Foundation.h>
+#import <CoreData/CoreData.h>
+
+@class MyAddressBook;
+
+@interface AllUrl : NSManagedObject
+
+@property (nonatomic, retain) NSString * homePage;
+@property (nonatomic, retain) NSString * workUrl;
+@property (nonatomic, retain) NSString * homeUrl;
+@property (nonatomic, retain) NSString * other;
+@property (nonatomic, retain) MyAddressBook *relMyAddressBook;
+
+@end

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>9D78E20F-1A93-4A7F-BD44-26A495F956A9</string>
+	<key>IDESourceControlProjectName</key>
+	<string>CRM</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>123EBED9-A48B-4546-84B5-1B43CC639C9A</key>
+		<string>https://github.com/CRMapp/CRM-APP.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>CRM.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>123EBED9-A48B-4546-84B5-1B43CC639C9A</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/CRMapp/CRM-APP.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>123EBED9-A48B-4546-84B5-1B43CC639C9A</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>123EBED9-A48B-4546-84B5-1B43CC639C9A</string>
+			<key>IDESourceControlWCCName</key>
+			<string>CRM-APP</string>
+		</dict>
+	</array>
+</dict>
+</plist>

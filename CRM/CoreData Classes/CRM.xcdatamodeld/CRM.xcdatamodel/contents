@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="3401" systemVersion="12F45" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="AllAddress" representedClassName="AllAddress" syncable="YES">
+        <attribute name="addressType" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="city" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="countryCode" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="latitude" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="longitude" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="personName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="state" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="street" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="zipCode" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="relMyAddressBook" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="MyAddressBook" inverseName="relAllAddress" inverseEntity="MyAddressBook" syncable="YES"/>
+    </entity>
+    <entity name="AllDate" representedClassName="AllDate" syncable="YES">
+        <attribute name="dates" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="dateTitle" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="relMyAddressBook" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="MyAddressBook" inverseName="relAllDates" inverseEntity="MyAddressBook" syncable="YES"/>
+    </entity>
+    <entity name="AllEmail" representedClassName="AllEmail" syncable="YES">
+        <attribute name="emailTitle" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="emailURL" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="isSelected" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <relationship name="relMyAddressBook" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="MyAddressBook" inverseName="relEmails" inverseEntity="MyAddressBook" syncable="YES"/>
+    </entity>
+    <entity name="AllPhone" representedClassName="AllPhone" syncable="YES">
+        <attribute name="phoneNumber" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="phoneTitle" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="relMyAddressBook" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="MyAddressBook" inverseName="relAllPhone" inverseEntity="MyAddressBook" syncable="YES"/>
+    </entity>
+    <entity name="AllRelatedName" representedClassName="AllRelatedName" syncable="YES">
+        <attribute name="nameTitle" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="relatedNames" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="relMyAddressBook" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="MyAddressBook" inverseName="relAllRelatedNames" inverseEntity="MyAddressBook" syncable="YES"/>
+    </entity>
+    <entity name="AllSms" representedClassName="AllSms" syncable="YES">
+        <attribute name="sms" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="relMyAddressBook" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="MyAddressBook" inverseName="relAllSms" inverseEntity="MyAddressBook" syncable="YES"/>
+    </entity>
+    <entity name="AllUrl" representedClassName="AllUrl" syncable="YES">
+        <attribute name="urlAddress" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="urlTitle" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="relMyAddressBook" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="MyAddressBook" inverseName="relAllUrl" inverseEntity="MyAddressBook" syncable="YES"/>
+    </entity>
+    <entity name="AppointmentList" representedClassName="AppointmentList" syncable="YES">
+        <attribute name="canShowInDashBoard" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="date" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="desc" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="note" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="timeStamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="relMyAddressBook" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="MyAddressBook" inverseName="relAppointment" inverseEntity="MyAddressBook" syncable="YES"/>
+    </entity>
+    <entity name="CountryNCodeList" representedClassName="CountryNCodeList" syncable="YES">
+        <attribute name="countryCode" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="countryName" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="EmailList" representedClassName="EmailList" syncable="YES">
+        <attribute name="date" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="desc" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="emailId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="emailTitle" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="timeStamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <relationship name="relMyAddressBook" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="MyAddressBook" inverseName="relEmailList" inverseEntity="MyAddressBook" syncable="YES"/>
+    </entity>
+    <entity name="FollowUpdate" representedClassName="FollowUpdate" syncable="YES">
+        <attribute name="canShowInDashBoard" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="followDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="followDesc" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="followTitle" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="followType" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="timeStamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <relationship name="relMyAddressBook" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="MyAddressBook" inverseName="relFollowUpdate" inverseEntity="MyAddressBook" syncable="YES"/>
+        <relationship name="relReminderList" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="ReminderList" inverseName="relFollowUpdate" inverseEntity="ReminderList" syncable="YES"/>
+    </entity>
+    <entity name="FunnelStageList" representedClassName="FunnelStageList" syncable="YES">
+        <attribute name="stageID" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="stageName" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="GoogleCategory" syncable="YES">
+        <attribute name="categoryName" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="GroupList" representedClassName="GroupList" syncable="YES">
+        <attribute name="groupDesc" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="groupName" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="relGroupMember" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="GroupMemberList" inverseName="relGroupList" inverseEntity="GroupMemberList" syncable="YES"/>
+        <relationship name="relSubGroup" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="SubGroupList" inverseName="relGroupList" inverseEntity="SubGroupList" syncable="YES"/>
+    </entity>
+    <entity name="GroupMemberList" representedClassName="GroupMemberList" syncable="YES">
+        <attribute name="memberCompany" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="memberName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="memberTitle" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="memRecordID" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="relGroupList" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="GroupList" inverseName="relGroupMember" inverseEntity="GroupList" syncable="YES"/>
+        <relationship name="relSubGroup" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="SubGroupList" inverseName="relGroupMember" inverseEntity="SubGroupList" syncable="YES"/>
+    </entity>
+    <entity name="ImageData" syncable="YES">
+        <attribute name="image_Data" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="image_Path" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="Industries" representedClassName="Industries" syncable="YES">
+        <attribute name="industryName" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="MyAddressBook" representedClassName="MyAddressBook" syncable="YES">
+        <attribute name="birthDay" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="creationDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="department" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="facebook" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="firstName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="firstNamePh" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="funnelDescription" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="funnelStageID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="gender" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="googlePlus" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="groupName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="image" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="industry" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="industryDescription" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="isViewed" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="jobTitle" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="kind" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="lastActivityDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="lastName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="lastNamePh" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="leadSource" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="leadStatus" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="linkedin" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="middleName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="middleNamePh" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="modificationDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="nickName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="note" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="organisation" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="prefix" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="recordID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="salutation" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="scoring" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="subGroupName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="suffix" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="twitter" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="relAllAddress" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="AllAddress" inverseName="relMyAddressBook" inverseEntity="AllAddress" syncable="YES"/>
+        <relationship name="relAllDates" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="AllDate" inverseName="relMyAddressBook" inverseEntity="AllDate" syncable="YES"/>
+        <relationship name="relAllPhone" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="AllPhone" inverseName="relMyAddressBook" inverseEntity="AllPhone" syncable="YES"/>
+        <relationship name="relAllRelatedNames" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="AllRelatedName" inverseName="relMyAddressBook" inverseEntity="AllRelatedName" syncable="YES"/>
+        <relationship name="relAllSms" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="AllSms" inverseName="relMyAddressBook" inverseEntity="AllSms" syncable="YES"/>
+        <relationship name="relAllUrl" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="AllUrl" inverseName="relMyAddressBook" inverseEntity="AllUrl" syncable="YES"/>
+        <relationship name="relAppointment" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="AppointmentList" inverseName="relMyAddressBook" inverseEntity="AppointmentList" syncable="YES"/>
+        <relationship name="relEmailList" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="EmailList" inverseName="relMyAddressBook" inverseEntity="EmailList" syncable="YES"/>
+        <relationship name="relEmails" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="AllEmail" inverseName="relMyAddressBook" inverseEntity="AllEmail" syncable="YES"/>
+        <relationship name="relFollowUpdate" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="FollowUpdate" inverseName="relMyAddressBook" inverseEntity="FollowUpdate" syncable="YES"/>
+        <relationship name="relNotes" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="NotesList" inverseName="relMyAddressBook" inverseEntity="NotesList" syncable="YES"/>
+        <relationship name="relProposal" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ProposalList" inverseName="relMyAddressBook" inverseEntity="ProposalList" syncable="YES"/>
+        <relationship name="relReminder" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ReminderList" inverseName="relMyAddressBook" inverseEntity="ReminderList" syncable="YES"/>
+        <relationship name="relTask" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="TaskList" inverseName="relMyAddressBook" inverseEntity="TaskList" syncable="YES"/>
+    </entity>
+    <entity name="NotesList" representedClassName="NotesList" syncable="YES">
+        <attribute name="canShowInDashBoard" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="noteDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="noteDesc" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="timeStamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <relationship name="relMyAddressBook" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="MyAddressBook" inverseName="relNotes" inverseEntity="MyAddressBook" syncable="YES"/>
+    </entity>
+    <entity name="ProductList" representedClassName="ProductList" syncable="YES">
+        <attribute name="currency" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="price" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="productCode" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="productDesc" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="productName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="quantity" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+    </entity>
+    <entity name="ProposalList" representedClassName="ProposalList" syncable="YES">
+        <attribute name="canShowInDashBoard" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="funnelStage" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="note" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="productQuantities" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="proposalDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="proposalNumber" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="proposalPrice" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="proposalProducts" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="proposalTargetDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="timeStamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <relationship name="relMyAddressBook" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="MyAddressBook" inverseName="relProposal" inverseEntity="MyAddressBook" syncable="YES"/>
+    </entity>
+    <entity name="ReminderList" representedClassName="ReminderList" syncable="YES">
+        <attribute name="canShowInDashBoard" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="note" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="remDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="remDesc" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="remFollowUpBy" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="remLocation" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="remTitle" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="remUniqueID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="timeStamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <relationship name="relFollowUpdate" optional="YES" minCount="1" maxCount="1" deletionRule="Cascade" destinationEntity="FollowUpdate" inverseName="relReminderList" inverseEntity="FollowUpdate" syncable="YES"/>
+        <relationship name="relMyAddressBook" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="MyAddressBook" inverseName="relReminder" inverseEntity="MyAddressBook" syncable="YES"/>
+    </entity>
+    <entity name="SaleGoal" representedClassName="SaleGoal" syncable="YES">
+        <attribute name="saleDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="saleEndDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="target" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="termPeriod" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="timePeriod" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="ScriptList" representedClassName="ScriptList" syncable="YES">
+        <attribute name="script_date" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="script_Description" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="scriptName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="scriptText" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="SubGroupList" representedClassName="SubGroupList" syncable="YES">
+        <attribute name="subGroupDesc" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="subGroupName" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="relGroupList" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="GroupList" inverseName="relSubGroup" inverseEntity="GroupList" syncable="YES"/>
+        <relationship name="relGroupMember" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="GroupMemberList" inverseName="relSubGroup" inverseEntity="GroupMemberList" syncable="YES"/>
+    </entity>
+    <entity name="TaskList" representedClassName="TaskList" syncable="YES">
+        <attribute name="canShowInDashBoard" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="dueDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="note" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="taskDesc" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="taskName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="taskStatus" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="timeStamp" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <relationship name="relMyAddressBook" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="MyAddressBook" inverseName="relTask" inverseEntity="MyAddressBook" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="AllAddress" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="AllDate" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="AllEmail" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="AllPhone" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="AllRelatedName" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="AllSms" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="AllUrl" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="AppointmentList" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="CountryNCodeList" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="EmailList" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="FollowUpdate" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="FunnelStageList" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="GoogleCategory" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="GroupList" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="GroupMemberList" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="ImageData" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="Industries" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="MyAddressBook" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="NotesList" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="ProductList" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="ProposalList" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="ReminderList" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="SaleGoal" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="ScriptList" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="SubGroupList" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="TaskList" positionX="0" positionY="0" width="0" height="0"/>
+    </elements>
+</model>

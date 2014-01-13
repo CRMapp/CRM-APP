@@ -1,0 +1,938 @@
+ //
+//  AddressBook.m
+//  CRM
+//
+//  Created by Sheetal's iMac on 18/02/13.
+//  Copyright (c) 2013 Sheetal's iMac. All rights reserved.
+//
+
+#import "AddressBook.h"
+
+#import "ABContact.h"
+#import "MyAddressBook.h"
+//#import "AppDelegate.h"
+#import "AllEmail.h"
+#import "AllPhone.h"
+#import "AllAddress.h"
+#import "AllDate.h"
+#import "AllUrl.h"
+#import "AllRelatedName.h"
+@implementation AddressBook
+{
+    
+}
+#pragma mark - Methods to fetch address book
++ (NSMutableArray*)arrayOfAddressBook
+{
+    return [NSMutableArray arrayWithArray:[self collectContacts]];
+}
++ (NSMutableArray*)collectContacts
+{
+    NSMutableArray *myAddressBook = [NSMutableArray array];
+    
+    ABAddressBookRef addressBook = ABAddressBookCreate();
+    __block BOOL accessGranted = NO;
+    if ([[[UIDevice currentDevice]systemVersion] integerValue] >=6)
+    {
+    
+        if (ABAddressBookRequestAccessWithCompletion != NULL)
+        { // we're on iOS 6
+            dispatch_semaphore_t sema = dispatch_semaphore_create(0);
+            ABAddressBookRequestAccessWithCompletion(addressBook, ^(bool granted, CFErrorRef error) {
+                accessGranted = granted;
+                dispatch_semaphore_signal(sema);
+            });
+            dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
+            dispatch_release(sema);
+        }
+    }
+    else
+    { // we're on iOS 5 or older
+        accessGranted = YES;
+    }
+    
+    if (accessGranted)
+    {
+
+        CFArrayRef people  = ABAddressBookCopyArrayOfAllPeople(addressBook);
+        
+        for(int i = 0;i<ABAddressBookGetPersonCount(addressBook);i++)
+        {
+            ABRecordRef ref = CFArrayGetValueAtIndex(people, i);
+            
+            [myAddressBook addObject:[self getDetailOfContact:ref]];
+        }
+        
+        CFRelease(people);
+        CFRelease(addressBook);
+        NSLog(@"%@",myAddressBook);
+    }
+    else
+    {
+        UIAlertView *contactAlert = [[UIAlertView alloc]initWithTitle:@"Alert" message:@"Allow CRM to access contacts from contact settings." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:@"", nil];
+        [contactAlert show];
+        [contactAlert release];
+    }
+    
+    return myAddressBook;
+    //    [self createCSV:myAddressBook];
+}
++ (NSMutableArray*)collectContactsWithoutSave
+{
+    NSMutableArray *myAddressBook = [NSMutableArray array];
+    
+    ABAddressBookRef addressBook = ABAddressBookCreate();
+    __block BOOL accessGranted = NO;
+    if ([[[UIDevice currentDevice]systemVersion] integerValue] >=6)
+    {
+        
+        if (ABAddressBookRequestAccessWithCompletion != NULL)
+        { // we're on iOS 6
+            dispatch_semaphore_t sema = dispatch_semaphore_create(0);
+            ABAddressBookRequestAccessWithCompletion(addressBook, ^(bool granted, CFErrorRef error) {
+                accessGranted = granted;
+                dispatch_semaphore_signal(sema);
+            });
+            dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
+            dispatch_release(sema);
+        }
+    }
+    else
+    { // we're on iOS 5 or older
+        accessGranted = YES;
+    }
+    
+    if (accessGranted)
+    {
+        
+        CFArrayRef people  = ABAddressBookCopyArrayOfAllPeople(addressBook);
+        
+        for(int i = 0;i<ABAddressBookGetPersonCount(addressBook);i++)
+        {
+            ABRecordRef ref = CFArrayGetValueAtIndex(people, i);
+            ABContact *aContact = [ABContact contactWithRecord:ref];
+            
+            NSDictionary *aPerson = [aContact dictionaryRepresentation];
+            [myAddressBook addObject:aPerson];
+        }
+        
+        CFRelease(people);
+        CFRelease(addressBook);
+        NSLog(@"%@",myAddressBook);
+    }
+    
+    return myAddressBook;
+
+}
++(NSDictionary*)getDetailOfContact:(ABRecordRef)ref
+{
+    ABContact *aContact = [ABContact contactWithRecord:ref];
+    
+    NSDictionary *aPerson = [aContact dictionaryRepresentation];
+    
+    NSLog(@"%@",aPerson);
+    
+    [self saveMyAddressBook:aPerson];
+    
+    return aPerson;
+}
+
++ (void)saveMyAddressBook:(NSDictionary*)aDict
+{
+    AppDelegate *aDelegate = (AppDelegate*)[UIApplication sharedApplication].delegate;
+    
+    if ([[aDict objectForKey:FIRST_NAME_STRING] rangeOfString:@"Albert-John" options:NSCaseInsensitiveSearch].length)
+    {
+        NSLog(@"%@",aDict);
+    }
+    
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"recordID == %@",[aDict objectForKey:RECORD_ID_STRING]];
+    
+    NSArray *previousEntry = [CoreDataHelper searchObjectsForEntity:@"MyAddressBook" withPredicate:predicate andSortKey:@"firstName" andSortAscending:YES andContext:aDelegate.managedObjectContext];
+    
+    MyAddressBook *aBook = nil;
+    if ([previousEntry count] == 0)
+    {        
+        aBook = (MyAddressBook *)[NSEntityDescription insertNewObjectForEntityForName:@"MyAddressBook" inManagedObjectContext:aDelegate.managedObjectContext];
+        
+        if ([aDict objectForKey:IMAGE_STRING])
+        {
+            [aBook setImage:[aDict objectForKey:IMAGE_STRING]];
+        }
+    }
+    else
+    {
+        aBook = (MyAddressBook *)[previousEntry lastObject];
+        if (aBook.image.length)
+        {
+            NSError *error;
+            NSFileManager *localFileManager	=	[[NSFileManager alloc] init];
+            BOOL isRemove = [localFileManager removeItemAtPath: aBook.image error:&error ];
+            [localFileManager release];
+            
+            if (isRemove)
+            {
+                NSLog(@"Image removed at path = %@",aBook.image);
+            }
+        }
+        if ([aDict objectForKey:IMAGE_STRING])
+        {
+            [aBook setImage:[aDict objectForKey:IMAGE_STRING]];
+        }
+    }
+    if ([aDict objectForKey:RECORD_ID_STRING] && [previousEntry count] == 0)
+    {
+        NSLog(@"%d",[[aDict objectForKey:RECORD_ID_STRING] integerValue]);
+//            [NSNumber numberWithInt:[[aDict objectForKey:RECORD_ID_STRING] intValue]];
+        [aBook setRecordID:[aDict objectForKey:RECORD_ID_STRING]];
+    }
+    
+    if ([aDict objectForKey:FIRST_NAME_STRING] && [previousEntry count] == 0)
+    {
+        if ([@"Shiv" isEqualToString:[aDict objectForKey:FIRST_NAME_STRING]])
+        {
+            NSLog(@"matched");
+        }
+        [aBook setFirstName:[aDict objectForKey:FIRST_NAME_STRING]];
+        
+    }
+    else
+    {
+        if([aDict objectForKey:FIRST_NAME_STRING])
+            [aBook setFirstName:[aDict objectForKey:FIRST_NAME_STRING]];
+    }
+    
+    if ([aDict objectForKey:MIDDLE_NAME_STRING] && [previousEntry count] == 0)
+    {
+        [aBook setMiddleName:[aDict objectForKey:MIDDLE_NAME_STRING]];
+    }
+    else
+    {
+        if([aDict objectForKey:MIDDLE_NAME_STRING])
+            [aBook setMiddleName:[aDict objectForKey:MIDDLE_NAME_STRING]];
+    }
+    
+    if ([aDict objectForKey:LAST_NAME_STRING] && [previousEntry count] == 0)
+    {
+        [aBook setLastName:[aDict objectForKey:LAST_NAME_STRING]];
+        
+    }
+    else
+    {
+        if ([aDict objectForKey:LAST_NAME_STRING])
+            [aBook setLastName:[aDict objectForKey:LAST_NAME_STRING]];
+    }
+    
+    if ([aDict objectForKey:NICKNAME_STRING] && [previousEntry count] == 0)
+    {
+        [aBook setNickName:[aDict objectForKey:NICKNAME_STRING]];
+    }
+    else
+    {
+        [aBook setNickName:[aDict objectForKey:NICKNAME_STRING]];
+    }
+    
+    if ([aDict objectForKey:PHONETIC_FIRST_STRING] && [previousEntry count] == 0)
+    {
+        [aBook setFirstNamePh:[aDict objectForKey:PHONETIC_FIRST_STRING]];
+    }
+    else
+    {
+        [aBook setFirstNamePh:[aDict objectForKey:PHONETIC_FIRST_STRING]];
+    }
+    
+    if ([aDict objectForKey:PHONETIC_MIDDLE_STRING] && [previousEntry count] == 0)
+    {
+        [aBook setMiddleNamePh:[aDict objectForKey:PHONETIC_MIDDLE_STRING]];
+    }
+    else
+    {
+        [aBook setMiddleNamePh:[aDict objectForKey:PHONETIC_MIDDLE_STRING]];
+    }
+    if ([aDict objectForKey:PHONETIC_LAST_STRING] && [previousEntry count] == 0)
+    {
+        [aBook setLastNamePh:[aDict objectForKey:PHONETIC_LAST_STRING]];
+    }
+    else
+    {
+        [aBook setLastNamePh:[aDict objectForKey:PHONETIC_LAST_STRING]];
+    }
+    
+    if ([aDict objectForKey:GENDER_STRING] && [previousEntry count] == 0)
+    {
+        [aBook setGender:[aDict objectForKey:GENDER_STRING]];
+    }
+    else
+    {
+        [aBook setGender:[aDict objectForKey:GENDER_STRING]];
+    }
+    
+    if ([aDict objectForKey:INDUSTRY_DESCRIPTION_STRING])
+    {
+        [aBook setIndustryDescription:[aDict objectForKey:INDUSTRY_DESCRIPTION_STRING]];
+    }
+    if ([aDict objectForKey:INDUSTRY_STRING])
+    {
+        [aBook setIndustry:[aDict objectForKey:INDUSTRY_STRING]];
+    }
+    if ([aDict objectForKey:FUNNEL_DESCRIPTION_STRING])
+    {
+        [aBook setFunnelDescription:[aDict objectForKey:FUNNEL_DESCRIPTION_STRING]];
+    }
+    if ([aDict objectForKey:ORGANIZATION_STRING] && [previousEntry count] == 0)
+    {
+        [aBook setOrganisation:[aDict objectForKey:ORGANIZATION_STRING]];
+    }
+    else
+    {
+        [aBook setOrganisation:[aDict objectForKey:ORGANIZATION_STRING]];
+    }
+    if ([aDict objectForKey:JOBTITLE_STRING] && [previousEntry count] == 0)
+    {
+        [aBook setJobTitle:[aDict objectForKey:JOBTITLE_STRING]];
+    }
+    else
+    {
+        [aBook setJobTitle:[aDict objectForKey:JOBTITLE_STRING]];
+    }
+    if ([aDict objectForKey:DEPARTMENT_STRING] && [previousEntry count] == 0)
+    {
+        [aBook setDepartment:[aDict objectForKey:DEPARTMENT_STRING]];
+    }
+    else
+    {
+        [aBook setDepartment:[aDict objectForKey:DEPARTMENT_STRING]];
+    }
+    if ([aDict objectForKey:NOTE_STRING] && [previousEntry count] == 0)
+    {
+        [aBook setNote:[aDict objectForKey:NOTE_STRING]];
+    }
+    else
+    {
+        [aBook setNote:[aDict objectForKey:NOTE_STRING]];
+    }
+    if ([aDict objectForKey:FUNNEL_STAGE_STRING])
+    {
+        [aBook setFunnelStageID:[[NSNumber numberWithInt:[aDict objectForKey:FUNNEL_STAGE_STRING]] integerValue]];
+    }
+    if ([aDict objectForKey:GROUP_STRING])
+    {
+        [aBook setGroupName:[aDict objectForKey:GROUP_STRING]];
+    }
+    if ([aDict objectForKey:SUB_GROUP_STRING])
+    {
+        [aBook setSubGroupName:[aDict objectForKey:SUB_GROUP_STRING]];
+    }
+    if ([aDict objectForKey:BIRTHDAY_STRING] && [previousEntry count] == 0)
+    {
+        [aBook setBirthDay:[aDict objectForKey:BIRTHDAY_STRING]];
+    }
+    else
+    {
+        [aBook setBirthDay:[aDict objectForKey:BIRTHDAY_STRING]];
+    }
+    if ([aDict objectForKey:CREATION_DATE_STRING] && [previousEntry count] == 0)
+    {
+        [aBook setCreationDate:[aDict objectForKey:CREATION_DATE_STRING]];
+    }
+    else
+    {
+        [aBook setCreationDate:[aDict objectForKey:CREATION_DATE_STRING]];
+    }
+    if ([aDict objectForKey:MODIFICATION_DATE_STRING] && [previousEntry count] == 0)
+    {
+        [aBook setModificationDate:[aDict objectForKey:MODIFICATION_DATE_STRING]];
+    }
+    if ([aDict objectForKey:KIND_STRING] && [previousEntry count] == 0)
+    {
+        [aBook setKind:[aDict objectForKey:KIND_STRING]];
+    }
+    else
+    {
+        [aBook setKind:[aDict objectForKey:KIND_STRING]];
+    }
+    if ([aDict objectForKey:LEAD_SOURCE_STRING])
+    {
+        [aBook setLeadSource:[aDict objectForKey:LEAD_SOURCE_STRING]];
+    }
+    if ([aDict objectForKey:LEAD_STATUS_STRING])
+    {
+        [aBook setLeadStatus:[aDict objectForKey:LEAD_STATUS_STRING]];
+    }
+    
+    /*****************Social Links starts*****************/
+    if ([aDict objectForKey:SOCIAL_FACEBOOK] && [previousEntry count] == 0)
+    {
+        [aBook setFacebook:[aDict objectForKey:SOCIAL_FACEBOOK]];
+    }
+    else
+    {
+        [aBook setFacebook:[aDict objectForKey:SOCIAL_FACEBOOK]];
+    }
+    if ([aDict objectForKey:SOCIAL_LINKEDIN] && [previousEntry count] == 0)
+    {
+        [aBook setLinkedin:[aDict objectForKey:SOCIAL_LINKEDIN]];
+    }
+    else
+    {
+        [aBook setLinkedin:[aDict objectForKey:SOCIAL_LINKEDIN]];
+    }
+    if ([aDict objectForKey:SOCIAL_TWITTER] && [previousEntry count] == 0)
+    {
+        [aBook setTwitter:[aDict objectForKey:SOCIAL_TWITTER]];
+    }
+    else
+    {
+        [aBook setTwitter:[aDict objectForKey:SOCIAL_TWITTER]];
+    }
+    if ([aDict objectForKey:SOCIAL_GOOGLE_PLUS] && [previousEntry count] == 0)
+    {
+        [aBook setGooglePlus:[aDict objectForKey:SOCIAL_GOOGLE_PLUS]];
+    }
+    else
+    {
+        [aBook setGooglePlus:[aDict objectForKey:SOCIAL_GOOGLE_PLUS]];
+    }
+    /*****************Social Links ends*****************/
+    if ([aDict objectForKey:PREFIX_STRING] && [previousEntry count] == 0)
+    {
+        [aBook setPrefix:[aDict objectForKey:PREFIX_STRING]];
+    }
+    else
+    {
+        [aBook setPrefix:[aDict objectForKey:PREFIX_STRING]];
+    }
+    if ([aDict objectForKey:SUFFIX_STRING] && [previousEntry count] == 0)
+    {
+        [aBook setSuffix:[aDict objectForKey:SUFFIX_STRING]];
+    }
+    else
+    {
+        [aBook setSuffix:[aDict objectForKey:SUFFIX_STRING]];
+    }
+    
+    if ([aDict objectForKey:SALUTATION_STRING])
+    {
+        [aBook setSalutation:[aDict objectForKey:SALUTATION_STRING]];
+    }
+    else
+    {
+        [aBook setSalutation:@"Dear"];
+    }
+    
+    [[aDelegate managedObjectContext] save:nil];
+   
+    
+    
+    if ([aDict objectForKey:PHONE_STRING])
+    {
+        NSArray *arrPhones = [NSArray arrayWithArray:[aDict objectForKey:PHONE_STRING]];
+        NSArray *phoneslist = [[aBook relAllPhone] allObjects];
+        for (AllPhone *phones in phoneslist)
+        {
+            [[((AppDelegate*)CRM_AppDelegate) managedObjectContext] deleteObject:phones];
+        }
+        for (NSDictionary *aPhoneDict in arrPhones)
+        {
+            if ([previousEntry count] == 0)  //add new numbers
+            {
+                [AddressBook addNewPhone:aPhoneDict person:aBook];
+            }
+            else //update numbers
+            {
+                [AddressBook UpdatePhones:aPhoneDict person:aBook];
+            }
+            
+        }
+
+    }
+    
+    if ([aDict objectForKey:EMAIL_STRING])
+    {
+        NSArray *arrPhones = [NSArray arrayWithArray:[aDict objectForKey:EMAIL_STRING]];
+        NSArray *emailslist = [[aBook relEmails] allObjects];
+        for (AllEmail *emails in emailslist)
+        {
+            [[((AppDelegate*)CRM_AppDelegate) managedObjectContext] deleteObject:emails];
+        }
+        for (NSDictionary *aEmailDict in arrPhones)
+        {
+            if ([previousEntry count] == 0)  //add new emails
+            {
+                [AddressBook addNewEmail:aEmailDict person:aBook];
+            }
+            else
+            {
+                [AddressBook UpdateEmails:aEmailDict person:aBook];
+            }
+        }
+       
+    }
+    if ([aDict objectForKey:URL_STRING])
+    {
+        NSArray *arrPhones = [NSArray arrayWithArray:[aDict objectForKey:URL_STRING]];
+        NSArray *urlslist = [[aBook relAllUrl] allObjects];
+        for (AllUrl *aUrl in urlslist)
+        {
+            [[((AppDelegate*)CRM_AppDelegate) managedObjectContext] deleteObject:aUrl];
+        }
+        for (NSDictionary *aEmailDict in arrPhones)
+        {
+            
+            if ([previousEntry count] == 0)
+            {
+                [AddressBook addNewUrl:aEmailDict person:aBook];
+            }
+            else
+            {
+                [AddressBook UpdateUrls:aEmailDict person:aBook];
+            }
+        }
+        
+    }
+    if ([aDict objectForKey:DATE_STRING])
+    {
+        NSArray *arrPhones = [NSArray arrayWithArray:[aDict objectForKey:DATE_STRING]];
+        
+        NSArray *dateList = [[aBook relAllDates] allObjects];
+        for (AllDate *aDate in dateList)
+        {
+            [[((AppDelegate*)CRM_AppDelegate) managedObjectContext] deleteObject:aDate];
+        }
+        for (NSDictionary *aEmailDict in arrPhones)
+        {
+            if ([previousEntry count] == 0)
+            {
+                [AddressBook addNewDate:aEmailDict person:aBook];
+            }
+            else
+            {
+                [AddressBook UpdateDates:aEmailDict person:aBook];
+            }
+            
+        }
+        
+    }
+    if ([aDict objectForKey:RELATED_STRING])
+    {
+        NSArray *arrPhones = [NSArray arrayWithArray:[aDict objectForKey:RELATED_STRING]];
+        NSArray *relatedList = [[aBook relAllRelatedNames] allObjects];
+        
+        for (AllRelatedName *relNames in relatedList)
+        {
+            [[((AppDelegate*)CRM_AppDelegate) managedObjectContext] deleteObject:relNames];
+        }
+        for (NSDictionary *aEmailDict in arrPhones)
+        {
+            if ([previousEntry count] == 0)
+            {
+                [AddressBook addNewRelatedname:aEmailDict person:aBook];
+            }
+            else
+            {
+                [AddressBook UpdateRelatednames:aEmailDict person:aBook];
+            }
+            
+        }
+    }
+    
+    if ([aDict objectForKey:ADDRESS_STRING])
+    {
+        NSArray *arrPhones = [NSArray arrayWithArray:[aDict objectForKey:ADDRESS_STRING]];
+        
+        NSArray *allAddresses = [[aBook relAllAddress] allObjects];
+        for (AllAddress *allAddress in allAddresses)
+        {
+            [[((AppDelegate*)CRM_AppDelegate) managedObjectContext] deleteObject:allAddress];
+        }
+        for (NSDictionary *aAddDict in arrPhones)
+        {
+            if ([previousEntry count] == 0)
+            {
+                [AddressBook addNewAddress:aAddDict person:aBook];
+            }
+            else
+            {
+                [AddressBook UpdateAddresses:aAddDict person:aBook];
+            }
+            
+        }
+        
+    }
+}
+- (void)removeImageAtPAth:(NSString*)fullPath
+{
+    NSError *error;
+    NSFileManager *localFileManager	=	[[NSFileManager alloc] init];
+    BOOL isRemove = [localFileManager removeItemAtPath: fullPath error:&error ];
+    [localFileManager release];
+    
+    if (isRemove)
+    {
+        NSLog(@"Image removed at path = %@",fullPath);
+    }
+
+}
++ (void)updateAppDatabaseFromiPad
+{
+    ABAddressBookRef addressBook = ABAddressBookCreate();
+    __block BOOL accessGranted = NO;
+    if ([[[UIDevice currentDevice]systemVersion] integerValue] >=6)
+    {
+        
+        if (ABAddressBookRequestAccessWithCompletion != NULL)
+        { // we're on iOS 6
+            dispatch_semaphore_t sema = dispatch_semaphore_create(0);
+            ABAddressBookRequestAccessWithCompletion(addressBook, ^(bool granted, CFErrorRef error) {
+                accessGranted = granted;
+                dispatch_semaphore_signal(sema);
+            });
+            dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
+            dispatch_release(sema);
+        }
+    }
+    else
+    { // we're on iOS 5 or older
+        accessGranted = YES;
+    }
+    
+    if (accessGranted)
+    {
+        
+        CFArrayRef people  = ABAddressBookCopyArrayOfAllPeople(addressBook);
+        CFIndex count = ABAddressBookGetPersonCount(addressBook);
+        NSLog(@"%ld",count);
+        for(int i = 0; i < count; i++)
+        {
+            ABRecordRef ref = CFArrayGetValueAtIndex(people, i);
+            CFTypeRef address = ABRecordCopyValue(ref, kABPersonAddressProperty);
+            ABContact *aContact = [ABContact contactWithRecord:ref];
+            
+            NSDictionary *aPerson = [aContact dictionaryRepresentation];
+            NSLog(@"%@",aPerson);
+
+            [self saveMyAddressBook:aPerson];
+        }
+        
+        CFRelease(people);
+        CFRelease(addressBook);
+//        NSLog(@"%@",myAddressBook);
+    }
+}
++(NSString *)getPredicateString:(NSDictionary *)aPerson
+{
+    NSString *predicateString = nil;
+    NSString *firstName = [aPerson objectForKey:FIRST_NAME_STRING];
+    NSString *lastName = [aPerson objectForKey:LAST_NAME_STRING];
+    NSString *middleName = [aPerson objectForKey:MIDDLE_NAME_STRING];
+    
+    if(firstName.length)
+    {
+        predicateString = [NSString stringWithFormat:@"firstName = '%@'",firstName ];
+    }
+    if(lastName.length)
+    {
+        if(predicateString)
+        {
+            predicateString = [predicateString stringByAppendingFormat:@"AND lastName = '%@'",lastName];
+        }
+        else
+            predicateString = [NSString stringWithFormat:@"lastName = '%@'",lastName ];
+    }
+    if(middleName.length)
+    {
+        if(predicateString)
+            predicateString = [predicateString stringByAppendingFormat:@"AND middleName = '%@'",middleName ];
+        else
+             predicateString = [NSString stringWithFormat:@"middleName = '%@'",middleName];
+    }
+    return predicateString;
+}
+#pragma mark - Add and Update Emails
++ (void)addNewEmail:(NSDictionary*)aEmailDict person:(MyAddressBook*)aBook
+{
+    //BOOL isContainsEmail = NO;
+    AllEmail *email = (AllEmail *)[NSEntityDescription insertNewObjectForEntityForName:@"AllEmail" inManagedObjectContext:((AppDelegate*)CRM_AppDelegate).managedObjectContext];
+    
+    [email setEmailURL:[aEmailDict objectForKey:[[aEmailDict allKeys] lastObject]]];
+    [email setEmailTitle:[[aEmailDict allKeys] lastObject]];
+    [email setRelMyAddressBook:aBook];
+    [[((AppDelegate*)CRM_AppDelegate) managedObjectContext] save:nil];
+}
++ (void)UpdateEmails:(NSDictionary*)aEmailDict person:(MyAddressBook*)aBook
+{
+//    NSArray *emailslist = [[aBook relEmails] allObjects];
+//    NSString *aKey  = nil;
+//    aKey            = [[aEmailDict allKeys] objectAtIndex:0];
+//    
+//    for (AllEmail *emails in emailslist)
+//    {
+//        if(emails.homeURL && [aKey isEqualToString:HOME_URL_STRING])
+//        {
+//            [emails setHomeURL:[aEmailDict objectForKey:HOME_URL_STRING]];
+//            [emails setRelMyAddressBook:aBook];
+//            [[((AppDelegate*)CRM_AppDelegate) managedObjectContext] save:nil];
+//            break;
+//        }
+//        if(emails.workURL && [aKey isEqualToString:WORK_URL_STRING])
+//        {
+//            [emails setWorkURL:[aEmailDict objectForKey:WORK_URL_STRING]];
+//            [emails setRelMyAddressBook:aBook];
+//            [[((AppDelegate*)CRM_AppDelegate) managedObjectContext] save:nil];
+//            break;
+//        }
+//        if(emails.other && [aKey isEqualToString:OTHER_STRING])
+//        {
+//            [emails setOther:[aEmailDict objectForKey:OTHER_STRING]];
+//            [emails setRelMyAddressBook:aBook];
+//            [[((AppDelegate*)CRM_AppDelegate) managedObjectContext] save:nil];
+//            break;
+//        }
+//        
+//    }
+//    if ([emailslist count] == 0)
+    {
+        [AddressBook addNewEmail:aEmailDict person:aBook];
+    }
+}
+#pragma mark - Add and Update Phones
++ (void)addNewPhone:(NSDictionary*)aPhoneDict person:(MyAddressBook*)aBook
+{
+    AllPhone *allPhone = (AllPhone *)[NSEntityDescription insertNewObjectForEntityForName:@"AllPhone" inManagedObjectContext:((AppDelegate*)CRM_AppDelegate).managedObjectContext];
+    
+    [allPhone setPhoneNumber:[aPhoneDict objectForKey:[[aPhoneDict allKeys] lastObject]]];
+    [allPhone setPhoneTitle:[[aPhoneDict allKeys] lastObject]];
+    [allPhone setRelMyAddressBook:aBook];
+    [[((AppDelegate*)CRM_AppDelegate) managedObjectContext] save:nil];
+}
++ (void)UpdatePhones:(NSDictionary*)aPhoneDict person:(MyAddressBook*)aBook
+{
+//    NSArray *phoneslist = [[aBook relAllPhone] allObjects];
+//    NSString *aKey  = nil;
+//    aKey            = [[aPhoneDict allKeys] objectAtIndex:0];
+//    for (AllPhone *phones in phoneslist)
+//    {
+//        if(phones.home && [aKey isEqualToString:HOME_NUMBER_STRING])
+//        {
+//            [phones setHome:[aPhoneDict objectForKey:HOME_NUMBER_STRING]];
+//            [phones setRelMyAddressBook:aBook];
+//            [[((AppDelegate*)CRM_AppDelegate) managedObjectContext] save:nil];
+//            break;
+//        }
+//        if(phones.mobile && [aKey isEqualToString:MOBILE_NUMBER_STRING])
+//        {
+//            [phones setMobile:[aPhoneDict objectForKey:MOBILE_NUMBER_STRING]];
+//            [phones setRelMyAddressBook:aBook];
+//            [[((AppDelegate*)CRM_AppDelegate) managedObjectContext] save:nil];
+//            break;
+//        }
+//        if(phones.phone && [aKey isEqualToString:PHONES_NUMBER_STRING])
+//        {
+//            [phones setPhone:[aPhoneDict objectForKey:PHONES_NUMBER_STRING]];
+//            [phones setRelMyAddressBook:aBook];
+//            [[((AppDelegate*)CRM_AppDelegate) managedObjectContext] save:nil];
+//            break;
+//        }
+//        if(phones.workFax && [aKey isEqualToString:FAX_NUMBER_STRING])
+//        {
+//            [phones setWorkFax:[aPhoneDict objectForKey:FAX_NUMBER_STRING]];
+//            [phones setRelMyAddressBook:aBook];
+//            [[((AppDelegate*)CRM_AppDelegate) managedObjectContext] save:nil];
+//            break;
+//        }
+//        if(phones.iPhone && [aKey isEqualToString:IPHONE_NUMBER_STRING])
+//        {
+//            [phones setIPhone:[aPhoneDict objectForKey:IPHONE_NUMBER_STRING]];
+//            [phones setRelMyAddressBook:aBook];
+//            [[((AppDelegate*)CRM_AppDelegate) managedObjectContext] save:nil];
+//            break;
+//        }
+//        if(phones.customHandy && [aKey isEqualToString:HANDY_NUMBER_STRING])
+//        {
+//            [phones setCustomHandy:[aPhoneDict objectForKey:HANDY_NUMBER_STRING]];
+//            [phones setRelMyAddressBook:aBook];
+//            [[((AppDelegate*)CRM_AppDelegate) managedObjectContext] save:nil];
+//            break;
+//        }
+//        if(phones.work && [aKey isEqualToString:WORK_NUMBER_STRING])
+//        {
+//            [phones setWork:[aPhoneDict objectForKey:WORK_NUMBER_STRING]];
+//            [phones setRelMyAddressBook:aBook];
+//            [[((AppDelegate*)CRM_AppDelegate) managedObjectContext] save:nil];
+//            break;
+//        }
+//        
+//    }
+//    if ([phoneslist count] == 0)
+    {
+        [AddressBook addNewPhone:aPhoneDict person:aBook];
+    }
+
+}
+#pragma mark - Add and Update Urls
++ (void)addNewUrl:(NSDictionary*)aEmailDict person:(MyAddressBook*)aBook
+{
+  
+    AllUrl *url = (AllUrl *)[NSEntityDescription insertNewObjectForEntityForName:@"AllUrl" inManagedObjectContext:((AppDelegate*)CRM_AppDelegate).managedObjectContext];
+    [url   setUrlAddress:[aEmailDict objectForKey:[[aEmailDict allKeys] lastObject]]];
+    [url setUrlTitle:[[aEmailDict allKeys] lastObject]];
+    [url setRelMyAddressBook:aBook];
+    [[((AppDelegate*)CRM_AppDelegate) managedObjectContext] save:nil];
+    
+    
+}
++ (void)UpdateUrls:(NSDictionary*)aEmailDict person:(MyAddressBook*)aBook
+{
+//    NSArray *urlslist = [[aBook relAllUrl] allObjects];
+//    NSString *aKey  = nil;
+//    aKey            = [[aEmailDict allKeys] objectAtIndex:0];
+//    
+//    for (AllUrl *aUrl in urlslist)
+//    {
+//        if(aUrl.homePage && [aKey isEqualToString:@"HomePage"])
+//        {
+//            [aUrl setHomePage:[aEmailDict objectForKey:@"HomePage"]];
+//            [aUrl setRelMyAddressBook:aBook];
+//            [[((AppDelegate*)CRM_AppDelegate) managedObjectContext] save:nil];
+//            break;
+//        }
+//        if(aUrl.homeUrl && [aKey isEqualToString:@"Home"])
+//        {
+//            [aUrl setHomeUrl:[aEmailDict objectForKey:@"Home"]];
+//            [aUrl setRelMyAddressBook:aBook];
+//            [[((AppDelegate*)CRM_AppDelegate) managedObjectContext] save:nil];
+//            break;
+//        }
+//        if(aUrl.workUrl && [aKey isEqualToString:@"Work"])
+//        {
+//            [aUrl setWorkUrl:[aEmailDict objectForKey:@"Work"]];
+//            [aUrl setRelMyAddressBook:aBook];
+//            [[((AppDelegate*)CRM_AppDelegate) managedObjectContext] save:nil];
+//            break;
+//        }
+//        if(aUrl.other && [aKey isEqualToString:@"Other"])
+//        {
+//            [aUrl setOther:[aEmailDict objectForKey:@"Other"]];
+//            [aUrl setRelMyAddressBook:aBook];
+//            [[((AppDelegate*)CRM_AppDelegate) managedObjectContext] save:nil];
+//            break;
+//        }
+//        
+//    }
+//    if ([urlslist count] == 0)
+    {
+        [AddressBook addNewUrl:aEmailDict person:aBook];
+    }
+}
+#pragma mark - Add and Update Dates
++ (void)addNewDate:(NSDictionary*)aEmailDict person:(MyAddressBook*)aBook
+{
+    AllDate *aDate = (AllDate *)[NSEntityDescription insertNewObjectForEntityForName:@"AllDate" inManagedObjectContext:((AppDelegate*)CRM_AppDelegate).managedObjectContext];
+    [aDate setDates:[aEmailDict objectForKey:[[aEmailDict allKeys] lastObject]]];
+    [aDate setDateTitle:[[aEmailDict allKeys] lastObject]];
+    
+    [aDate setRelMyAddressBook:aBook];
+    [[((AppDelegate*)CRM_AppDelegate) managedObjectContext] save:nil];
+    
+}
++ (void)UpdateDates:(NSDictionary*)aEmailDict person:(MyAddressBook*)aBook
+{
+//    NSArray *dateList = [[aBook relAllDates] allObjects];
+//    
+//    for (AllDate *aDate in dateList)
+//    {
+//        [aDate setDates:[aEmailDict objectForKey:[[aEmailDict allKeys] lastObject]]];
+//        [aDate setDateTitle:[[aEmailDict allKeys] lastObject]];
+//        
+//        [aDate setRelMyAddressBook:aBook];
+//        [[((AppDelegate*)CRM_AppDelegate) managedObjectContext] save:nil];
+//    }
+//    if ([dateList count] == 0)
+    {
+        [AddressBook addNewDate:aEmailDict person:aBook];
+    }
+}
+#pragma mark - Add and Update Related Names
++ (void)addNewRelatedname:(NSDictionary*)aEmailDict person:(MyAddressBook*)aBook
+{
+    AllRelatedName *relNames = (AllRelatedName *)[NSEntityDescription insertNewObjectForEntityForName:@"AllRelatedName" inManagedObjectContext:((AppDelegate*)CRM_AppDelegate).managedObjectContext];
+    [relNames setRelatedNames:[aEmailDict objectForKey:[[aEmailDict allKeys] lastObject]]];
+    [relNames setNameTitle:[[aEmailDict allKeys] lastObject]];
+    [relNames setRelMyAddressBook:aBook];
+    [[((AppDelegate*)CRM_AppDelegate) managedObjectContext] save:nil];
+    
+}
++ (void)UpdateRelatednames:(NSDictionary*)aEmailDict person:(MyAddressBook*)aBook
+{
+//    NSArray *relatedList = [[aBook relAllRelatedNames] allObjects];
+//    
+//    for (AllRelatedName *relNames in relatedList)
+//    {
+//        [relNames setRelatedNames:[aEmailDict objectForKey:[[aEmailDict allKeys] lastObject]]];
+//        [relNames setNameTitle:[[aEmailDict allKeys] lastObject]];
+//        [relNames setRelMyAddressBook:aBook];
+//        [[((AppDelegate*)CRM_AppDelegate) managedObjectContext] save:nil];
+//    }
+//    if ([relatedList count] == 0)
+    {
+        [AddressBook addNewRelatedname:aEmailDict person:aBook];
+    }
+}
+#pragma mark - Add and Update Addresses
++ (void)addNewAddress:(NSDictionary*)aAddDict person:(MyAddressBook*)aBook
+{
+    AllAddress *allAddress = (AllAddress *)[NSEntityDescription insertNewObjectForEntityForName:@"AllAddress" inManagedObjectContext:((AppDelegate*)CRM_AppDelegate).managedObjectContext];
+    NSString *username = @"";
+    if(aBook.firstName != nil)
+    username = [username stringByAppendingString:aBook.firstName];
+    if(aBook.lastName != nil)
+    username = [username stringByAppendingFormat:@" %@",aBook.lastName];
+    [allAddress setPersonName:  username];
+    [allAddress setCity:            [aAddDict objectForKey:CITY_STRING]];
+    [allAddress setCountryCode:     [aAddDict objectForKey:COUNTRY_STRING]];
+    [allAddress setState:           [aAddDict objectForKey:STATE_STRING]];
+    [allAddress setStreet:          [aAddDict objectForKey:STREET_STRING]];
+    [allAddress setZipCode:         [aAddDict objectForKey:ZIP_STRING]];
+    [allAddress setAddressType:     [aAddDict objectForKey:ADDRESS_TYPE_STRING]];
+    [allAddress setLatitude:        [NSString stringWithFormat:@"%@",[aAddDict objectForKey:LATITUDE_STRING]]];
+    [allAddress setLongitude:       [NSString stringWithFormat:@"%@",[aAddDict objectForKey:LONGITUDE_STRING]]];
+    [allAddress setRelMyAddressBook:aBook];
+    
+    [[((AppDelegate*)CRM_AppDelegate) managedObjectContext] save:nil];
+}
+
++ (void)UpdateAddresses:(NSDictionary*)aAddDict person:(MyAddressBook*)aBook
+{
+//    NSArray *allAddresses = [[aBook relAllAddress] allObjects];
+//    NSString *username = @"";
+//    
+//    username = [username stringByAppendingString:aBook.firstName];
+//    username = [username stringByAppendingFormat:@" %@",aBook.lastName];
+//    
+//    for (AllAddress *allAddress in allAddresses)
+//    {
+//        if ([allAddress.addressType isEqualToString:[aAddDict objectForKey:ADDRESS_TYPE_STRING]])
+//        {
+//            [allAddress setPersonName:  username];
+//            [allAddress setCity:            [aAddDict objectForKey:CITY_STRING]];
+//            [allAddress setCountryCode:     [aAddDict objectForKey:COUNTRY_STRING]];
+//            [allAddress setState:           [aAddDict objectForKey:STATE_STRING]];
+//            [allAddress setStreet:          [aAddDict objectForKey:STREET_STRING]];
+//            [allAddress setZipCode:         [aAddDict objectForKey:ZIP_STRING]];
+//            [allAddress setAddressType:     [aAddDict objectForKey:ADDRESS_TYPE_STRING]];
+//            
+//            [allAddress setLatitude:        [NSString stringWithFormat:@"%@",[aAddDict objectForKey:LATITUDE_STRING]]];
+//            [allAddress setLongitude:       [NSString stringWithFormat:@"%@",[aAddDict objectForKey:LONGITUDE_STRING]]];
+//            [allAddress setRelMyAddressBook:aBook];
+//            
+//            [[((AppDelegate*)CRM_AppDelegate) managedObjectContext] save:nil];
+//            break;
+//        }
+//        
+//    }
+//    if ([allAddresses count] == 0)
+    {
+        [AddressBook addNewAddress:aAddDict person:aBook];
+    }
+}
+@end

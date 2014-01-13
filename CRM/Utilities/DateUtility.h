@@ -1,0 +1,48 @@
+//
+//  DateUtility.h
+//  NameTag
+//
+//  Created by Om Prakash on 28/5/10.
+//  Copyright 2010 . All rights reserved.
+//
+
+#import <Foundation/Foundation.h>
+
+@interface NSDate (DateUtility) 
+
+- (NSString *) dateToRelativeFormattedString;
+- (NSString *) dateToRelativeFormattedStringAbsolute:(BOOL) absolute;
+
+- (NSString *) longFormattedString;
+- (NSString *) dateToBirthdayFormattedString;
+- (NSString *) dateToNTBirthdayFormattedString;
+- (NSString *) dateToSQLiteFormattedString;
+
++ (NSDate*) dateBeforeYears:(NSInteger)years;
++ (NSDate*) convertUTCToLocal:(NSDate*)utcDate;
++ (NSDate*) convertLocalToUTC:(NSDate*)localDate;
+
++ (NSString*) secondsToString:(int)seconds;
+
++ (NSDate *) DateFromDb:(NSString *)aDateString;
++ (NSDate *) DateTimeFromDb:(NSString *)aDateString;
+
++(NSDate *) DateForReminderWithString:(NSString *)aDateString;
+-(NSString *) stringInReminderFormat;
++ (NSString*) TimeInfoForReminderWithString:(NSString*)aDateString;
+
++ (NSString *) NutritionistFormattedString;
+
+
+- (NSString *) dateStringForDB;
+- (NSString *) dateStringForInDisplay;
+- (NSString *) dateStringForGraphDisplay;
+
+	//+(NSDate *)IncreaseDate:(NSDate *)aDate :(int)Days :(int)Month :(int)Year;
+- (NSDate *)IncreaseDate:(int)Days Month:(int)Month Year:(int)Year date:(NSDate*)date;
++ (int ) DayDifferance:(NSDate*)firstDate fromDate:(NSDate* )SecondDate;
++ (NSString*)calculateDataAndTimeDeffrence:(NSDate*)startDate endDate:(NSDate*)expireDate;
++ (NSInteger)differenceBetweenDates:(NSDate*)startDate endDate:(NSDate*)endDate;
+- (BOOL)isSameDay:(NSDate*)date1 date2:(NSDate*)date2;
++ (NSDate*)normalizedDateWithDate:(NSDate*)date;
+@end

@@ -1,0 +1,25 @@
+//
+//  AllPhone.h
+//  CRM
+//
+//  Created by Sheetal's iMac on 16/05/13.
+//  Copyright (c) 2013 Sheetal's iMac. All rights reserved.
+//
+
+#import <Foundation/Foundation.h>
+#import <CoreData/CoreData.h>
+
+@class MyAddressBook;
+
+@interface AllPhone : NSManagedObject
+
+@property (nonatomic, retain) NSString * home;
+@property (nonatomic, retain) NSString * mobile;
+@property (nonatomic, retain) NSString * workFax;
+@property (nonatomic, retain) NSString * phone;
+@property (nonatomic, retain) NSString * iPhone;
+@property (nonatomic, retain) NSString * customHandy;
+@property (nonatomic, retain) NSString * work;
+@property (nonatomic, retain) MyAddressBook *relMyAddressBook;
+
+@end

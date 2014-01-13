@@ -1,0 +1,21 @@
+//
+//  ViewController.h
+//  CRM
+//
+//  Created by Sheetal's iMac on 04/02/13.
+//  Copyright (c) 2013 Sheetal's iMac. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+@interface LoginViewController : UIViewController<UITextFieldDelegate>
+{
+    IBOutlet UITextField *txtfUsername;
+    IBOutlet UITextField *txtfPassword;
+    IBOutlet UISwitch *switchRemember;
+    IBOutlet UIView *view_forgot_pass;
+}
+
+- (IBAction)btnForgotPassword:(id)sender;
+- (IBAction)switchValueChange:(UISwitch*)sender;
+@end

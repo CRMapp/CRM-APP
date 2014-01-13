@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AddNewContact</key>
+	<array>
+		<dict>
+			<key>DetailName</key>
+			<string>Salutation</string>
+			<key>DetailsType</key>
+			<string>TypeDropDown</string>
+		</dict>
+		<dict>
+			<key>DetailName</key>
+			<string>Prefix</string>
+			<key>DetailsType</key>
+			<string>TypeDropDown</string>
+		</dict>
+		<dict>
+			<key>DetailName</key>
+			<string>First Name</string>
+			<key>DetailsType</key>
+			<string>TypeText</string>
+		</dict>
+		<dict>
+			<key>DetailName</key>
+			<string>Middle Name</string>
+			<key>DetailsType</key>
+			<string>TypeText</string>
+		</dict>
+		<dict>
+			<key>DetailName</key>
+			<string>Last Name</string>
+			<key>DetailsType</key>
+			<string>TypeText</string>
+		</dict>
+		<dict>
+			<key>DetailName</key>
+			<string>Suffix</string>
+			<key>DetailsType</key>
+			<string>TypeText</string>
+		</dict>
+		<dict>
+			<key>DetailName</key>
+			<string>Gender</string>
+			<key>DetailsType</key>
+			<string>typeGender</string>
+		</dict>
+		<dict>
+			<key>DetailName</key>
+			<string>Image</string>
+			<key>DetailsType</key>
+			<string>Image</string>
+		</dict>
+		<dict>
+			<key>DetailName</key>
+			<string>Date of Birth</string>
+			<key>DetailsType</key>
+			<string>TypeDOB</string>
+		</dict>
+		<dict>
+			<key>DetailName</key>
+			<string>Email Address</string>
+			<key>DetailsType</key>
+			<string>TypeText</string>
+		</dict>
+		<dict>
+			<key>DetailName</key>
+			<string>Address</string>
+			<key>DetailsType</key>
+			<string>typeAddress</string>
+		</dict>
+		<dict>
+			<key>DetailName</key>
+			<string>Address2</string>
+			<key>DetailsType</key>
+			<string>typeAddress2</string>
+		</dict>
+		<dict>
+			<key>DetailName</key>
+			<string>City</string>
+			<key>DetailsType</key>
+			<string>TypeText</string>
+		</dict>
+		<dict>
+			<key>DetailName</key>
+			<string>State</string>
+			<key>DetailsType</key>
+			<string>TypeText</string>
+		</dict>
+		<dict>
+			<key>DetailName</key>
+			<string>Country</string>
+			<key>DetailsType</key>
+			<string>TypeText</string>
+		</dict>
+		<dict>
+			<key>DetailName</key>
+			<string>Zip Code</string>
+			<key>DetailsType</key>
+			<string>TypeTextNumber</string>
+		</dict>
+		<dict>
+			<key>DetailName</key>
+			<string>Phone Number</string>
+			<key>DetailsType</key>
+			<string>TypeTextNumber</string>
+		</dict>
+		<dict>
+			<key>DetailName</key>
+			<string>Mobile Number</string>
+			<key>DetailsType</key>
+			<string>TypeTextNumber</string>
+		</dict>
+		<dict>
+			<key>DetailName</key>
+			<string>Home Number</string>
+			<key>DetailsType</key>
+			<string>TypeTextNumber</string>
+		</dict>
+		<dict>
+			<key>DetailName</key>
+			<string>Fax Number</string>
+			<key>DetailsType</key>
+			<string>TypeTextNumber</string>
+		</dict>
+	</array>
+	<key>CompInfo</key>
+	<array>
+		<dict>
+			<key>DetailName</key>
+			<string>Company Name</string>
+			<key>DetailsType</key>
+			<string>typeText</string>
+		</dict>
+		<dict>
+			<key>DetailName</key>
+			<string>Title</string>
+			<key>DetailsType</key>
+			<string>typeText</string>
+		</dict>
+		<dict>
+			<key>DetailName</key>
+			<string>Industry</string>
+			<key>DetailsType</key>
+			<string>typeIndustryDropDown</string>
+		</dict>
+		<dict>
+			<key>DetailName</key>
+			<string>Industry Description</string>
+			<key>DetailsType</key>
+			<string>typeTextView</string>
+		</dict>
+		<dict>
+			<key>DetailName</key>
+			<string>URL</string>
+			<key>DetailsType</key>
+			<string>texturl</string>
+		</dict>
+	</array>
+	<key>ProfileInfo</key>
+	<array>
+		<dict>
+			<key>DetailName</key>
+			<string>Add To Group</string>
+			<key>DetailsType</key>
+			<string>typeDropDown</string>
+		</dict>
+		<dict>
+			<key>DetailName</key>
+			<string>Add To Subgroup</string>
+			<key>DetailsType</key>
+			<string>typeDropDown</string>
+		</dict>
+		<dict>
+			<key>DetailName</key>
+			<string>Lead Status</string>
+			<key>DetailsType</key>
+			<string>typeDropDown</string>
+		</dict>
+		<dict>
+			<key>DetailName</key>
+			<string>Lead Source</string>
+			<key>DetailsType</key>
+			<string>typeDropDown</string>
+		</dict>
+		<dict>
+			<key>DetailName</key>
+			<string>Funnel Description</string>
+			<key>DetailsType</key>
+			<string>typeTextView</string>
+		</dict>
+		<dict>
+			<key>DetailName</key>
+			<string>Facebook</string>
+			<key>DetailsType</key>
+			<string>typeText</string>
+		</dict>
+		<dict>
+			<key>DetailName</key>
+			<string>Twitter</string>
+			<key>DetailsType</key>
+			<string>typeText</string>
+		</dict>
+		<dict>
+			<key>DetailName</key>
+			<string>Linkedin</string>
+			<key>DetailsType</key>
+			<string>typeText</string>
+		</dict>
+		<dict>
+			<key>DetailName</key>
+			<string>Google+</string>
+			<key>DetailsType</key>
+			<string>typeText</string>
+		</dict>
+		<dict>
+			<key>DetailName</key>
+			<string>Scoring</string>
+			<key>DetailsType</key>
+			<string>typeText</string>
+		</dict>
+		<dict>
+			<key>DetailName</key>
+			<string>Notes</string>
+			<key>DetailsType</key>
+			<string>typeTextView</string>
+		</dict>
+	</array>
+</dict>
+</plist>
