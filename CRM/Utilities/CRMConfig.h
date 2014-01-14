@@ -174,6 +174,7 @@ enum {
 
 
 //Social Networks Keys
+#define SOCIAL_STRING             @"Social"
 #define SOCIAL_FACEBOOK             @"facebook"
 #define SOCIAL_TWITTER              @"twitter"
 #define SOCIAL_LINKEDIN             @"linkedin"
