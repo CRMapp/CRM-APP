@@ -2246,15 +2246,14 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
         [DateFormatter release];
 		//--
 		
+        
+        
+    
+        /*
+        
 		//Email
 		AllEmail * emails = nil;
-		/*
-         
-         NSArray* phoneNumbers = [self.selectedRecord.phoneNumbers allObjects];
-         ((PhoneNumber*)[phoneNumbers objectAtIndex:0]).number = self.number1Textfield.text;
-         ((PhoneNumber*)[phoneNumbers objectAtIndex:1]).number = self.number2Textfield.text;
-         
-         */
+		
 		if (self.editMyAddObj && [[self.editMyAddObj.relEmails allObjects] count])
 		{
 
@@ -2388,7 +2387,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
 			
 			[url setRelMyAddressBook:addressBook];
 		}
-		//--
+		*/
 		
 		/*Profile info*/
 		
