@@ -49,6 +49,7 @@
 #import "ImageData.h"
 @interface ContactDetailViewController ()
 
+
 @end
 
 @implementation ContactDetailViewController
@@ -513,7 +514,7 @@
     NSArray *phoneslist = [[self.aContactDetails relAllPhone] allObjects];
     for (AllPhone *phones in phoneslist){
     [dict setObject:phones.phoneNumber forKey:phones.phoneTitle];
-    [arrAllKeys addObject:phones.phoneTitle];
+    //[arrAllKeys addObject:phones.phoneTitle];
     }
     [self.dictTemp setObject:dict forKey:PHONE_STRING];
 }
@@ -522,7 +523,7 @@
     NSArray *emailslist = [[self.aContactDetails relEmails] allObjects];
     for (AllEmail *emails in emailslist){
         [dict setObject:emails.emailURL forKey:emails.emailTitle];
-        [arrAllKeys addObject:emails.emailTitle];
+        //[arrAllKeys addObject:emails.emailTitle];
     }
     [self.dictTemp setObject:dict forKey:EMAIL_STRING];
 }
@@ -531,13 +532,20 @@
     NSArray *urlslist = [[self.aContactDetails relAllUrl] allObjects];
     for (AllUrl *aUrl in urlslist){
         [dict setObject:aUrl.urlAddress forKey:aUrl.urlTitle];
-        [arrAllKeys addObject:aUrl.urlTitle];
+        //[arrAllKeys addObject:aUrl.urlTitle];
     }
     [self.dictTemp setObject:dict forKey:URL_STRING];
 }
 -(void)showAddress{
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
         NSString *lastAddressType = nil;
+    NSString *addressTitle =nil;
+    NSString *addressStreet =nil;
+    NSString *addressCity =nil;
+    NSString *addressState =nil;
+    NSString *addressZip =nil;
+    NSString *addressCountry =nil;
+    
         NSArray *addList = [[self.aContactDetails relAllAddress] allObjects];
         for (int i =0 ; i <[addList count]; i++){
             AllAddress *address = [addList objectAtIndex:i];
@@ -552,8 +560,9 @@
                     else
                         keyStr = [ADDRESS_TYPE_STRING stringByAppendingFormat:@"  %d",i];
                 }
-                [dict setObject:address.addressType forKey:keyStr];
-                [arrAllKeys addObject:keyStr];
+                
+               addressTitle = address.addressType;
+                
             }
             
             if(address.street){
@@ -566,8 +575,8 @@
                     else
                         keyStr = [STREET_STRING stringByAppendingFormat:@"  %d",i];
                 }
-                [dict setObject:address.street forKey:keyStr];
-                [arrAllKeys addObject:keyStr];
+                
+               addressStreet = address.street;
             }
             if(address.city){
                 if(!lastAddressType){
@@ -579,8 +588,9 @@
                     else
                         keyStr = [CITY_STRING stringByAppendingFormat:@"  %d",i];
                 }
-                [dict setObject:address.city forKey:keyStr];
-                [arrAllKeys addObject:keyStr];
+  
+              addressCity = address.city;
+                
             }
             
             if(address.state){
@@ -593,8 +603,9 @@
                     else
                         keyStr = [STATE_STRING stringByAppendingFormat:@"  %d",i];
                 }
-                [dict setObject:address.state forKey:keyStr];
-                [arrAllKeys addObject:keyStr];
+                
+              addressState = address.state;
+                
             }
             
             if(address.zipCode){
@@ -607,8 +618,9 @@
                     else
                         keyStr = [ZIP_STRING stringByAppendingFormat:@"  %d",i];
                 }
-                [dict setObject:address.zipCode forKey:keyStr];
-                [arrAllKeys addObject:keyStr];
+                
+                addressZip = address.zipCode;
+            
             }
             if(address.countryCode){
                 if(!lastAddressType){
@@ -620,19 +632,25 @@
                     else
                         keyStr = [COUNTRY_STRING stringByAppendingFormat:@"  %d",i];
                 }
-                [dict setObject:address.countryCode forKey:keyStr];
-                [arrAllKeys addObject:keyStr];
+                
+              addressCountry = address.countryCode;
+                
             }
             lastAddressType = address.addressType;
+            NSString *fullAddress = [NSString stringWithFormat:@"%@\n%@\n%@\n%@\n%@",addressStreet,addressCity,addressState,addressZip,addressCountry];
+            [dict setObject:fullAddress forKey:addressTitle];
         }
+    
+    
     [self.dictTemp setObject:dict forKey:ADDRESS_STRING];
 }
+
 -(void)showBirthdayDate{
     if(self.aContactDetails.birthDay){
         [self.dictTemp setObject:[NSDateFormatter localizedStringFromDate:self.aContactDetails.birthDay
                                                                 dateStyle:NSDateFormatterShortStyle
                                                                 timeStyle:NSDateFormatterNoStyle]      forKey:BIRTHDAY_STRING];
-        [arrAllKeys addObject:BIRTHDAY_STRING];
+        //[arrAllKeys addObject:BIRTHDAY_STRING];
     }
  }
 -(void)showDate{
@@ -642,7 +660,7 @@
         [dict setObject:[NSDateFormatter localizedStringFromDate:aDate.dates
                                                                 dateStyle:NSDateFormatterShortStyle
                                                                 timeStyle:NSDateFormatterNoStyle]      forKey:aDate.dateTitle];
-        [arrAllKeys addObject:aDate.dateTitle];
+        //[arrAllKeys addObject:aDate.dateTitle];
     }
     [self.dictTemp setObject:dict forKey:DATE_STRING];
 }
@@ -651,18 +669,19 @@
     NSArray *relatedList = [[self.aContactDetails relAllRelatedNames] allObjects];
         for (AllRelatedName *arelated in relatedList){
             [dict setObject:arelated.relatedNames forKey:arelated.nameTitle];
-            [arrAllKeys addObject:arelated.nameTitle];
+            //[arrAllKeys addObject:arelated.nameTitle];
         }
     [self.dictTemp setObject:dict forKey:RELATED_STRING];
 }
--(void)showOtherDetail{
+-(void)showIndustrialInfo{
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     if(self.aContactDetails.industry){
-        [self.dictTemp setObject:self.aContactDetails.industry forKey:INDUSTRY_STRING];
-        [arrAllKeys addObject:INDUSTRY_STRING];
+        [dict setObject:self.aContactDetails.industry forKey:INDUSTRY_STRING];
+        //[arrAllKeys addObject:INDUSTRY_STRING];
     }
     if(self.aContactDetails.industryDescription){
-        [self.dictTemp setObject:self.aContactDetails.industryDescription forKey:INDUSTRY_DESCRIPTION_STRING];
-        [arrAllKeys addObject:INDUSTRY_DESCRIPTION_STRING];
+        [dict setObject:self.aContactDetails.industryDescription forKey:INDUSTRY_DESCRIPTION_STRING];
+        //[arrAllKeys addObject:INDUSTRY_DESCRIPTION_STRING];
     }
     if (self.aContactDetails.isViewed == NO){
         self.aContactDetails.isViewed = YES;
@@ -675,137 +694,137 @@
 		NSArray * arrayFunnel = [CoreDataHelper searchObjectsForEntity:@"FunnelStageList" withPredicate:pridicate andSortKey:nil andSortAscending:NO andContext:[adele managedObjectContext]];
 		if ([arrayFunnel count]){
 			FunnelStageList * funnelObj = (FunnelStageList*)[arrayFunnel lastObject];
-			[self.dictTemp setObject:funnelObj.stageName           forKey:FUNNEL_STAGE_STRING];
-			[arrAllKeys addObject:FUNNEL_STAGE_STRING];
+			[dict setObject:funnelObj.stageName           forKey:FUNNEL_STAGE_STRING];
+			//[arrAllKeys addObject:FUNNEL_STAGE_STRING];
 		}
     }
     if(self.aContactDetails.funnelDescription){
-        [self.dictTemp setObject:self.aContactDetails.funnelDescription forKey:FUNNEL_DESCRIPTION_STRING];
-        [arrAllKeys addObject:FUNNEL_DESCRIPTION_STRING];
+        [dict setObject:self.aContactDetails.funnelDescription forKey:FUNNEL_DESCRIPTION_STRING];
+        //[arrAllKeys addObject:FUNNEL_DESCRIPTION_STRING];
     }
     if(self.aContactDetails.groupName){
-        [self.dictTemp setObject:self.aContactDetails.groupName forKey:GROUP_STRING];
-        [arrAllKeys addObject:GROUP_STRING];
+        [dict setObject:self.aContactDetails.groupName forKey:GROUP_STRING];
+        //[arrAllKeys addObject:GROUP_STRING];
     }
     if(self.aContactDetails.subGroupName){
-        [self.dictTemp setObject:self.aContactDetails.subGroupName forKey:SUB_GROUP_STRING];
-        [arrAllKeys addObject:SUB_GROUP_STRING];
+        [dict setObject:self.aContactDetails.subGroupName forKey:SUB_GROUP_STRING];
+        //[arrAllKeys addObject:SUB_GROUP_STRING];
     }
     if(self.aContactDetails.leadSource){
-        [self.dictTemp setObject:self.aContactDetails.leadSource forKey:LEAD_SOURCE_STRING];
-        [arrAllKeys addObject:LEAD_SOURCE_STRING];
+        [dict setObject:self.aContactDetails.leadSource forKey:LEAD_SOURCE_STRING];
+        //[arrAllKeys addObject:LEAD_SOURCE_STRING];
     }
     if(self.aContactDetails.leadStatus){
-        [self.dictTemp setObject:self.aContactDetails.leadStatus forKey:LEAD_STATUS_STRING];
-        [arrAllKeys addObject:LEAD_STATUS_STRING];
+        [dict setObject:self.aContactDetails.leadStatus forKey:LEAD_STATUS_STRING];
+        //[arrAllKeys addObject:LEAD_STATUS_STRING];
     }
-    if(self.aContactDetails.note){
+    [self.dictTemp setObject:dict forKey:INDUSTRIAL_STRING];
+}
+-(void)showNote{
+       if(self.aContactDetails.note){
         [self.dictTemp setObject:self.aContactDetails.note forKey:NOTE_STRING];
-        [arrAllKeys addObject:NOTE_STRING];
+        //[arrAllKeys addObject:NOTE_STRING];
     }
 }
 -(void)showSocial{
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     if(self.aContactDetails.facebook){
         [dict setObject:self.aContactDetails.facebook forKey:SOCIAL_FACEBOOK];
-        [arrAllKeys addObject:SOCIAL_FACEBOOK];
+        //[arrAllKeys addObject:SOCIAL_FACEBOOK];
     }
     if(self.aContactDetails.linkedin){
            [dict setObject:self.aContactDetails.linkedin forKey:SOCIAL_LINKEDIN];
-           [arrAllKeys addObject:SOCIAL_LINKEDIN];
+           //[arrAllKeys addObject:SOCIAL_LINKEDIN];
        }
        if(self.aContactDetails.twitter){
            [dict setObject:[ NSString stringWithFormat:@"@%@",self.aContactDetails.twitter] forKey:SOCIAL_TWITTER];
-           [arrAllKeys addObject:SOCIAL_TWITTER];
+           //[arrAllKeys addObject:SOCIAL_TWITTER];
        }
         if(self.aContactDetails.googlePlus){
             [dict setObject:self.aContactDetails.googlePlus forKey:SOCIAL_GOOGLE_PLUS];
-            [arrAllKeys addObject:SOCIAL_GOOGLE_PLUS];
+            //[arrAllKeys addObject:SOCIAL_GOOGLE_PLUS];
        }
     [self.dictTemp setObject:dict forKey:SOCIAL_STRING];
 }
--(void)showSingleValue{
-    if(self.aContactDetails.gender){
-        [self.dictTemp setObject:self.aContactDetails.gender forKey:GENDER_STRING];
-        [arrAllKeys addObject:GENDER_STRING];
-    }
+-(void)showProfileInfo{
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     if(self.aContactDetails.salutation){
-        [self.dictTemp setObject:self.aContactDetails.salutation forKey:SALUTATION_STRING];
-        [arrAllKeys addObject:SALUTATION_STRING];
-    }
-    if(self.aContactDetails.prefix){
-        [self.dictTemp setObject:self.aContactDetails.prefix forKey:PREFIX_STRING];
-        [arrAllKeys addObject:PREFIX_STRING];
+        [dict setObject:self.aContactDetails.salutation forKey:SALUTATION_STRING];
+        //[arrAllKeys addObject:SALUTATION_STRING];
     }
     if(self.aContactDetails.firstName){
         [lblPersonNmae setText:self.aContactDetails.firstName];
-        [self.dictTemp setObject:self.aContactDetails.firstName forKey:FIRST_NAME_STRING];
-        [arrAllKeys addObject:FIRST_NAME_STRING];
+        [dict setObject:self.aContactDetails.firstName forKey:FIRST_NAME_STRING];
+        //[arrAllKeys addObject:FIRST_NAME_STRING];
     }
     if(self.aContactDetails.firstNamePh){
-        [self.dictTemp setObject:self.aContactDetails.firstNamePh forKey:PHONETIC_FIRST_STRING];
-        [arrAllKeys addObject:PHONETIC_FIRST_STRING];
+        [dict setObject:self.aContactDetails.firstNamePh forKey:PHONETIC_FIRST_STRING];
+        //[arrAllKeys addObject:PHONETIC_FIRST_STRING];
     }
     if(self.aContactDetails.middleName){
-        [self.dictTemp setObject:self.aContactDetails.middleName forKey:MIDDLE_NAME_STRING];
-        [arrAllKeys addObject:MIDDLE_NAME_STRING];
+        [dict setObject:self.aContactDetails.middleName forKey:MIDDLE_NAME_STRING];
+        //[arrAllKeys addObject:MIDDLE_NAME_STRING];
     }
     if(self.aContactDetails.middleNamePh){
-        [self.dictTemp setObject:self.aContactDetails.middleNamePh forKey:PHONETIC_MIDDLE_STRING];
-        [arrAllKeys addObject:PHONETIC_MIDDLE_STRING];
+        [dict setObject:self.aContactDetails.middleNamePh forKey:PHONETIC_MIDDLE_STRING];
+        //[arrAllKeys addObject:PHONETIC_MIDDLE_STRING];
     }
     if(self.aContactDetails.lastName){
         [lblPersonNmae setText:[lblPersonNmae.text stringByAppendingFormat:@" %@",self.aContactDetails.lastName]];
-        [self.dictTemp setObject:self.aContactDetails.lastName forKey:LAST_NAME_STRING];
-        [arrAllKeys addObject:LAST_NAME_STRING];
+        [dict setObject:self.aContactDetails.lastName forKey:LAST_NAME_STRING];
+        //[arrAllKeys addObject:LAST_NAME_STRING];
     }
     if(self.aContactDetails.lastNamePh){
-        [self.dictTemp setObject:self.aContactDetails.lastNamePh forKey:PHONETIC_LAST_STRING];
-        [arrAllKeys addObject:PHONETIC_LAST_STRING];
+        [dict setObject:self.aContactDetails.lastNamePh forKey:PHONETIC_LAST_STRING];
+        //[arrAllKeys addObject:PHONETIC_LAST_STRING];
     }
-    //single values
-    if(self.aContactDetails.suffix){
-        [self.dictTemp setObject:self.aContactDetails.suffix forKey:SUFFIX_STRING];
-        [arrAllKeys addObject:SUFFIX_STRING];
-    }
-    if(self.aContactDetails.nickName){
-        [self.dictTemp setObject:self.aContactDetails.nickName forKey:NICKNAME_STRING];
-        [arrAllKeys addObject:NICKNAME_STRING];
+    if(self.aContactDetails.gender){
+        [dict setObject:self.aContactDetails.gender forKey:GENDER_STRING];
+        //[arrAllKeys addObject:GENDER_STRING];
     }
     if(self.aContactDetails.jobTitle){
         [lblTitle setText:self.aContactDetails.jobTitle];
-        [self.dictTemp setObject:self.aContactDetails.jobTitle forKey:JOBTITLE_STRING];
-        [arrAllKeys addObject:JOBTITLE_STRING];
+        [dict setObject:self.aContactDetails.jobTitle forKey:JOBTITLE_STRING];
+        //[arrAllKeys addObject:JOBTITLE_STRING];
     }
     if(self.aContactDetails.department){
-        [self.dictTemp setObject:self.aContactDetails.department forKey:DEPARTMENT_STRING];
-        [arrAllKeys addObject:DEPARTMENT_STRING];
+        [dict setObject:self.aContactDetails.department forKey:DEPARTMENT_STRING];
+        //[arrAllKeys addObject:DEPARTMENT_STRING];
     }
     if(self.aContactDetails.organisation){
-        [self.dictTemp setObject:self.aContactDetails.organisation forKey:ORGANIZATION_STRING];
-        [arrAllKeys addObject:ORGANIZATION_STRING];
+        [dict setObject:self.aContactDetails.organisation forKey:ORGANIZATION_STRING];
+        //[arrAllKeys addObject:ORGANIZATION_STRING];
     }
-}
--(void)addSpace{
-    [self.dictTemp setObject:@"" forKey:@""];
-    [arrAllKeys addObject:@""];
-
+    if(self.aContactDetails.prefix){
+        [dict setObject:self.aContactDetails.prefix forKey:PREFIX_STRING];
+        //[arrAllKeys addObject:PREFIX_STRING];
+    }
+    if(self.aContactDetails.suffix){
+        [dict setObject:self.aContactDetails.suffix forKey:SUFFIX_STRING];
+        //[arrAllKeys addObject:SUFFIX_STRING];
+    }
+    if(self.aContactDetails.nickName){
+        [dict setObject:self.aContactDetails.nickName forKey:NICKNAME_STRING];
+        //[arrAllKeys addObject:NICKNAME_STRING];
+    }
+    [self.dictTemp setObject:dict forKey:PERSONAL_STRING];
 }
 - (void)showPersonalDetails{
     self.dictTemp =  [NSMutableDictionary dictionary];
     self.arrAllKeys = [NSMutableArray array];
     NSLog(@"%@",self.aContactDetails);
-    
-    [self showSingleValue];
+    [self showProfileInfo];
     [self showPhone];
     [self showEmail];
     [self showURL];
     [self showAddress];
-    [self showRelatedName];
     [self showBirthdayDate];
     [self showDate];
-    [self showOtherDetail];
+    [self showRelatedName];
+    [self showIndustrialInfo];
+    [self showNote];
     [self showSocial];
+    NSDictionary *sd = self.dictTemp;
     NSLog(@"%@",self.dictTemp);
 }
 #pragma mark - fetch follow updates
@@ -4541,6 +4560,15 @@
     return 0;
 }
 
+//Header in Section for Conatct view
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    NSString *sectionHead = nil;
+    NSArray *allkeys = [self.dictTemp allKeys];
+    sectionHead = [allkeys objectAtIndex:section];
+    return sectionHead;
+}
+
+
 - (UITableViewCell *)createTVCellFor:(UITableView *)tableView AtIndexPath:(NSIndexPath *)indexPath listType:(NSString*)listType
 {
     if ([listType isEqualToString:NS_PROPOSAL])
@@ -4851,7 +4879,10 @@
         NSString *currentKey = [allKeys objectAtIndex:indexPath.section];
         NSDictionary *currentValue = [self.dictTemp objectForKey:currentKey];
        
-        if([currentKey isEqualToString:LAST_NAME_STRING] || [currentKey isEqualToString:FIRST_NAME_STRING] || [currentKey isEqualToString:SALUTATION_STRING] || [currentKey isEqualToString:NOTE_STRING] || [currentKey isEqualToString:ORGANIZATION_STRING] || [currentKey isEqualToString:BIRTHDAY_STRING]){
+        
+        
+        if([currentKey isEqualToString:NOTE_STRING] || [currentKey isEqualToString:BIRTHDAY_STRING]){
+            
             
             [cell updateUITableViewCell:currentKey
                               cellValue:[self.dictTemp objectForKey:currentKey]];
@@ -4863,11 +4894,13 @@
             NSArray *allCurrentValues = [currentValue allValues];
             NSString *multiCellKey = [allCurrentKeys objectAtIndex:indexPath.row];
             NSString *multiCellValue = [allCurrentValues objectAtIndex:indexPath.row];
+
+    
+            
             [cell updateUITableViewCell:multiCellKey
                               cellValue:multiCellValue];
             [cell.btnNavigateTo addTarget:self action:@selector(cellPersonalDetails_NavigateTo:) forControlEvents:UIControlEventTouchUpInside];
-            
-        }
+            }
         
         /*
         [cell updateUITableViewCell:[self.arrAllKeys objectAtIndex:indexPath.row]
@@ -5139,7 +5172,7 @@
 {
     if (tableView.tag == 22)
     {
-
+        NSString *stringTemp;
         UIInterfaceOrientation *interface = [[UIApplication sharedApplication] statusBarOrientation];
         int orientation = interface;
         CGFloat width  = 680;
@@ -5147,11 +5180,23 @@
         {
             width  = 395;
         }
-        
+        // for dynamic cell height
+        NSArray *allKeys = [self.dictTemp allKeys];
+        NSString *currentKey = [allKeys objectAtIndex:indexPath.section];
+        NSDictionary *currentValue = [self.dictTemp objectForKey:currentKey];
+        if([currentKey isEqualToString:NOTE_STRING] || [currentKey isEqualToString:BIRTHDAY_STRING]){
+            stringTemp = [self.dictTemp objectForKey:currentKey]; //for Dynamic height of cell
+        }
+        else{
+            NSArray *allCurrentValues = [currentValue allValues];
+            NSString *multiCellValue = [allCurrentValues objectAtIndex:indexPath.row];
+            stringTemp = multiCellValue;
+            }
         NSString *Text = nil;
-        Text = [dictTemp objectForKey:[self.arrAllKeys objectAtIndex:indexPath.row]];
+        Text = stringTemp;
         
         float height = [Text sizeWithFont:[UIFont fontWithName:@"Helvetica" size:16.0f] constrainedToSize:CGSizeMake(width, CGFLOAT_MAX) lineBreakMode:UILineBreakModeWordWrap].height;
+        
 //        NSLog(@"height =%f",height);
         if(height < 44)
             return 44;

@@ -15,7 +15,9 @@
 
 +(NSDictionary *)setPhoneNumbers:(MyAddressBook*)addObj;
 
-+(NSString *)setEmailsInDict:(MyAddressBook*)addObj;
++(NSDictionary *)setEmailsInDict:(MyAddressBook*)addObj;
+
++(NSDictionary *)setURLInDict:(MyAddressBook*)addObj;
 
 +(AllEmail *)getWorkEmail:(MyAddressBook *)addressBook;
 

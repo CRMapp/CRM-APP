@@ -43,7 +43,11 @@
 #import "DHValidation.h"
 #import "AddEditContactHelper.h"
 
-@interface AddNewContactViewController ()
+@interface AddNewContactViewController (){
+    NSMutableDictionary *dictDetailTitle;
+    NSMutableArray *arrayDictDetail;
+    NSMutableDictionary *allAddressBook;
+}
 
 @end
 
@@ -92,6 +96,8 @@
         
 		//Dict for editing
 		global.dictMyAddressBook = [NSMutableDictionary dictionaryWithDictionary:[self createDictForEditing]];
+        allAddressBook = [NSMutableDictionary dictionaryWithDictionary:[self createAllAddressBook]];
+        
         [tblDetils reloadData];
     }
     else
@@ -211,7 +217,7 @@
 	tblDetils = nil;
     [super viewDidUnload];
 }
-#pragma mark - Add OR Remove Notificatoin Observers
+#pragma mark - Add OR Remove Notification Observers
 - (void)addObserver_NotificationCenter
 {
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(changeLayout:) name:@"changeLayout" object:nil];
@@ -346,27 +352,277 @@
 }
 
 #pragma mark
+
+
+//--------------Prakhar Editing begin
+
+- (void) addNewContactDict{
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    //Salutation
+    [dict setValue:SALUTATION_STRING forKey:@"DetailName"];
+    [dict setValue:@"TypeDropDown" forKey:@"DetailsType"];
+    [arrayDictDetail addObject:dict];
+    dict = nil;
+    dict = [NSMutableDictionary dictionary];
+    //Prefix
+    [dict setValue:PREFIX_STRING forKey:@"DetailName"];
+    [dict setValue:@"TypeDropDown" forKey:@"DetailsType"];
+    [arrayDictDetail addObject:dict];
+    dict = nil;
+    dict = [NSMutableDictionary dictionary];
+    //FirstName
+    [dict setValue:FIRST_NAME_STRING forKey:@"DetailName"];
+    [dict setValue:@"TypeText" forKey:@"DetailsType"];
+    [arrayDictDetail addObject:dict];
+    dict = nil;
+    dict = [NSMutableDictionary dictionary];
+    //MiddleName
+    [dict setValue:MIDDLE_NAME_STRING forKey:@"DetailName"];
+    [dict setValue:@"TypeText" forKey:@"DetailsType"];
+    [arrayDictDetail addObject:dict];
+    dict = nil;
+    dict = [NSMutableDictionary dictionary];
+    //LastName
+    [dict setValue:LAST_NAME_STRING forKey:@"DetailName"];
+    [dict setValue:@"TypeText" forKey:@"DetailsType"];
+    [arrayDictDetail addObject:dict];
+    dict = nil;
+    dict = [NSMutableDictionary dictionary];
+    //Suffix
+    [dict setValue:SUFFIX_STRING forKey:@"DetailName"];
+    [dict setValue:@"TypeText" forKey:@"DetailsType"];
+    [arrayDictDetail addObject:dict];
+    dict = nil;
+    dict = [NSMutableDictionary dictionary];
+    //Gender
+    [dict setValue:GENDER_STRING forKey:@"DetailName"];
+    [dict setValue:@"typeGender" forKey:@"DetailsType"];
+    [arrayDictDetail addObject:dict];
+    dict = nil;
+    dict = [NSMutableDictionary dictionary];
+    //image
+    [dict setValue:@"Image" forKey:@"DetailName"];
+    [dict setValue:@"Image" forKey:@"DetailsType"];
+    [arrayDictDetail addObject:dict];
+    dict = nil;
+    dict = [NSMutableDictionary dictionary];
+    //DateOfBirth
+    [dict setValue:BIRTHDAY_STRING forKey:@"DetailName"];
+    [dict setValue:@"TypeDOB" forKey:@"DetailsType"];
+    [arrayDictDetail addObject:dict];
+     dict = nil;
+     dict = [NSMutableDictionary dictionary];
+    //Email
+    NSArray *emailslist = [[self.editMyAddObj relEmails] allObjects];
+    for (AllEmail *emails in emailslist){
+        [dict setObject:emails.emailTitle forKey:@"DetailName"];
+        [dict setObject:@"TypeText" forKey:@"DetailsType"];
+        [arrayDictDetail addObject:dict];
+    dict = nil;
+    dict = [NSMutableDictionary dictionary];
+    }
+    //Address
+    NSArray *addList = [[self.editMyAddObj relAllAddress] allObjects];
+    for (int i =0 ; i <[addList count]; i++){
+        AllAddress *address = [addList objectAtIndex:i];
+    [dict setValue:address.addressType forKey:@"DetailName"];
+    [dict setValue:@"TypeAddress" forKey:@"DetailsType"];
+    [arrayDictDetail addObject:dict];
+    dict = nil;
+    dict = [NSMutableDictionary dictionary];
+    }
+    /*
+    NSArray *addList = [[self.editMyAddObj relAllAddress] allObjects];
+    for (int i =0 ; i <[addList count]; i++){
+        AllAddress *address = [addList objectAtIndex:i];
+        [dict setObject:address.addressType forKey:@"DetailName"];
+        [dict setObject:@"typeAddress" forKey:@"DetailsType"];
+        [arrayDictDetail addObject:dict];
+        dict = nil;
+        dict = [NSMutableDictionary dictionary];
+        [dict setObject:@"Street Address" forKey:@"DetailName"];
+        [dict setObject:@"typeAddress" forKey:@"DetailsType"];
+        [arrayDictDetail addObject:dict];
+        dict = nil;
+        dict = [NSMutableDictionary dictionary];
+        [dict setObject:@"Street Address 2" forKey:@"DetailName"];
+        [dict setObject:@"typeAddress2" forKey:@"DetailsType"];
+        [arrayDictDetail addObject:dict];
+        dict = nil;
+        dict = [NSMutableDictionary dictionary];
+        [dict setObject:CITY_STRING forKey:@"DetailName"];
+        [dict setObject:@"TypeText" forKey:@"DetailsType"];
+        [arrayDictDetail addObject:dict];
+        dict = nil;
+        dict = [NSMutableDictionary dictionary];
+        [dict setObject:STATE_STRING forKey:@"DetailName"];
+        [dict setObject:@"TypeText" forKey:@"DetailsType"];
+        [arrayDictDetail addObject:dict];
+        dict = nil;
+        dict = [NSMutableDictionary dictionary];
+        [dict setObject:COUNTRY_STRING forKey:@"DetailName"];
+        [dict setObject:@"TypeText" forKey:@"DetailsType"];
+        [arrayDictDetail addObject:dict];
+        dict = nil;
+        dict = [NSMutableDictionary dictionary];
+        [dict setObject:ZIP_STRING forKey:@"DetailName"];
+        [dict setObject:@"TypeTextNumber" forKey:@"DetailsType"];
+        [arrayDictDetail addObject:dict];
+        dict = nil;
+        dict = [NSMutableDictionary dictionary];
+    }
+    */
+    //PhoneNumber
+    NSArray *phoneslist = [[self.editMyAddObj relAllPhone] allObjects];
+    for (AllPhone *phones in phoneslist){
+        [dict setObject:phones.phoneTitle forKey:@"DetailName"];
+        [dict setObject:@"TypeTextNumber" forKey:@"DetailsType"];
+        [arrayDictDetail addObject:dict];
+        dict = nil;
+        dict = [NSMutableDictionary dictionary];
+    }
+    [dictDetailTitle setObject:arrayDictDetail forKey:@"Add New Contact"];
+}
+    
+- (void) compInfo{
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    //CompanyName
+    [dict setValue:k_TextFiled_CompanyName forKey:@"DetailName"];
+    [dict setValue:@"TypeText" forKey:@"DetailsType"];
+    [arrayDictDetail addObject:dict];
+    dict = nil;
+    dict = [NSMutableDictionary dictionary];
+    //Title
+    [dict setValue:k_TextFiled_Title forKey:@"DetailName"];
+    [dict setValue:@"TypeText" forKey:@"DetailsType"];
+    [arrayDictDetail addObject:dict];
+    dict = nil;
+    dict = [NSMutableDictionary dictionary];
+    //Industry
+    [dict setValue:INDUSTRIAL_STRING forKey:@"DetailName"];
+    [dict setValue:@"typeIndustryDropDown" forKey:@"DetailsType"];
+    [arrayDictDetail addObject:dict];
+    dict = nil;
+    dict = [NSMutableDictionary dictionary];
+    //IndustryDescription
+    [dict setValue:INDUSTRY_DESCRIPTION_STRING forKey:@"DetailName"];
+    [dict setValue:@"typeTextView" forKey:@"DetailsType"];
+    [arrayDictDetail addObject:dict];
+    dict = nil;
+    dict = [NSMutableDictionary dictionary];
+    //URL
+    NSArray *urlslist = [[self.editMyAddObj relAllUrl] allObjects];
+    for (AllUrl *aUrl in urlslist){
+        [dict setObject:aUrl.urlTitle forKey:@"DetailName"];
+        [dict setObject:@"texturl" forKey:@"DetailsType"];
+        [arrayDictDetail addObject:dict];
+        dict = nil;
+        dict = [NSMutableDictionary dictionary];
+    }
+    [dictDetailTitle setObject:arrayDictDetail forKey:@"Company Info"];
+}
+- (void) profileInfo{
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    //Group
+    [dict setValue:kAddNewContact_AddGroup forKey:@"DetailName"];
+    [dict setValue:@"typeDropDown" forKey:@"DetailsType"];
+    [arrayDictDetail addObject:dict];
+    dict = nil;
+    dict = [NSMutableDictionary dictionary];
+    //SubGroup
+    [dict setValue:kAddNewContact_AddSubGroup forKey:@"DetailName"];
+    [dict setValue:@"typeDropDown" forKey:@"DetailsType"];
+    [arrayDictDetail addObject:dict];
+    dict = nil;
+    dict = [NSMutableDictionary dictionary];
+    //LeadStatus
+    [dict setValue:kAddNewContact_LeadStatus forKey:@"DetailName"];
+    [dict setValue:@"typeDropDown" forKey:@"DetailsType"];
+    [arrayDictDetail addObject:dict];
+    dict = nil;
+    dict = [NSMutableDictionary dictionary];
+    //LeadSource
+    [dict setValue:kAddNewContact_LeadSource forKey:@"DetailName"];
+    [dict setValue:@"typeDropDown" forKey:@"DetailsType"];
+    [arrayDictDetail addObject:dict];
+    dict = nil;
+    dict = [NSMutableDictionary dictionary];
+    //FunnelDescription
+    [dict setValue:k_TextFiled_FunnelDesc forKey:@"DetailName"];
+    [dict setValue:@"typeTextView" forKey:@"DetailsType"];
+    [arrayDictDetail addObject:dict];
+    dict = nil;
+    dict = [NSMutableDictionary dictionary];
+    //Facebook
+    [dict setValue:k_TextFiled_Facebook forKey:@"DetailName"];
+    [dict setValue:@"TypeText" forKey:@"DetailsType"];
+    [arrayDictDetail addObject:dict];
+    dict = nil;
+    dict = [NSMutableDictionary dictionary];
+    //Twitter
+    [dict setValue:k_TextFiled_Twitter forKey:@"DetailName"];
+    [dict setValue:@"TypeText" forKey:@"DetailsType"];
+    [arrayDictDetail addObject:dict];
+    dict = nil;
+    dict = [NSMutableDictionary dictionary];
+    //Linkedin
+    [dict setValue:@"Linkedin" forKey:@"DetailName"];
+    [dict setValue:@"TypeText" forKey:@"DetailsType"];
+    [arrayDictDetail addObject:dict];
+    dict = nil;
+    dict = [NSMutableDictionary dictionary];
+    //Google+
+    [dict setValue:@"Google+" forKey:@"DetailName"];
+    [dict setValue:@"TypeText" forKey:@"DetailsType"];
+    [arrayDictDetail addObject:dict];
+    dict = nil;
+    dict = [NSMutableDictionary dictionary];
+    //Scoring
+    [dict setValue:@"Scoring" forKey:@"DetailName"];
+    [dict setValue:@"TypeText" forKey:@"DetailsType"];
+    [arrayDictDetail addObject:dict];
+    dict = nil;
+    dict = [NSMutableDictionary dictionary];
+    //Note
+    [dict setValue:@"Notes" forKey:@"DetailName"];
+    [dict setValue:@"typeTextView" forKey:@"DetailsType"];
+    [arrayDictDetail addObject:dict];
+    dict = nil;
+    dict = [NSMutableDictionary dictionary];
+    [dictDetailTitle setObject:arrayDictDetail forKey:@"Profile Info"];
+}
+//--------------Prakhar Editing Ends
+
+
+
 -(NSArray *)createArrayForTable
 {
-	NSString *path = [[NSBundle mainBundle] pathForResource:
-					  @"AddNewContact" ofType:@"plist"];
-	// Build the array from the plist
-	NSDictionary *dict = [[[NSDictionary alloc] initWithContentsOfFile:path] autorelease];
-	
-	if (btnPersonalDetails.selected)
+    
+    if (btnPersonalDetails.selected)
 	{
+        dictDetailTitle = [NSMutableDictionary dictionary];
+        arrayDictDetail = [NSMutableArray array];
         [lblHeader setText:@"Personal Information"];
-		return [dict objectForKey:@"AddNewContact"];
+        [self addNewContactDict];
+        arrayDictDetail =nil;
+		return [dictDetailTitle objectForKey:@"Add New Contact"];
 	}else if (btnCompInfo.selected)
 	{
+        dictDetailTitle = [NSMutableDictionary dictionary];
+        arrayDictDetail = [NSMutableArray array];
         [lblHeader setText:@"Company Information"];
-		return [dict objectForKey:@"CompInfo"];
+        [self compInfo];
+        arrayDictDetail = nil;
+		return [dictDetailTitle objectForKey:@"Company Info"];
 	}else if (btnProfileInfo.selected)
 	{
+        dictDetailTitle = [NSMutableDictionary dictionary];
+        arrayDictDetail = [NSMutableArray array];
         [lblHeader setText:@"Profile Information"];
-		return [dict objectForKey:@"ProfileInfo"];
+        [self profileInfo];
+        arrayDictDetail = nil;
+		return [dictDetailTitle objectForKey:@"Profile Info"];
 	}
-	
 	return nil;
 }
 
@@ -426,7 +682,7 @@
 	{
 		return [self.arrayIndustry count];
 	}
-	return [self.mArrDetilTitle count];;
+	return [self.mArrDetilTitle count];
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
@@ -773,6 +1029,8 @@
         [self.datePickerPopover dismissPopoverAnimated:YES];
     }
 }
+
+
 - (IBAction)btnTopDonePressed:(id)sender
 {
 	//save data in database
@@ -913,6 +1171,7 @@
     
 	
 }
+
 - (void)checkAndPrepareNewRecord
 {
     DHValidation *validate = [[DHValidation alloc]init];
@@ -1682,6 +1941,118 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
 	}
 	[tblDetils reloadData];
 }
+
+
+-(NSDictionary *)createAllAddressBook
+{
+	NSMutableDictionary * dictEdit = [NSMutableDictionary dictionaryWithCapacity:0];
+	
+	[dictEdit setValue:self.editMyAddObj.prefix		forKey:kAddNewContact_Prefix];
+	[dictEdit setValue:self.editMyAddObj.salutation forKey:kAddNewContact_Salutation];
+	[dictEdit setValue:self.editMyAddObj.firstName	forKey:k_TextFiled_FirstName];
+	[dictEdit setValue:self.editMyAddObj.middleName forKey:k_TextFiled_MiddleName];
+	[dictEdit setValue:self.editMyAddObj.lastName	forKey:k_TextFiled_LastName];
+	[dictEdit setValue:self.editMyAddObj.suffix		forKey:k_TextFiled_Suffix];
+	
+	//Gender
+	NSString * gender = self.editMyAddObj.gender;
+	
+	if ([gender length])
+	{
+		if ([gender rangeOfString:@"female" options:NSCaseInsensitiveSearch].length)
+		{
+			[dictEdit setValue:@"10" forKey:kAddNewContact_Gender];
+		}else
+		{
+			[dictEdit setValue:@"11" forKey:kAddNewContact_Gender];
+		}
+	}
+	//--
+	[dictEdit setValue:self.editMyAddObj.image forKey:kAddNewContact_Image];					//Image
+	
+	//date of birth
+	
+	NSString * strDate = [NSDateFormatter localizedStringFromDate:self.editMyAddObj.birthDay
+														dateStyle:NSDateFormatterFullStyle
+														timeStyle:NSDateFormatterNoStyle];
+	[dictEdit setValue:strDate forKey:kAddNewContact_DOB];
+	//--
+	
+	//Email
+	{
+		[dictEdit setObject:[AddEditContactHelper setEmailsInDict:self.editMyAddObj] forKey:EMAIL_STRING];
+	}
+	
+	//Address
+	{
+		
+		AllAddress * address = [AddEditContactHelper getWorkAddress:self.editMyAddObj];
+        
+		if (address)
+		{
+			[dictEdit setValue:address.street forKey:k_TextFiled_Address];
+			[dictEdit setValue:address.city forKey:k_TextFiled_City];
+			[dictEdit setValue:address.state forKey:k_TextFiled_State];
+			[dictEdit setValue:address.countryCode forKey:k_TextFiled_Country];
+			[dictEdit setValue:address.zipCode forKey:k_TextFiled_ZipCode];
+		}
+        
+	}
+	//--
+	
+	//Phone
+	{
+		[dictEdit setObject:[AddEditContactHelper setPhoneNumbers:self.editMyAddObj] forKey:PHONE_STRING];
+	}
+	//--
+	
+	
+	/*Company info*/
+	
+	[dictEdit setValue:self.editMyAddObj.organisation			forKey:k_TextFiled_CompanyName];//CompanyName
+	[dictEdit setValue:self.editMyAddObj.jobTitle				forKey:k_TextFiled_Title];//Title
+	[dictEdit setValue:self.editMyAddObj.industry				forKey:kAddNewContact_Industry];//industry
+	[dictEdit setValue:self.editMyAddObj.industryDescription	forKey:k_TextFiled_IndustryDes];//industry desc
+	
+	//Url
+	{
+        
+        [dictEdit setObject:[AddEditContactHelper setURLInDict:self.editMyAddObj] forKey:URL_STRING];
+        
+	}
+	//--
+	
+	/*Profile info*/
+	[dictEdit setValue:self.editMyAddObj.groupName			forKey:kAddNewContact_AddGroup];			//group
+	[dictEdit setValue:self.editMyAddObj.subGroupName		forKey:kAddNewContact_AddSubGroup];			//Subgroup
+	
+	//Funnal stage
+	NSPredicate * predicate = [NSPredicate predicateWithFormat:@"stageID == %@",self.editMyAddObj.funnelStageID];
+	
+	NSArray * array = [CoreDataHelper searchObjectsForEntity:@"FunnelStageList" withPredicate:predicate andSortKey:nil andSortAscending:NO andContext:((AppDelegate*)CRM_AppDelegate).managedObjectContext];
+	
+	if ([array count])
+	{
+		FunnelStageList * funnalStage = [array lastObject];
+		[dictEdit setValue:funnalStage.stageName forKey:kAddNewContact_FunnelStage];
+	}
+	
+	//--
+	
+	[dictEdit setValue:self.editMyAddObj.leadStatus			forKey:kAddNewContact_LeadStatus];//Lead Status
+	[dictEdit setValue:self.editMyAddObj.leadSource			forKey:kAddNewContact_LeadSource];//Lead source
+	[dictEdit setValue:self.editMyAddObj.funnelDescription	forKey:k_TextFiled_FunnelDesc];//Funnel desc
+	[dictEdit setValue:self.editMyAddObj.facebook			forKey:k_TextFiled_Facebook];//Facebook
+	[dictEdit setValue:self.editMyAddObj.twitter			forKey:k_TextFiled_Twitter];//Twitter
+	[dictEdit setValue:self.editMyAddObj.linkedin			forKey:k_TextFiled_Linkedin];//LinkedIn
+	[dictEdit setValue:self.editMyAddObj.googlePlus			forKey:k_TextFiled_Google];//Google+
+	[dictEdit setValue:self.editMyAddObj.scoring			forKey:k_TextFiled_Scoring];//Scoring
+	[dictEdit setValue:self.editMyAddObj.note				forKey:k_TextFiled_Note];//Notes
+    
+	return dictEdit;
+}
+
+//---------------------Prakhar Editing Ends
 -(NSDictionary *)createDictForEditing
 {
 	NSMutableDictionary * dictEdit = [NSMutableDictionary dictionaryWithCapacity:0];
@@ -1719,8 +2090,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
 	
 	//Email
 	{
-		[dictEdit setValue:[AddEditContactHelper setEmailsInDict:self.editMyAddObj]
-					forKey:k_TextFiled_Email];
+		[dictEdit addEntriesFromDictionary:[AddEditContactHelper setEmailsInDict:self.editMyAddObj]];
 	}
 	
 	//Address
@@ -1756,13 +2126,9 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
 	
 	//Url
 	{
-        if ([[[self.editMyAddObj relAllUrl] allObjects] count])
-		{
-			AllUrl * aUrl = [[[self.editMyAddObj relAllUrl] allObjects] objectAtIndex:0];
-			
-			[dictEdit setValue:aUrl.urlAddress forKey:k_TextFiled_URL];
-			
-		}
+        
+       [dictEdit addEntriesFromDictionary:[AddEditContactHelper setURLInDict:self.editMyAddObj]];
+        
 	}
 	//--
 	
@@ -1882,10 +2248,16 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
 		
 		//Email
 		AllEmail * emails = nil;
-		
+		/*
+         
+         NSArray* phoneNumbers = [self.selectedRecord.phoneNumbers allObjects];
+         ((PhoneNumber*)[phoneNumbers objectAtIndex:0]).number = self.number1Textfield.text;
+         ((PhoneNumber*)[phoneNumbers objectAtIndex:1]).number = self.number2Textfield.text;
+         
+         */
 		if (self.editMyAddObj && [[self.editMyAddObj.relEmails allObjects] count])
 		{
-            
+
 			emails =  [AddEditContactHelper getWorkEmail:self.editMyAddObj];
 		}
 		else
@@ -1894,7 +2266,10 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
 												   inManagedObjectContext:appDelegate.managedObjectContext];
 		}
 		
-		[emails setWorkURL:[global.dictMyAddressBook valueForKey:k_TextFiled_Email]];
+        
+        
+		[emails setEmailURL:[global.dictMyAddressBook valueForKey:k_TextFiled_Email]];
+        
 		[emails setRelMyAddressBook:addressBook];
 		
 		

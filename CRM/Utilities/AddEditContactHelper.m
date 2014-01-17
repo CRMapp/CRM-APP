@@ -14,6 +14,7 @@
 #import "AllPhone.h"
 #import "AllEmail.h"
 #import "AllAddress.h"
+#import "AllUrl.h"
 
 #import "MyAddressBook.h"
 
@@ -37,6 +38,19 @@
 	
 	return dictEdit;
 }
+
++(NSDictionary *)setURLInDict:(MyAddressBook *)addObj
+{
+	NSMutableDictionary * dictEdit = [NSMutableDictionary dictionaryWithCapacity:0];
+	
+	for (AllUrl * aURL in [[addObj relAllUrl] allObjects])
+	{
+		[dictEdit setValue:aURL.urlAddress forKey:aURL.urlTitle];
+	}
+	
+	return dictEdit;
+}
+
 /*
  Method : setEmailsInDict:
  @prams addObj object from which we require to get data
@@ -44,33 +58,17 @@
  return a dict with work Email, if we don't have work email then any of the email exist
  */
 
-+(NSString *)setEmailsInDict:(MyAddressBook*)addObj
++(NSDictionary *)setEmailsInDict:(MyAddressBook*)addObj
 {
-	NSString * emailStr = @"";
+	NSMutableDictionary * dictEdit = [NSMutableDictionary dictionaryWithCapacity:0];
 	
-	//our main focus is on the work email only
 	for (AllEmail * emails in [[addObj relEmails] allObjects])
 	{
-		if ([[emails.emailTitle lowercaseString] isEqualToString:@"work"])
-		{
-			emailStr = [NSString stringWithString:[emails.emailURL lowercaseString]];
-			break;
-		}
-	}
-    //if we haven't got any work email then any related email
-	if(emailStr.length == 0)
-    {
-        for (AllEmail * emails in [[addObj relEmails] allObjects])
-        {
-            if(emails.emailURL.length !=0)
-            {
-                emailStr = [NSString stringWithString:[emails.emailURL lowercaseString]];
-                break;
-            }
-        }
+		[dictEdit setValue:emails.emailURL forKey:emails.emailTitle];
 	}
 	
-	return emailStr;
+	return dictEdit;
+    
 }
 
 +(AllAddress*)getWorkAddress:(MyAddressBook *)addObj

@@ -31,7 +31,8 @@
 //    {
 //        cellTitle = @"Google+";
 //    }
-    cellTitle = [[cellTitle componentsSeparatedByCharactersInSet: [[NSCharacterSet letterCharacterSet] invertedSet]] componentsJoinedByString:@" "];
+    
+    //cellTitle = [[cellTitle componentsSeparatedByCharactersInSet: [[NSCharacterSet letterCharacterSet] invertedSet]] componentsJoinedByString:@" "];
     
     UIInterfaceOrientation *interface = [[UIApplication sharedApplication] statusBarOrientation];
     int orientation = interface;
@@ -63,8 +64,8 @@
     if(newFrame.size.height <= 20)
         [self.lblValue setCenter:CGPointMake(self.lblValue.center.x, self.center.y)];
     
-    [self.lblTitle setText:[[cellTitle stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]capitalizedString]];
-    
+    //[self.lblTitle setText:[[cellTitle stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]capitalizedString]];
+    [self.lblTitle setText:cellTitle];
     [self addCellBtnForAddressEmailNPhoneNumber];
 }
 -(void)addCellBtnForAddressEmailNPhoneNumber

@@ -97,6 +97,7 @@ enum {
 #define LEAD_STATUS_STRING	@"Lead Status"
 
 
+
 #define ORGANIZATION_STRING	@"Organization"
 #define JOBTITLE_STRING		@"Job Title"
 #define DEPARTMENT_STRING	@"Department"
@@ -109,7 +110,8 @@ enum {
 
 #define KIND_STRING	@"Kind"
 
-
+#define PERSONAL_STRING	@"Personal"
+#define INDUSTRIAL_STRING	@"Industrial"
 
 #define HOME_URL_STRING         @"Home"
 #define WORK_URL_STRING         @"Work"

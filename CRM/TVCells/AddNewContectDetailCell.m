@@ -61,7 +61,7 @@
 //	[self.txtdetail setFrame:rectTxt];
 	
 	NSString * strType = [dictData objectForKey:kDETAILSTYPE];
-	
+
 	if ([self.lblDetailTitle.text rangeOfString:@"image" options:NSCaseInsensitiveSearch].length)
 	{
 		[self setImageOnCell];
@@ -69,10 +69,12 @@
 	else if ([strType rangeOfString:@"typeDOB" options:NSCaseInsensitiveSearch].length)
 	{
 		[self setAccordingDateOfBirth];
-	}else if([strType rangeOfString:@"typeGender" options:NSCaseInsensitiveSearch].length)
+	}
+    else if([strType rangeOfString:@"typeGender" options:NSCaseInsensitiveSearch].length)
 	{
 		[self setAccordingGender];
-	}else if([strType rangeOfString:@"TypeTextView" options:NSCaseInsensitiveSearch].length)
+	}
+    else if([strType rangeOfString:@"TypeTextView" options:NSCaseInsensitiveSearch].length)
 	{
 		[self setAccordingDescription];
 	}
@@ -84,6 +86,8 @@
 	{
 		[self setAccordingToSingleDropDownWithDict:dictData];
 	}
+    /*
+     //PreviousAddress 
 	else if([strType rangeOfString:@"typePurchase" options:NSCaseInsensitiveSearch].length)
 	{
 		[self setAccordingToLastPurchase];
@@ -96,11 +100,38 @@
 	{
 		[self setAccordingToAddress];
 	}
+    */
     else if([strType rangeOfString:@"TypeTextNumber" options:NSCaseInsensitiveSearch].length)
 	{
 		[self setAccordingToNumberField];
 	}
-	
+    else if([strType rangeOfString:@"TypeAddress" options:NSCaseInsensitiveSearch].length)
+	{
+		[self setAccordingToTypeAddress];
+	}
+}
+    /*
+    else if([strType rangeOfString:@"TypeText" options:NSCaseInsensitiveSearch].length)
+    {
+        [self setAccordingToTypeText];
+    }
+    else if ([strType rangeOfString:@"texturl" options:NSCaseInsensitiveSearch].length)
+    {
+        [self setAccordingToTextURL];
+    }
+
+-(void)setAccordingToTypeText
+{
+//
+}
+-(void)setAccordingToTextURL
+{
+//
+}
+     */
+-(void)setAccordingToTypeAddress
+{
+	[self.txtdetail setHidden:YES];
 }
 -(void)setAccordingToNumberField
 {
@@ -401,19 +432,21 @@
 -(void)getDataFromDict:(NSMutableDictionary *)dictAddController andDict:(NSDictionary *)dict
 {
 	GlobalDataPersistence * globalObj = [GlobalDataPersistence sharedGlobalDataPersistence];
-	
-	
 	NSString *key = [dict objectForKey:kDETAILSTITLE];
+    NSDictionary *tempArr = globalObj.dictMyAddressBook;
 	NSLog(@"Key : %@",key);
 	
 	if ([self.lblDetailTitle.text isEqualToString:key])
 	{
 		[self.txtdetail setText:[globalObj.dictMyAddressBook objectForKey:key]];
+        
+        /*
         if([key isEqualToString:@"URL"]){
             [self.txtdetail setAutocapitalizationType:UITextAutocapitalizationTypeNone];
         }else{
             [self.txtdetail setAutocapitalizationType:UITextAutocapitalizationTypeSentences];
         }
+         */
 	}
 	
 	if ([key rangeOfString:@"Description" options:NSCaseInsensitiveSearch].length ||
