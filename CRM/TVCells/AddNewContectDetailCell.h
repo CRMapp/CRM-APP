@@ -76,7 +76,9 @@
 }
 
 //dict for my addressBook
+@property (retain, nonatomic) MyAddressBook * editMyAddObj;
 @property (retain, nonatomic) NSMutableDictionary * dictM_MyaddressBookCell;
+@property (retain, nonatomic) NSDictionary *dictDetailTitle;
 @property (assign, nonatomic) id <AddNewContactdetailCellDelegate>  adelegate;
 
 @property (retain,nonatomic) NSIndexPath * indexPathForCell;

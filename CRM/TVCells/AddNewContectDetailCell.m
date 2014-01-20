@@ -13,7 +13,7 @@
 #import "AllPhone.h"
 #import "AllAddress.h"
 #import "AllUrl.h"
-
+#import "AddNewContactViewController.h"
 #import "AddNewContectDetailCell.h"
 #import "CRMConfig.h"
 //#import "AppDelegate.h"
@@ -22,8 +22,11 @@
 
 #import "GlobalDataPersistence.h"
 
-@implementation AddNewContectDetailCell
+@implementation AddNewContectDetailCell{
+    
+}
 
+@synthesize editMyAddObj;
 @synthesize adelegate;
 @synthesize indexPathForCell;
 @synthesize dictM_MyaddressBookCell;
@@ -44,11 +47,33 @@
     // Configure the view for the selected state
 }
 
+
+
+
 -(void)setlabeldetailTitleWithDict:(NSDictionary *)dictData andWithSize:(CGSize)size
 {
-	[self.lblDetailTitle setText:[NSString stringWithFormat:@"%@",[dictData objectForKey:kDETAILSTITLE]]];
+    //Lable for Multi value cell
+    if([[dictData objectForKey:kDETAILSTITLE] isEqualToString:EMAIL_STRING]){
+        
+        [self.lblDetailTitle setText:[NSString stringWithFormat:@"%@",[dictData objectForKey:kDETAILSTITLE]]];
+       
+    }
+    else if ([[dictData objectForKey:kDETAILSTITLE] isEqualToString:URL_STRING]){
+        [self.lblDetailTitle setText:[NSString stringWithFormat:@"%@",[dictData objectForKey:kDETAILSTITLE]]];
+     
+    }
+    else if ([[dictData objectForKey:kDETAILSTITLE] isEqualToString:PHONE_STRING]){
+        [self.lblDetailTitle setText:[NSString stringWithFormat:@"%@",[dictData objectForKey:kDETAILSTITLE]]];
+       
+    }
+    else if ([[dictData objectForKey:kDETAILSTITLE] isEqualToString:ADDRESS_STRING]){
+        [self.lblDetailTitle setText:[NSString stringWithFormat:@"%@",[dictData objectForKey:kDETAILSTITLE]]];
+       
+    }
+    else{
+        [self.lblDetailTitle setText:[NSString stringWithFormat:@"%@",[dictData objectForKey:kDETAILSTITLE]]];
     
-    [self.txtdetail setDelegate:self];
+        [self.txtdetail setDelegate:self];
 	
 //	CGRect rectLblTitle = self.lblDetailTitle.frame;
 //	rectLblTitle.size = size;
@@ -60,32 +85,32 @@
 //	rectTxt.size.width = self.frame.size.width - rectTxt.origin.x;
 //	[self.txtdetail setFrame:rectTxt];
 	
-	NSString * strType = [dictData objectForKey:kDETAILSTYPE];
+        NSString * strType = [dictData objectForKey:kDETAILSTYPE];
 
-	if ([self.lblDetailTitle.text rangeOfString:@"image" options:NSCaseInsensitiveSearch].length)
-	{
-		[self setImageOnCell];
-	}
-	else if ([strType rangeOfString:@"typeDOB" options:NSCaseInsensitiveSearch].length)
-	{
-		[self setAccordingDateOfBirth];
-	}
-    else if([strType rangeOfString:@"typeGender" options:NSCaseInsensitiveSearch].length)
-	{
-		[self setAccordingGender];
-	}
-    else if([strType rangeOfString:@"TypeTextView" options:NSCaseInsensitiveSearch].length)
-	{
-		[self setAccordingDescription];
-	}
-	else if([strType rangeOfString:@"typeIndustryDropDown" options:NSCaseInsensitiveSearch].length)
-	{
-		[self setAccordingToIndustryDropDown];
-	}
-	else if([strType rangeOfString:@"typedropdown" options:NSCaseInsensitiveSearch].length)
-	{
-		[self setAccordingToSingleDropDownWithDict:dictData];
-	}
+        if ([self.lblDetailTitle.text rangeOfString:@"image" options:NSCaseInsensitiveSearch].length)
+        {
+            [self setImageOnCell];
+        }
+        else if ([strType rangeOfString:@"typeDOB" options:NSCaseInsensitiveSearch].length)
+        {
+            [self setAccordingDateOfBirth];
+        }
+        else if([strType rangeOfString:@"typeGender" options:NSCaseInsensitiveSearch].length)
+        {
+            [self setAccordingGender];
+        }
+        else if([strType rangeOfString:@"TypeTextView" options:NSCaseInsensitiveSearch].length)
+        {
+            [self setAccordingDescription];
+        }
+        else if([strType rangeOfString:@"typeIndustryDropDown" options:NSCaseInsensitiveSearch].length)
+        {
+            [self setAccordingToIndustryDropDown];
+        }
+        else if([strType rangeOfString:@"typedropdown" options:NSCaseInsensitiveSearch].length)
+        {
+            [self setAccordingToSingleDropDownWithDict:dictData];
+        }
     /*
      //PreviousAddress 
 	else if([strType rangeOfString:@"typePurchase" options:NSCaseInsensitiveSearch].length)
@@ -101,14 +126,15 @@
 		[self setAccordingToAddress];
 	}
     */
-    else if([strType rangeOfString:@"TypeTextNumber" options:NSCaseInsensitiveSearch].length)
-	{
-		[self setAccordingToNumberField];
-	}
-    else if([strType rangeOfString:@"TypeAddress" options:NSCaseInsensitiveSearch].length)
-	{
-		[self setAccordingToTypeAddress];
-	}
+        else if([strType rangeOfString:@"TypeTextNumber" options:NSCaseInsensitiveSearch].length)
+        {
+            [self setAccordingToNumberField];
+        }
+        else if([strType rangeOfString:@"TypeAddress" options:NSCaseInsensitiveSearch].length)
+        {
+            [self setAccordingToTypeAddress];
+        }
+    }
 }
     /*
     else if([strType rangeOfString:@"TypeText" options:NSCaseInsensitiveSearch].length)
@@ -429,24 +455,40 @@
     
 	
 }
--(void)getDataFromDict:(NSMutableDictionary *)dictAddController andDict:(NSDictionary *)dict
+-(void)getDataFromDict:(NSMutableDictionary *)dictMultiValue andDict:(NSDictionary *)dict
 {
-	GlobalDataPersistence * globalObj = [GlobalDataPersistence sharedGlobalDataPersistence];
+    GlobalDataPersistence * globalObj = [GlobalDataPersistence sharedGlobalDataPersistence];
 	NSString *key = [dict objectForKey:kDETAILSTITLE];
-    NSDictionary *tempArr = globalObj.dictMyAddressBook;
 	NSLog(@"Key : %@",key);
-	
+    if([[dict objectForKey:kDETAILSTITLE] isEqualToString:EMAIL_STRING])
+    {
+        NSDictionary *tempDict = [dictMultiValue objectForKey:EMAIL_STRING];
+        NSArray *currentKeys = [tempDict allKeys];
+        NSArray *currentValues = [tempDict allValues];
+        [self.txtdetail setText:[currentValues objectAtIndex:indexPathForCell.row]];
+        [self.lblDetailTitle setText:[currentKeys objectAtIndex:indexPathForCell.row]];
+    }
+    else if([[dict objectForKey:kDETAILSTITLE] isEqualToString:URL_STRING]){
+        NSDictionary *tempDict = [dictMultiValue objectForKey:URL_STRING];
+        NSArray *currentKeys = [tempDict allKeys];
+        NSArray *currentValues = [tempDict allValues];
+        [self.txtdetail setText:[currentValues objectAtIndex:indexPathForCell.row]];
+        [self.lblDetailTitle setText:[currentKeys objectAtIndex:indexPathForCell.row]];
+    }
+    else if ([[dict objectForKey:kDETAILSTITLE] isEqualToString:PHONE_STRING]){
+        NSDictionary *tempDict = [dictMultiValue objectForKey:PHONE_STRING];
+        NSArray *currentKeys = [tempDict allKeys];
+        NSArray *currentValues = [tempDict allValues];
+        [self.txtdetail setText:[currentValues objectAtIndex:indexPathForCell.row]];
+        [self.lblDetailTitle setText:[currentKeys objectAtIndex:indexPathForCell.row]];
+    }
+//    else if ([[dict objectForKey:kDETAILSTITLE] isEqualToString:ADDRESS_STRING]){
+//    
+//    }
+    else{
 	if ([self.lblDetailTitle.text isEqualToString:key])
 	{
 		[self.txtdetail setText:[globalObj.dictMyAddressBook objectForKey:key]];
-        
-        /*
-        if([key isEqualToString:@"URL"]){
-            [self.txtdetail setAutocapitalizationType:UITextAutocapitalizationTypeNone];
-        }else{
-            [self.txtdetail setAutocapitalizationType:UITextAutocapitalizationTypeSentences];
-        }
-         */
 	}
 	
 	if ([key rangeOfString:@"Description" options:NSCaseInsensitiveSearch].length ||
@@ -486,6 +528,7 @@
 			imgPhoto.image = [UIImage imageWithContentsOfFile:path];
 		}
 	}
+    }
 }
 -(BOOL)boolForDropDown:(NSString *)key
 {

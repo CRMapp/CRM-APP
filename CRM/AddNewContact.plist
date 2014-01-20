@@ -60,7 +60,7 @@
 		</dict>
 		<dict>
 			<key>DetailName</key>
-			<string>Email Address</string>
+			<string>Email</string>
 			<key>DetailsType</key>
 			<string>TypeText</string>
 		</dict>
@@ -72,55 +72,7 @@
 		</dict>
 		<dict>
 			<key>DetailName</key>
-			<string>Address2</string>
-			<key>DetailsType</key>
-			<string>typeAddress2</string>
-		</dict>
-		<dict>
-			<key>DetailName</key>
-			<string>City</string>
-			<key>DetailsType</key>
-			<string>TypeText</string>
-		</dict>
-		<dict>
-			<key>DetailName</key>
-			<string>State</string>
-			<key>DetailsType</key>
-			<string>TypeText</string>
-		</dict>
-		<dict>
-			<key>DetailName</key>
-			<string>Country</string>
-			<key>DetailsType</key>
-			<string>TypeText</string>
-		</dict>
-		<dict>
-			<key>DetailName</key>
-			<string>Zip Code</string>
-			<key>DetailsType</key>
-			<string>TypeTextNumber</string>
-		</dict>
-		<dict>
-			<key>DetailName</key>
-			<string>Work Number</string>
-			<key>DetailsType</key>
-			<string>TypeTextNumber</string>
-		</dict>
-		<dict>
-			<key>DetailName</key>
-			<string>Mobile Number</string>
-			<key>DetailsType</key>
-			<string>TypeTextNumber</string>
-		</dict>
-		<dict>
-			<key>DetailName</key>
-			<string>Home Number</string>
-			<key>DetailsType</key>
-			<string>TypeTextNumber</string>
-		</dict>
-		<dict>
-			<key>DetailName</key>
-			<string>Fax Number</string>
+			<string>Phone</string>
 			<key>DetailsType</key>
 			<string>TypeTextNumber</string>
 		</dict>
