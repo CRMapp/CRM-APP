@@ -78,7 +78,7 @@
 //dict for my addressBook
 @property (retain, nonatomic) MyAddressBook * editMyAddObj;
 @property (retain, nonatomic) NSMutableDictionary * dictM_MyaddressBookCell;
-@property (retain, nonatomic) NSDictionary *dictDetailTitle;
+@property (retain, nonatomic) NSMutableDictionary *dictDetailTitle;
 @property (assign, nonatomic) id <AddNewContactdetailCellDelegate>  adelegate;
 
 @property (retain,nonatomic) NSIndexPath * indexPathForCell;
@@ -103,4 +103,5 @@
 
 -(void)setlabeldetailTitleWithDict:(NSDictionary *)dictData andWithSize:(CGSize)size;
 -(void)getDataFromDict:(NSMutableDictionary *)dictAddController andDict:(NSDictionary *)dict;
+
 @end

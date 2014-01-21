@@ -281,6 +281,10 @@
 }
 -(void)keyboardWasShown:(NSNotification*)notification
 {
+    
+    //dict update
+    [self dictDetailUpdate];
+    
 	NSLog(@"KeyBoard appear");
 	
 	// first of all reducce the higth of the table view
@@ -351,6 +355,29 @@
 }
 
 #pragma mark
+
+- (void) dictDetailUpdate{
+    
+    AddNewContectDetailCell *obj = nil;
+    
+    NSString *srt = obj.lblDetailTitle.text;
+    
+    if([obj.lblDetailTitle.text isEqualToString:EMAIL_STRING])
+    {
+        NSMutableDictionary *tempdict = [self.dictDetailTitle objectForKey:EMAIL_STRING];
+        NSString *currentValue = obj.txtdetail.text;
+        NSString *akey = obj.detailTextLabel.text;
+        
+        [tempdict removeObjectForKey:akey];
+        [tempdict setValue:currentValue forKey:akey];
+        
+        [self.dictDetailTitle removeObjectForKey:EMAIL_STRING];
+        [self.dictDetailTitle setObject:tempdict forKey:EMAIL_STRING];
+        
+    }
+    
+}
+
 
 - (void) dictDetailValue{
     //==================Create a dictionary
@@ -532,6 +559,7 @@
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
+    
     if (tableView == tableIndustry)
 	{
 		static NSString *cellIdentifier = @"CellIdentifier";
@@ -619,6 +647,7 @@
 	[cell.btnIndustryDropDown addTarget:self action:@selector(btnIndustryDropDownTapped:) forControlEvents:UIControlEventTouchUpInside];
 	[cell.btnIndustryDropDown setTag:indexPath.section];
 	
+    
 	return cell;
 	
 }
@@ -2230,6 +2259,84 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
 			[url setRelMyAddressBook:addressBook];
 		}
 		*/
+        
+        //url
+        // only edit existing contact
+		{
+			AllUrl * url = nil;
+			if (self.editMyAddObj && [[self.editMyAddObj.relAllUrl allObjects] count])
+			{
+                NSDictionary *allURL = [self.dictDetailTitle objectForKey:URL_STRING];
+                NSArray *allKeys = [allURL allKeys];
+                NSArray *allValues = [allURL allValues];
+                
+                for(int i=0; i<[allKeys count]; i++)
+                {
+                    url = [[self.editMyAddObj.relAllUrl allObjects] objectAtIndex:i];
+                    [url setUrlAddress:[allValues objectAtIndex:i]];
+                    [url setUrlTitle:[allKeys objectAtIndex:i]];
+                    
+                    [url setRelMyAddressBook:addressBook];
+                }
+                
+			}
+			else
+			{
+				url = [NSEntityDescription insertNewObjectForEntityForName:@"AllUrl" inManagedObjectContext:appDelegate.managedObjectContext];
+			}
+		}
+        //phone
+        //only edit existing contact
+        {
+			AllPhone * phone = nil;
+			if (self.editMyAddObj && [[self.editMyAddObj.relAllPhone allObjects] count])
+			{
+                NSDictionary *allPhone = [self.dictDetailTitle objectForKey:PHONE_STRING];
+                NSArray *allKeys = [allPhone allKeys];
+                NSArray *allValues = [allPhone allValues];
+                
+                for(int i=0; i<[allKeys count]; i++)
+                {
+                    phone = [[self.editMyAddObj.relAllPhone allObjects] objectAtIndex:i];
+                    [phone setPhoneNumber:[allValues objectAtIndex:i]];
+                    [phone setPhoneTitle:[allKeys objectAtIndex:i]];
+                    
+                    [phone setRelMyAddressBook:addressBook];
+                }
+                
+			}
+			else
+			{
+				phone = [NSEntityDescription insertNewObjectForEntityForName:@"AllPhone" inManagedObjectContext:appDelegate.managedObjectContext];
+			}
+		}
+        //Email
+        //only edit exixting contact
+        {
+			AllEmail * email = nil;
+			if (self.editMyAddObj && [[self.editMyAddObj.relEmails allObjects] count])
+			{
+                NSDictionary *allEmail = [self.dictDetailTitle objectForKey:EMAIL_STRING];
+                NSArray *allKeys = [allEmail allKeys];
+                NSArray *allValues = [allEmail allValues];
+                
+                for(int i=0; i<[allKeys count]; i++)
+                {
+                    email = [[self.editMyAddObj.relEmails allObjects] objectAtIndex:i];
+                    [email setEmailURL:[allValues objectAtIndex:i]];
+                    [email setEmailTitle:[allKeys objectAtIndex:i]];
+                    
+                    [email setRelMyAddressBook:addressBook];
+                }
+                
+			}
+			else
+			{
+				email = [NSEntityDescription insertNewObjectForEntityForName:@"AllEmail" inManagedObjectContext:appDelegate.managedObjectContext];
+			}
+		}
+        
+        
         
 		[addressBook setOrganisation:[global.dictMyAddressBook valueForKey:k_TextFiled_CompanyName]];		//CompanyName
 		[addressBook setJobTitle:[global.dictMyAddressBook valueForKey:k_TextFiled_Title]];					//Title

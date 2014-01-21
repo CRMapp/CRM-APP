@@ -30,6 +30,7 @@
 @synthesize adelegate;
 @synthesize indexPathForCell;
 @synthesize dictM_MyaddressBookCell;
+
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
@@ -39,6 +40,7 @@
     }
     return self;
 }
+
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {
@@ -346,7 +348,6 @@
 	
 }
 
-
 #pragma mark -
 #pragma mark TextFields methods
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
@@ -356,6 +357,7 @@
 }
 - (void)textFieldDidBeginEditing:(UITextField *)textField
 {
+    
 	if (self.adelegate && [self.adelegate respondsToSelector:@selector(textFiledDidBeginEditingWithField:)])
 	{
 		[self.adelegate performSelector:@selector(textFiledDidBeginEditingWithField:) withObject:textField];
@@ -372,6 +374,7 @@
 #define NUMBERS_ONLY @"1234567890 "
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
+
     NSString *rawString = [[textField text] stringByAppendingString:string];
     NSCharacterSet *whitespace = [NSCharacterSet whitespaceAndNewlineCharacterSet];
     NSString *trimmed = [rawString stringByTrimmingCharactersInSet:whitespace];
@@ -414,10 +417,12 @@
 #pragma mark - UITextView Delegate
 - (BOOL)textViewShouldBeginEditing:(UITextView *)textView
 {
+    
 	return YES;
 }
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
+    
     NSString *rawString = [[textView text] stringByAppendingString:text];
     NSCharacterSet *whitespace = [NSCharacterSet whitespaceAndNewlineCharacterSet];
     NSString *trimmed = [rawString stringByTrimmingCharactersInSet:whitespace];
@@ -457,30 +462,34 @@
 }
 -(void)getDataFromDict:(NSMutableDictionary *)dictMultiValue andDict:(NSDictionary *)dict
 {
+    self.dictDetailTitle = dictMultiValue;
     GlobalDataPersistence * globalObj = [GlobalDataPersistence sharedGlobalDataPersistence];
 	NSString *key = [dict objectForKey:kDETAILSTITLE];
 	NSLog(@"Key : %@",key);
     if([[dict objectForKey:kDETAILSTITLE] isEqualToString:EMAIL_STRING])
     {
-        NSDictionary *tempDict = [dictMultiValue objectForKey:EMAIL_STRING];
+        NSDictionary *tempDict = [self.dictDetailTitle objectForKey:EMAIL_STRING];
         NSArray *currentKeys = [tempDict allKeys];
         NSArray *currentValues = [tempDict allValues];
         [self.txtdetail setText:[currentValues objectAtIndex:indexPathForCell.row]];
-        [self.lblDetailTitle setText:[currentKeys objectAtIndex:indexPathForCell.row]];
+        [self.detailTextLabel setText:[currentKeys objectAtIndex:indexPathForCell.row]];
+        //[self.lblDetailTitle setText:[currentKeys objectAtIndex:indexPathForCell.row]];
     }
     else if([[dict objectForKey:kDETAILSTITLE] isEqualToString:URL_STRING]){
-        NSDictionary *tempDict = [dictMultiValue objectForKey:URL_STRING];
+        NSDictionary *tempDict = [self.dictDetailTitle objectForKey:URL_STRING];
         NSArray *currentKeys = [tempDict allKeys];
         NSArray *currentValues = [tempDict allValues];
         [self.txtdetail setText:[currentValues objectAtIndex:indexPathForCell.row]];
-        [self.lblDetailTitle setText:[currentKeys objectAtIndex:indexPathForCell.row]];
+        [self.detailTextLabel setText:[currentKeys objectAtIndex:indexPathForCell.row]];
+        //[self.lblDetailTitle setText:[currentKeys objectAtIndex:indexPathForCell.row]];
     }
     else if ([[dict objectForKey:kDETAILSTITLE] isEqualToString:PHONE_STRING]){
-        NSDictionary *tempDict = [dictMultiValue objectForKey:PHONE_STRING];
+        NSDictionary *tempDict = [self.dictDetailTitle objectForKey:PHONE_STRING];
         NSArray *currentKeys = [tempDict allKeys];
         NSArray *currentValues = [tempDict allValues];
         [self.txtdetail setText:[currentValues objectAtIndex:indexPathForCell.row]];
-        [self.lblDetailTitle setText:[currentKeys objectAtIndex:indexPathForCell.row]];
+        [self.detailTextLabel setText:[currentKeys objectAtIndex:indexPathForCell.row]];
+        //[self.lblDetailTitle setText:[currentKeys objectAtIndex:indexPathForCell.row]];
     }
 //    else if ([[dict objectForKey:kDETAILSTITLE] isEqualToString:ADDRESS_STRING]){
 //    

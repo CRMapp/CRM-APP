@@ -4092,6 +4092,8 @@
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
+    
+    
     if (textField.superview == view_add_Proposal && textField.keyboardType == UIKeyboardTypeNumberPad)
     {
         if (textField.tag == 1 || textField.tag == 2)
