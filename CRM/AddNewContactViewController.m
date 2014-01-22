@@ -216,6 +216,7 @@
 	tblDetils = nil;
     [super viewDidUnload];
 }
+
 #pragma mark - Add OR Remove Notification Observers
 - (void)addObserver_NotificationCenter
 {
@@ -281,9 +282,6 @@
 }
 -(void)keyboardWasShown:(NSNotification*)notification
 {
-    
-    //dict update
-    [self dictDetailUpdate];
     
 	NSLog(@"KeyBoard appear");
 	
@@ -356,29 +354,6 @@
 
 #pragma mark
 
-- (void) dictDetailUpdate{
-    
-    AddNewContectDetailCell *obj = nil;
-    
-    NSString *srt = obj.lblDetailTitle.text;
-    
-    if([obj.lblDetailTitle.text isEqualToString:EMAIL_STRING])
-    {
-        NSMutableDictionary *tempdict = [self.dictDetailTitle objectForKey:EMAIL_STRING];
-        NSString *currentValue = obj.txtdetail.text;
-        NSString *akey = obj.detailTextLabel.text;
-        
-        [tempdict removeObjectForKey:akey];
-        [tempdict setValue:currentValue forKey:akey];
-        
-        [self.dictDetailTitle removeObjectForKey:EMAIL_STRING];
-        [self.dictDetailTitle setObject:tempdict forKey:EMAIL_STRING];
-        
-    }
-    
-}
-
-
 - (void) dictDetailValue{
     //==================Create a dictionary
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
@@ -429,8 +404,9 @@
 
 -(NSArray *)createArrayForTable
 {
-
+    if(self.dictDetailTitle == nil){
     [self dictDetailValue];
+    }
     
     NSString *path = [[NSBundle mainBundle] pathForResource:
 					  @"AddNewContact" ofType:@"plist"];
@@ -609,15 +585,15 @@
 			}
 		}
     }
-   
+    [cell addObserver_NotificationCenter];
 	cell.indexPathForCell = indexPath;
 	// and other objects like radio(gender),dropdown buttons etc.
 
 	NSDictionary * dict = [self.mArrDetilTitle objectAtIndex:indexPath.section];
 	[cell setlabeldetailTitleWithDict:dict andWithSize:CGSizeMake(150, 20)];
 	[cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-	
-	//set data in table view
+
+    //set data in table view
 	[cell getDataFromDict:self.dictDetailTitle andDict:dict];
 
 	

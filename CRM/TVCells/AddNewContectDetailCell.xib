@@ -30,6 +30,12 @@
                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                         <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </label>
+                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="right" minimumFontSize="17" id="aPC-f9-sRU">
+                        <rect key="frame" x="7" y="12" width="163" height="20"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                        <textInputTraits key="textInputTraits"/>
+                    </textField>
                     <label hidden="YES" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="44">
                         <rect key="frame" x="0.0" y="0.0" width="1" height="44"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES" flexibleMaxY="YES"/>
@@ -59,6 +65,7 @@
                 <outlet property="btnViewHistory" destination="29" id="30"/>
                 <outlet property="imgPhoto" destination="10" id="11"/>
                 <outlet property="lblDetailTitle" destination="4" id="8"/>
+                <outlet property="lblDictTitle" destination="44" id="826-lN-bUH"/>
                 <outlet property="lblSaperator" destination="40" id="41"/>
                 <outlet property="txtSecondAddress" destination="32" id="33"/>
                 <outlet property="txtView" destination="25" id="43"/>

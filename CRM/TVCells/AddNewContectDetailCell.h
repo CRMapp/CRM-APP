@@ -78,12 +78,14 @@
 //dict for my addressBook
 @property (retain, nonatomic) MyAddressBook * editMyAddObj;
 @property (retain, nonatomic) NSMutableDictionary * dictM_MyaddressBookCell;
-@property (retain, nonatomic) NSMutableDictionary *dictDetailTitle;
+@property (strong, nonatomic) NSMutableDictionary *dictDetailTitle;
 @property (assign, nonatomic) id <AddNewContactdetailCellDelegate>  adelegate;
 
 @property (retain,nonatomic) NSIndexPath * indexPathForCell;
 @property (retain, nonatomic) IBOutlet UILabel *lblDetailTitle;
+@property (retain, nonatomic) IBOutlet UILabel *lblDictTitle;
 @property (retain, nonatomic) IBOutlet UITextField *txtdetail;
+@property (retain, nonatomic) IBOutlet UITextField *txtTitle;
 @property (retain, nonatomic) IBOutlet UIButton *btnUpload;
 @property (retain, nonatomic) IBOutlet UIButton *btnDate;
 @property (retain, nonatomic) IBOutlet UIButton *btnMale;
@@ -101,7 +103,8 @@
 
 @property (retain, nonatomic) UITextField * txtFirstRseponder;
 
--(void)setlabeldetailTitleWithDict:(NSDictionary *)dictData andWithSize:(CGSize)size;
--(void)getDataFromDict:(NSMutableDictionary *)dictAddController andDict:(NSDictionary *)dict;
+- (void)setlabeldetailTitleWithDict:(NSDictionary *)dictData andWithSize:(CGSize)size;
+- (void)getDataFromDict:(NSMutableDictionary *)dictMultiValue andDict:(NSDictionary *)dict;
+- (void)addObserver_NotificationCenter;
 
 @end

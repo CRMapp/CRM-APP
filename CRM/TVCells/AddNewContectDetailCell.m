@@ -22,9 +22,8 @@
 
 #import "GlobalDataPersistence.h"
 
-@implementation AddNewContectDetailCell{
-    
-}
+@implementation AddNewContectDetailCell
+
 
 @synthesize editMyAddObj;
 @synthesize adelegate;
@@ -57,18 +56,22 @@
     //Lable for Multi value cell
     if([[dictData objectForKey:kDETAILSTITLE] isEqualToString:EMAIL_STRING]){
         
+       
         [self.lblDetailTitle setText:[NSString stringWithFormat:@"%@",[dictData objectForKey:kDETAILSTITLE]]];
        
     }
     else if ([[dictData objectForKey:kDETAILSTITLE] isEqualToString:URL_STRING]){
+        
         [self.lblDetailTitle setText:[NSString stringWithFormat:@"%@",[dictData objectForKey:kDETAILSTITLE]]];
      
     }
     else if ([[dictData objectForKey:kDETAILSTITLE] isEqualToString:PHONE_STRING]){
+      
         [self.lblDetailTitle setText:[NSString stringWithFormat:@"%@",[dictData objectForKey:kDETAILSTITLE]]];
        
     }
     else if ([[dictData objectForKey:kDETAILSTITLE] isEqualToString:ADDRESS_STRING]){
+        
         [self.lblDetailTitle setText:[NSString stringWithFormat:@"%@",[dictData objectForKey:kDETAILSTITLE]]];
        
     }
@@ -76,6 +79,7 @@
         [self.lblDetailTitle setText:[NSString stringWithFormat:@"%@",[dictData objectForKey:kDETAILSTITLE]]];
     
         [self.txtdetail setDelegate:self];
+        [self.txtTitle setDelegate:self];
 	
 //	CGRect rectLblTitle = self.lblDetailTitle.frame;
 //	rectLblTitle.size = size;
@@ -172,6 +176,7 @@
 	// hide the label and textField
 	[self.lblDetailTitle setHidden:YES];
 	[self.txtdetail setHidden:YES];
+    [self.txtTitle setHidden:YES];
 	
 	CGRect rectImg = imgPhoto.frame;
 	rectImg.origin.x = 10;
@@ -193,7 +198,7 @@
 -(void)setAccordingDateOfBirth
 {
 	[self.txtdetail setUserInteractionEnabled:NO];
-	
+	 [self.txtTitle setHidden:YES];
 	CGRect rect = self.btnDate.frame;
 	rect.origin.x = (self.txtdetail.frame.size.width + self.txtdetail.frame.origin.x) - rect.size.width;
 	[self.btnDate setFrame:rect];
@@ -210,7 +215,7 @@
 -(void)setAccordingGender
 {
 	[self.txtdetail setHidden:YES];
-	
+	 [self.txtTitle setHidden:YES];
 	CGRect rect = self.btnUpload.frame;
 	rect.origin.x = (self.txtdetail.frame.size.width + self.txtdetail.frame.origin.x) - rect.size.width;
 	
@@ -222,6 +227,7 @@
 }
 -(void)setAccordingDescription
 {
+     [self.txtTitle setHidden:YES];
 	[self.txtdetail setHidden:YES];
 	[self.txtView setDelegate:nil];
 	[self.txtView setDelegate:self];
@@ -232,6 +238,7 @@
 -(void)setAccordingToSingleDropDownWithDict:(NSDictionary*)dict
 {
 	[self.txtdetail setHidden:YES];
+     [self.txtTitle setHidden:YES];
 	
 	// set images in cell
 	UIImage * image = [UIImage imageNamed:@"text_box_p.png"];
@@ -274,7 +281,7 @@
 -(void)setAccordingToLastPurchase
 {
 	[self.txtdetail setHidden:YES];
-	
+	 [self.txtTitle setHidden:YES];
 	// ADD Las Purchase
 	CGRect rectAdd = self.btnAddLatPurchase.frame;
 	rectAdd.origin.x =	self.txtdetail.frame.origin.x ;
@@ -306,7 +313,7 @@
 {
 	// hide the textfiled
 	[self.txtdetail setHidden:YES];
-    
+     [self.txtTitle setHidden:YES];
     
 	// first dropDown Image
     
@@ -348,7 +355,42 @@
 	
 }
 
-#pragma mark -
+#pragma mark - TextField Notifications
+- (void)addObserver_NotificationCenter{
+    [[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(textDidEndEditing:)
+												 name:UITextFieldTextDidEndEditingNotification object:nil];
+}
+- (void)removeObserver_NotificationCenter
+{
+	[[NSNotificationCenter defaultCenter] removeObserver:UITextFieldTextDidEndEditingNotification];
+}
+
+#pragma mark - Notification Methods
+-(void)textDidEndEditing:(NSNotification*)notification{
+ 
+    NSString *currentKey = self.lblDetailTitle.text;
+    NSString *currentValue = self.txtdetail.text;
+    NSString *currentDict = self.lblDictTitle.text;
+
+    NSMutableArray *newRecord = [self.dictDetailTitle objectForKey:currentDict];
+    [newRecord setValue:currentValue forKey:currentKey];
+    
+    if([currentDict isEqualToString:EMAIL_STRING]){
+        
+        [self.dictDetailTitle setObject:newRecord forKey:EMAIL_STRING];
+        
+    }else if([currentDict isEqualToString:URL_STRING]){
+        
+        [self.dictDetailTitle setObject:newRecord forKey:URL_STRING];
+        
+    }else if ([currentDict isEqualToString:PHONE_STRING]){
+        
+        [self.dictDetailTitle setObject:newRecord forKey:PHONE_STRING];
+        
+    }
+    
+}
 #pragma mark TextFields methods
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
@@ -362,6 +404,7 @@
 	{
 		[self.adelegate performSelector:@selector(textFiledDidBeginEditingWithField:) withObject:textField];
 	}
+
 }
 
 - (BOOL)textFieldShouldClear:(UITextField *)textField
@@ -374,7 +417,7 @@
 #define NUMBERS_ONLY @"1234567890 "
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
-
+    
     NSString *rawString = [[textField text] stringByAppendingString:string];
     NSCharacterSet *whitespace = [NSCharacterSet whitespaceAndNewlineCharacterSet];
     NSString *trimmed = [rawString stringByTrimmingCharactersInSet:whitespace];
@@ -458,11 +501,14 @@
 		[globalObj.dictMyAddressBook setValue:self.btnIndustryDropDown.titleLabel.text forKey:self.lblDetailTitle.text];
 	}
     
-	
 }
+
 -(void)getDataFromDict:(NSMutableDictionary *)dictMultiValue andDict:(NSDictionary *)dict
 {
+    if(self.dictDetailTitle == nil){
     self.dictDetailTitle = dictMultiValue;
+    }
+    
     GlobalDataPersistence * globalObj = [GlobalDataPersistence sharedGlobalDataPersistence];
 	NSString *key = [dict objectForKey:kDETAILSTITLE];
 	NSLog(@"Key : %@",key);
@@ -472,24 +518,25 @@
         NSArray *currentKeys = [tempDict allKeys];
         NSArray *currentValues = [tempDict allValues];
         [self.txtdetail setText:[currentValues objectAtIndex:indexPathForCell.row]];
-        [self.detailTextLabel setText:[currentKeys objectAtIndex:indexPathForCell.row]];
-        //[self.lblDetailTitle setText:[currentKeys objectAtIndex:indexPathForCell.row]];
+        [self.lblDetailTitle setText:[currentKeys objectAtIndex:indexPathForCell.row]];
+        [self.lblDictTitle setText:EMAIL_STRING];
+        
     }
     else if([[dict objectForKey:kDETAILSTITLE] isEqualToString:URL_STRING]){
         NSDictionary *tempDict = [self.dictDetailTitle objectForKey:URL_STRING];
         NSArray *currentKeys = [tempDict allKeys];
         NSArray *currentValues = [tempDict allValues];
         [self.txtdetail setText:[currentValues objectAtIndex:indexPathForCell.row]];
-        [self.detailTextLabel setText:[currentKeys objectAtIndex:indexPathForCell.row]];
-        //[self.lblDetailTitle setText:[currentKeys objectAtIndex:indexPathForCell.row]];
+        [self.lblDetailTitle setText:[currentKeys objectAtIndex:indexPathForCell.row]];
+        [self.lblDictTitle setText:URL_STRING];
     }
     else if ([[dict objectForKey:kDETAILSTITLE] isEqualToString:PHONE_STRING]){
         NSDictionary *tempDict = [self.dictDetailTitle objectForKey:PHONE_STRING];
         NSArray *currentKeys = [tempDict allKeys];
         NSArray *currentValues = [tempDict allValues];
         [self.txtdetail setText:[currentValues objectAtIndex:indexPathForCell.row]];
-        [self.detailTextLabel setText:[currentKeys objectAtIndex:indexPathForCell.row]];
-        //[self.lblDetailTitle setText:[currentKeys objectAtIndex:indexPathForCell.row]];
+        [self.lblDetailTitle setText:[currentKeys objectAtIndex:indexPathForCell.row]];
+        [self.lblDictTitle setText:PHONE_STRING];
     }
 //    else if ([[dict objectForKey:kDETAILSTITLE] isEqualToString:ADDRESS_STRING]){
 //    
@@ -498,12 +545,14 @@
 	if ([self.lblDetailTitle.text isEqualToString:key])
 	{
 		[self.txtdetail setText:[globalObj.dictMyAddressBook objectForKey:key]];
+        
 	}
 	
 	if ([key rangeOfString:@"Description" options:NSCaseInsensitiveSearch].length ||
 		[key rangeOfString:@"Note" options:NSCaseInsensitiveSearch].length)
 	{
 		[self.txtView setText:[globalObj.dictMyAddressBook objectForKey:key]];
+       
 	}
 	
 	if ([self boolForDropDown:key])
@@ -557,6 +606,7 @@
 {
 	[dictM_MyaddressBookCell release];
     [_txtdetail setDelegate:nil];
+    [_txtTitle setDelegate:nil];
     [_txtView setDelegate:nil];
     [indexPathForCell release];
 	[_txtFirstRseponder release];
@@ -575,6 +625,7 @@
 	[_btnDropDown release];
 	[_btnIndustryDropDown release];
 	[lblSaperator release];
+    [self removeObserver_NotificationCenter];
 	[super dealloc];
 }
 @end
