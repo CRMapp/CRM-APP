@@ -302,7 +302,6 @@
 		rectTable.size.height = rectTable.size.height - kbSize.width;
 	}
 	
-	
 	[tblDetils setFrame:rectTable];
 	
 	
@@ -312,8 +311,9 @@
 }
 -(void)keyboardWillBeHidden:(NSNotification*)notification
 {
+    
 	NSLog(@"keyBoard hide");
-	
+    
 	NSDictionary* info = [notification userInfo];
     CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
 	
@@ -333,6 +333,7 @@
     //	self.currentField = nil;
 	
 	[tblDetils setFrame:rectTable];
+
 }
 -(void)setTextfieldInFront
 {
@@ -511,7 +512,7 @@
 	[tableIndustry reloadData];
 }
 
-#pragma mark - UITableView Delegates
+#pragma mark - UITableView DataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     
         return numberOfSection;
@@ -588,7 +589,7 @@
     [cell addObserver_NotificationCenter];
 	cell.indexPathForCell = indexPath;
 	// and other objects like radio(gender),dropdown buttons etc.
-
+    
 	NSDictionary * dict = [self.mArrDetilTitle objectAtIndex:indexPath.section];
 	[cell setlabeldetailTitleWithDict:dict andWithSize:CGSizeMake(150, 20)];
 	[cell setSelectionStyle:UITableViewCellSelectionStyleNone];
@@ -652,6 +653,10 @@
 		
 		return 120;
 	}
+    else if ([text rangeOfString:@"address" options:NSCaseInsensitiveSearch].length){
+        return 200;
+    }
+    
     return 44;
 }
 
@@ -2311,7 +2316,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
 				email = [NSEntityDescription insertNewObjectForEntityForName:@"AllEmail" inManagedObjectContext:appDelegate.managedObjectContext];
 			}
 		}
-        
+    
         
         
 		[addressBook setOrganisation:[global.dictMyAddressBook valueForKey:k_TextFiled_CompanyName]];		//CompanyName

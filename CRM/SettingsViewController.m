@@ -3614,6 +3614,7 @@
     //address fields
     NSString *lastAddressType = nil;
     NSArray *addList = [[aContactDetails relAllAddress] allObjects];
+    NSString *fullAddress;
     for (int i =0 ; i <[addList count]; i++)
     {
         AllAddress *address = [addList objectAtIndex:i];
@@ -3670,8 +3671,9 @@
                 else
                     keyStr = [STREET_STRING stringByAppendingFormat:@"  %d",i];
             }
-            [self.dictTemp setObject:address.street                            forKey:keyStr];
-            [arrAllKeys addObject:keyStr];
+            fullAddress = [NSString stringWithFormat:@" %@ \n",address.street];
+//            [self.dictTemp setObject:address.street                            forKey:keyStr];
+//            [arrAllKeys addObject:keyStr];
         }
         if(address.city)
         {
@@ -3686,8 +3688,9 @@
                 else
                     keyStr = [CITY_STRING stringByAppendingFormat:@"  %d",i];
             }
-            [self.dictTemp setObject:address.city                            forKey:keyStr];
-            [arrAllKeys addObject:keyStr];
+             fullAddress = [NSString stringWithFormat:@"%@ %@ \n",fullAddress,address.city];
+            //[self.dictTemp setObject:address.city                            forKey:keyStr];
+            //[arrAllKeys addObject:keyStr];
         }
         if(address.state)
         {
@@ -3702,8 +3705,9 @@
                 else
                     keyStr = [STATE_STRING stringByAppendingFormat:@"  %d",i];
             }
-            [self.dictTemp setObject:address.state                            forKey:keyStr];
-            [arrAllKeys addObject:keyStr];
+            fullAddress = [NSString stringWithFormat:@"%@ %@ \n",fullAddress,address.state];
+            //[self.dictTemp setObject:address.state                            forKey:keyStr];
+            //[arrAllKeys addObject:keyStr];
         }
         if(address.zipCode)
         {
@@ -3718,8 +3722,9 @@
                 else
                     keyStr = [ZIP_STRING stringByAppendingFormat:@"  %d",i];
             }
-            [self.dictTemp setObject:address.zipCode                            forKey:keyStr];
-            [arrAllKeys addObject:keyStr];
+            fullAddress = [NSString stringWithFormat:@"%@ %@ \n",fullAddress,address.zipCode];
+            //[self.dictTemp setObject:address.zipCode                            forKey:keyStr];
+            //[arrAllKeys addObject:keyStr];
         }
         if(address.countryCode)
         {
@@ -3734,9 +3739,14 @@
                 else
                     keyStr = [COUNTRY_STRING stringByAppendingFormat:@"  %d",i];
             }
-            [self.dictTemp setObject:address.countryCode                        forKey:keyStr];
-            [arrAllKeys addObject:keyStr];
+            fullAddress = [NSString stringWithFormat:@"%@ %@ \n",fullAddress,address.countryCode];
+            //[self.dictTemp setObject:address.countryCode                        forKey:keyStr];
+            //[arrAllKeys addObject:keyStr];
         }
+        
+        [self.dictTemp setObject:fullAddress                        forKey:address.addressType];
+        [arrAllKeys addObject:address.addressType];
+
         
         lastAddressType = address.addressType;
     }

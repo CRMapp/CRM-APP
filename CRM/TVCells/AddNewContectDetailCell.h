@@ -72,6 +72,7 @@
 	IBOutlet UILabel *lblSaperator;
 	CGPoint ptBeforeScrolling;
 	IBOutlet UIView *vwRadio;
+    IBOutlet UIView *addressEditView;
 	IBOutlet UIImageView *imgPhoto;
 }
 
@@ -80,6 +81,8 @@
 @property (retain, nonatomic) NSMutableDictionary * dictM_MyaddressBookCell;
 @property (strong, nonatomic) NSMutableDictionary *dictDetailTitle;
 @property (assign, nonatomic) id <AddNewContactdetailCellDelegate>  adelegate;
+
+@property (strong, nonatomic) NSString *currentEditKey;
 
 @property (retain,nonatomic) NSIndexPath * indexPathForCell;
 @property (retain, nonatomic) IBOutlet UILabel *lblDetailTitle;
@@ -91,6 +94,13 @@
 @property (retain, nonatomic) IBOutlet UIButton *btnMale;
 @property (retain, nonatomic) IBOutlet UIButton *btnFemale;
 @property (retain, nonatomic) IBOutlet UITextView *txtView;
+//For Address Edit
+@property (retain, nonatomic) IBOutlet UITextField *addressType;
+@property (retain, nonatomic) IBOutlet UITextField *addressStreet;
+@property (retain, nonatomic) IBOutlet UITextField *addressCity;
+@property (retain, nonatomic) IBOutlet UITextField *addressState;
+@property (retain, nonatomic) IBOutlet UITextField *addressZip;
+@property (retain, nonatomic) IBOutlet UITextField *addressCountry;
 
 @property (retain, nonatomic) UIImageView * imgfirstDropDown;
 @property (retain, nonatomic) UIImageView * imgSecondDropDown;

@@ -824,7 +824,6 @@
     [self showIndustrialInfo];
     [self showNote];
     [self showSocial];
-    NSDictionary *sd = self.dictTemp;
     NSLog(@"%@",self.dictTemp);
 }
 #pragma mark - fetch follow updates

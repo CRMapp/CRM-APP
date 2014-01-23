@@ -55,6 +55,13 @@
                 </subviews>
             </tableViewCellContentView>
             <connections>
+                <outlet property="addressCity" destination="DUK-yl-yEz" id="FC1-XK-Gnc"/>
+                <outlet property="addressCountry" destination="ycI-CL-gsc" id="UzS-XZ-vXz"/>
+                <outlet property="addressEditView" destination="c4U-qZ-b69" id="JVK-6R-cN4"/>
+                <outlet property="addressState" destination="uB8-z8-FzB" id="edn-bQ-MVH"/>
+                <outlet property="addressStreet" destination="jBf-sD-pbk" id="fTj-Ax-Zn9"/>
+                <outlet property="addressType" destination="lrP-LV-tbN" id="EmG-zs-VWc"/>
+                <outlet property="addressZip" destination="IZv-Lb-Ifx" id="FJg-55-YVE"/>
                 <outlet property="btnAddLatPurchase" destination="28" id="31"/>
                 <outlet property="btnDate" destination="14" id="15"/>
                 <outlet property="btnDropDown" destination="35" id="36"/>
@@ -68,6 +75,7 @@
                 <outlet property="lblDictTitle" destination="44" id="826-lN-bUH"/>
                 <outlet property="lblSaperator" destination="40" id="41"/>
                 <outlet property="txtSecondAddress" destination="32" id="33"/>
+                <outlet property="txtTitle" destination="aPC-f9-sRU" id="UoJ-cF-4zQ"/>
                 <outlet property="txtView" destination="25" id="43"/>
                 <outlet property="txtdetail" destination="7" id="9"/>
                 <outlet property="vwRadio" destination="16" id="19"/>
@@ -206,6 +214,67 @@
                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
             </state>
         </button>
+        <view contentMode="scaleToFill" id="c4U-qZ-b69" userLabel="Edit Address View">
+            <rect key="frame" x="0.0" y="0.0" width="814" height="180"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Address" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="ppT-zE-9c8">
+                    <rect key="frame" x="7" y="12" width="163" height="20"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" id="lrP-LV-tbN" userLabel="AddressType">
+                    <rect key="frame" x="178" y="0.0" width="623" height="30"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                    <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="14"/>
+                    <textInputTraits key="textInputTraits" autocapitalizationType="words"/>
+                </textField>
+                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" id="jBf-sD-pbk" userLabel="Street">
+                    <rect key="frame" x="178" y="30" width="623" height="30"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                    <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="14"/>
+                    <textInputTraits key="textInputTraits" autocapitalizationType="words"/>
+                </textField>
+                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" id="DUK-yl-yEz" userLabel="City">
+                    <rect key="frame" x="178" y="60" width="623" height="30"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                    <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="14"/>
+                    <textInputTraits key="textInputTraits" autocapitalizationType="words"/>
+                </textField>
+                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" id="uB8-z8-FzB" userLabel="State">
+                    <rect key="frame" x="178" y="90" width="623" height="30"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                    <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="14"/>
+                    <textInputTraits key="textInputTraits" autocapitalizationType="words"/>
+                </textField>
+                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" id="IZv-Lb-Ifx" userLabel="ZipCode">
+                    <rect key="frame" x="178" y="120" width="623" height="30"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                    <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="14"/>
+                    <textInputTraits key="textInputTraits" autocapitalizationType="words"/>
+                </textField>
+                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" id="ycI-CL-gsc" userLabel="Country">
+                    <rect key="frame" x="178" y="150" width="623" height="30"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                    <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="14"/>
+                    <textInputTraits key="textInputTraits" autocapitalizationType="words"/>
+                </textField>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+        </view>
     </objects>
     <resources>
         <image name="btn_bg.png" width="92" height="35"/>

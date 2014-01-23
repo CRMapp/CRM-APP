@@ -22,7 +22,11 @@
 
 #import "GlobalDataPersistence.h"
 
-@implementation AddNewContectDetailCell
+@implementation AddNewContectDetailCell{
+  
+    NSMutableDictionary *newRecord;
+
+}
 
 
 @synthesize editMyAddObj;
@@ -53,34 +57,44 @@
 
 -(void)setlabeldetailTitleWithDict:(NSDictionary *)dictData andWithSize:(CGSize)size
 {
+   
+    
     //Lable for Multi value cell
     if([[dictData objectForKey:kDETAILSTITLE] isEqualToString:EMAIL_STRING]){
         
-       
-        [self.lblDetailTitle setText:[NSString stringWithFormat:@"%@",[dictData objectForKey:kDETAILSTITLE]]];
+        [self.lblDetailTitle setHidden:YES];
+        //[self.lblDetailTitle setText:[NSString stringWithFormat:@"%@",[dictData objectForKey:kDETAILSTITLE]]];
        
     }
     else if ([[dictData objectForKey:kDETAILSTITLE] isEqualToString:URL_STRING]){
         
-        [self.lblDetailTitle setText:[NSString stringWithFormat:@"%@",[dictData objectForKey:kDETAILSTITLE]]];
+        [self.lblDetailTitle setHidden:YES];
+        //[self.lblDetailTitle setText:[NSString stringWithFormat:@"%@",[dictData objectForKey:kDETAILSTITLE]]];
      
     }
     else if ([[dictData objectForKey:kDETAILSTITLE] isEqualToString:PHONE_STRING]){
       
-        [self.lblDetailTitle setText:[NSString stringWithFormat:@"%@",[dictData objectForKey:kDETAILSTITLE]]];
+        [self.lblDetailTitle setHidden:YES];
+        //[self.lblDetailTitle setText:[NSString stringWithFormat:@"%@",[dictData objectForKey:kDETAILSTITLE]]];
        
     }
     else if ([[dictData objectForKey:kDETAILSTITLE] isEqualToString:ADDRESS_STRING]){
         
-        [self.lblDetailTitle setText:[NSString stringWithFormat:@"%@",[dictData objectForKey:kDETAILSTITLE]]];
-       
+        
+                [self setAddressView];
+                self.addressCity.placeholder = [NSString stringWithFormat:@"City"];
+                self.addressCountry.placeholder = [NSString stringWithFormat:@"Country"];
+                self.addressState.placeholder = [NSString stringWithFormat:@"State"];
+                self.addressStreet.placeholder = [NSString stringWithFormat:@"Street"];
+                self.addressType.placeholder = [NSString stringWithFormat:@"Address Label"];
+                self.addressZip.placeholder = [NSString stringWithFormat:@"Zip"];
+        //[self.lblDetailTitle setText:[NSString stringWithFormat:@"%@",[dictData objectForKey:kDETAILSTITLE]]];
     }
     else{
         [self.lblDetailTitle setText:[NSString stringWithFormat:@"%@",[dictData objectForKey:kDETAILSTITLE]]];
-    
+        
         [self.txtdetail setDelegate:self];
         [self.txtTitle setDelegate:self];
-	
 //	CGRect rectLblTitle = self.lblDetailTitle.frame;
 //	rectLblTitle.size = size;
 //	[self.lblDetailTitle setFrame:rectLblTitle];
@@ -91,8 +105,10 @@
 //	rectTxt.size.width = self.frame.size.width - rectTxt.origin.x;
 //	[self.txtdetail setFrame:rectTxt];
 	
+        [self.txtTitle setHidden:YES];
+        
         NSString * strType = [dictData objectForKey:kDETAILSTYPE];
-
+        
         if ([self.lblDetailTitle.text rangeOfString:@"image" options:NSCaseInsensitiveSearch].length)
         {
             [self setImageOnCell];
@@ -161,6 +177,8 @@
 //
 }
      */
+
+
 -(void)setAccordingToTypeAddress
 {
 	[self.txtdetail setHidden:YES];
@@ -176,7 +194,7 @@
 	// hide the label and textField
 	[self.lblDetailTitle setHidden:YES];
 	[self.txtdetail setHidden:YES];
-    [self.txtTitle setHidden:YES];
+  
 	
 	CGRect rectImg = imgPhoto.frame;
 	rectImg.origin.x = 10;
@@ -194,11 +212,19 @@
 	[self addSubview:imgPhoto];
 	[self addSubview:self.btnUpload];
 }
-
+-(void)setAddressView{
+    [self.txtdetail setHidden:YES];
+//    CGRect rect = addressEditView.frame;
+//
+//    [addressEditView setCenter:CGPointMake(7, self.lblDetailTitle.center.y)];
+//    [addressEditView setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin];
+    [self addSubview:addressEditView];
+    
+}
 -(void)setAccordingDateOfBirth
 {
 	[self.txtdetail setUserInteractionEnabled:NO];
-	 [self.txtTitle setHidden:YES];
+	
 	CGRect rect = self.btnDate.frame;
 	rect.origin.x = (self.txtdetail.frame.size.width + self.txtdetail.frame.origin.x) - rect.size.width;
 	[self.btnDate setFrame:rect];
@@ -215,7 +241,7 @@
 -(void)setAccordingGender
 {
 	[self.txtdetail setHidden:YES];
-	 [self.txtTitle setHidden:YES];
+	
 	CGRect rect = self.btnUpload.frame;
 	rect.origin.x = (self.txtdetail.frame.size.width + self.txtdetail.frame.origin.x) - rect.size.width;
 	
@@ -225,9 +251,10 @@
 	[vwRadio setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin];
 	[self addSubview:vwRadio];
 }
+
 -(void)setAccordingDescription
 {
-     [self.txtTitle setHidden:YES];
+    
 	[self.txtdetail setHidden:YES];
 	[self.txtView setDelegate:nil];
 	[self.txtView setDelegate:self];
@@ -237,8 +264,6 @@
 }
 -(void)setAccordingToSingleDropDownWithDict:(NSDictionary*)dict
 {
-	[self.txtdetail setHidden:YES];
-     [self.txtTitle setHidden:YES];
 	
 	// set images in cell
 	UIImage * image = [UIImage imageNamed:@"text_box_p.png"];
@@ -281,7 +306,7 @@
 -(void)setAccordingToLastPurchase
 {
 	[self.txtdetail setHidden:YES];
-	 [self.txtTitle setHidden:YES];
+	
 	// ADD Las Purchase
 	CGRect rectAdd = self.btnAddLatPurchase.frame;
 	rectAdd.origin.x =	self.txtdetail.frame.origin.x ;
@@ -313,7 +338,7 @@
 {
 	// hide the textfiled
 	[self.txtdetail setHidden:YES];
-     [self.txtTitle setHidden:YES];
+    
     
 	// first dropDown Image
     
@@ -359,37 +384,84 @@
 - (void)addObserver_NotificationCenter{
     [[NSNotificationCenter defaultCenter] addObserver:self
 											 selector:@selector(textDidEndEditing:)
-												 name:UITextFieldTextDidEndEditingNotification object:nil];
+												 name:UITextFieldTextDidEndEditingNotification object:self.txtTitle];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(textDidBeginEditing:)
+												 name:UITextFieldTextDidBeginEditingNotification object:self.txtTitle];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(textDidEndEditing:)
+												 name:UITextFieldTextDidEndEditingNotification object:self.txtdetail];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(textDidBeginEditing:)
+												 name:UITextFieldTextDidBeginEditingNotification object:self.txtdetail];
 }
 - (void)removeObserver_NotificationCenter
 {
 	[[NSNotificationCenter defaultCenter] removeObserver:UITextFieldTextDidEndEditingNotification];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:UITextFieldTextDidBeginEditingNotification];
 }
 
 #pragma mark - Notification Methods
+-(void)textDidBeginEditing:(NSNotification*)notification{
+    
+  self.currentEditKey = self.txtTitle.text;
+    NSLog(@"Editing Filed : %@",self.currentEditKey);
+
+}
 -(void)textDidEndEditing:(NSNotification*)notification{
  
-    NSString *currentKey = self.lblDetailTitle.text;
+    NSString *currentKey = self.txtTitle.text;
     NSString *currentValue = self.txtdetail.text;
     NSString *currentDict = self.lblDictTitle.text;
-
-    NSMutableArray *newRecord = [self.dictDetailTitle objectForKey:currentDict];
-    [newRecord setValue:currentValue forKey:currentKey];
     
-    if([currentDict isEqualToString:EMAIL_STRING]){
+    NSLog(@"End Editing current key :  %@  %@",currentKey,currentValue);
+    
+    if(![currentKey isEqualToString:self.currentEditKey]){
+        newRecord = nil;
+        newRecord = [NSMutableDictionary dictionary];
+        newRecord = [self.dictDetailTitle objectForKey:currentDict];
+        [newRecord removeObjectForKey:self.currentEditKey];
+        [newRecord setValue:currentValue forKey:currentKey];
+        if([currentDict isEqualToString:EMAIL_STRING]){
         
-        [self.dictDetailTitle setObject:newRecord forKey:EMAIL_STRING];
+            [self.dictDetailTitle setObject:newRecord forKey:EMAIL_STRING];
+            NSLog(@"dictionary :  %@",self.dictDetailTitle);
         
-    }else if([currentDict isEqualToString:URL_STRING]){
+        }else if([currentDict isEqualToString:URL_STRING]){
+       
+            [self.dictDetailTitle setObject:newRecord forKey:URL_STRING];
         
-        [self.dictDetailTitle setObject:newRecord forKey:URL_STRING];
+        }else if ([currentDict isEqualToString:PHONE_STRING]){
+       
+            [self.dictDetailTitle setObject:newRecord forKey:PHONE_STRING];
         
-    }else if ([currentDict isEqualToString:PHONE_STRING]){
-        
-        [self.dictDetailTitle setObject:newRecord forKey:PHONE_STRING];
-        
+        }
     }
-    
+    else{
+     
+        newRecord = nil;
+        newRecord = [NSMutableDictionary dictionary];
+        newRecord = [self.dictDetailTitle objectForKey:currentDict];
+        [newRecord setValue:currentValue forKey:currentKey];
+        
+        if([currentDict isEqualToString:EMAIL_STRING]){
+            
+            [self.dictDetailTitle setObject:newRecord forKey:EMAIL_STRING];
+            
+        }else if([currentDict isEqualToString:URL_STRING]){
+            
+            [self.dictDetailTitle setObject:newRecord forKey:URL_STRING];
+            
+        }else if ([currentDict isEqualToString:PHONE_STRING]){
+            
+            [self.dictDetailTitle setObject:newRecord forKey:PHONE_STRING];
+            
+        }
+
+    }
+    NSLog(@"NSDictionary  :  %@",self.dictDetailTitle);
 }
 #pragma mark TextFields methods
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
@@ -508,7 +580,6 @@
     if(self.dictDetailTitle == nil){
     self.dictDetailTitle = dictMultiValue;
     }
-    
     GlobalDataPersistence * globalObj = [GlobalDataPersistence sharedGlobalDataPersistence];
 	NSString *key = [dict objectForKey:kDETAILSTITLE];
 	NSLog(@"Key : %@",key);
@@ -517,8 +588,9 @@
         NSDictionary *tempDict = [self.dictDetailTitle objectForKey:EMAIL_STRING];
         NSArray *currentKeys = [tempDict allKeys];
         NSArray *currentValues = [tempDict allValues];
+        
         [self.txtdetail setText:[currentValues objectAtIndex:indexPathForCell.row]];
-        [self.lblDetailTitle setText:[currentKeys objectAtIndex:indexPathForCell.row]];
+        [self.txtTitle setText:[currentKeys objectAtIndex:indexPathForCell.row]];
         [self.lblDictTitle setText:EMAIL_STRING];
         
     }
@@ -527,7 +599,7 @@
         NSArray *currentKeys = [tempDict allKeys];
         NSArray *currentValues = [tempDict allValues];
         [self.txtdetail setText:[currentValues objectAtIndex:indexPathForCell.row]];
-        [self.lblDetailTitle setText:[currentKeys objectAtIndex:indexPathForCell.row]];
+        [self.txtTitle setText:[currentKeys objectAtIndex:indexPathForCell.row]];
         [self.lblDictTitle setText:URL_STRING];
     }
     else if ([[dict objectForKey:kDETAILSTITLE] isEqualToString:PHONE_STRING]){
@@ -535,12 +607,45 @@
         NSArray *currentKeys = [tempDict allKeys];
         NSArray *currentValues = [tempDict allValues];
         [self.txtdetail setText:[currentValues objectAtIndex:indexPathForCell.row]];
-        [self.lblDetailTitle setText:[currentKeys objectAtIndex:indexPathForCell.row]];
+        [self.txtTitle setText:[currentKeys objectAtIndex:indexPathForCell.row]];
         [self.lblDictTitle setText:PHONE_STRING];
     }
-//    else if ([[dict objectForKey:kDETAILSTITLE] isEqualToString:ADDRESS_STRING]){
-//    
-//    }
+    else if ([[dict objectForKey:kDETAILSTITLE] isEqualToString:ADDRESS_STRING]){
+        NSDictionary *tempDict = [self.dictDetailTitle objectForKey:ADDRESS_STRING];
+        NSArray *allAddressType = [tempDict allKeys];
+    
+        [self.addressType setText:[allAddressType objectAtIndex:indexPathForCell.row]];
+        
+        
+        NSMutableArray *allcity = [NSMutableArray array];
+        NSMutableArray *allcountry = [NSMutableArray array];
+        NSMutableArray *allstate = [NSMutableArray array];
+        NSMutableArray *allstreet = [NSMutableArray array];
+        NSMutableArray *allzip = [NSMutableArray array];
+        for(NSString *aKey in allAddressType){
+            NSArray *currentAddress = [tempDict objectForKey:aKey];
+            NSString *street = [currentAddress valueForKey:STREET_STRING];
+            NSString *city = [currentAddress valueForKey:CITY_STRING];
+            NSString *state = [currentAddress valueForKey:STATE_STRING];
+            NSString *zip = [currentAddress valueForKey:ZIP_STRING];
+            NSString *country = [currentAddress valueForKey:COUNTRY_STRING];
+            [allcity addObject:city];
+            [allcountry addObject:country];
+            [allstate addObject:state];
+            [allzip addObject:zip];
+            [allstreet addObject:street];
+ 
+        }
+        
+        
+        
+        [self.addressCity setText:[allcity objectAtIndex:indexPathForCell.row]];
+        [self.addressCountry setText:[allcountry objectAtIndex:indexPathForCell.row]];
+        [self.addressState setText:[allstate objectAtIndex:indexPathForCell.row]];
+        [self.addressStreet setText:[allstreet objectAtIndex:indexPathForCell.row]];
+        [self.addressZip setText:[allzip objectAtIndex:indexPathForCell.row]];
+        
+    }
     else{
 	if ([self.lblDetailTitle.text isEqualToString:key])
 	{
