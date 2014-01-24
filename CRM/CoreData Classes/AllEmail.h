@@ -12,10 +12,8 @@
 @class MyAddressBook;
 
 @interface AllEmail : NSManagedObject
-
 @property (nonatomic, retain) NSNumber * isSelected;
 @property (nonatomic, retain) NSString * emailURL;
 @property (nonatomic, retain) NSString * emailTitle;
 @property (nonatomic, retain) MyAddressBook *relMyAddressBook;
-
 @end

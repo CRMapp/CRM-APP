@@ -77,7 +77,7 @@
 	[super viewDidLoad];
     [(AppDelegate *)[[UIApplication sharedApplication] delegate] insertFunnelStageList];
     [(AppDelegate *)[[UIApplication sharedApplication] delegate] insertIndusrtiesInDatabase];
-    
+    self.managedObjectContext = ((AppDelegate*)CRM_AppDelegate).managedObjectContext;
     self.groupIndex = -999;
     self.subGroupIndex = -999;
     
@@ -109,7 +109,6 @@
 	//    [self createHeaderView];
 	
     [self addObserver_NotificationCenter];
-	
     // Do any additional setup after loading the view from its nib.
 }
 - (void)createHeaderView
@@ -505,7 +504,7 @@
 		predicate = [NSPredicate predicateWithFormat:@"ANY industryName CONTAINS[cd] %@",txtIndustrySearch.text];
 	}
 	
-	NSArray *array = [CoreDataHelper searchObjectsForEntity:@"Industries" withPredicate:predicate andSortKey:@"industryName" andSortAscending:YES andContext:((AppDelegate*)CRM_AppDelegate).managedObjectContext];
+	NSArray *array = [CoreDataHelper searchObjectsForEntity:@"Industries" withPredicate:predicate andSortKey:@"industryName" andSortAscending:YES andContext:self.managedObjectContext];
 	
 	self.arrayIndustry = [NSMutableArray arrayWithArray:array];
 	
@@ -624,10 +623,84 @@
 	[cell.btnIndustryDropDown addTarget:self action:@selector(btnIndustryDropDownTapped:) forControlEvents:UIControlEventTouchUpInside];
 	[cell.btnIndustryDropDown setTag:indexPath.section];
 	
-    
+  [tableView setEditing:YES animated:YES];
 	return cell;
 	
 }
+- (UITableViewCellEditingStyle)tableView:(UITableView *)aTableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
+   
+    // Detemine cell to be edited
+    NSDictionary *tempDict = [self.mArrDetilTitle objectAtIndex:indexPath.section];
+    if([[tempDict valueForKey:kDETAILSTITLE] isEqualToString:EMAIL_STRING] || [[tempDict valueForKey:kDETAILSTITLE] isEqualToString:ADDRESS_STRING] || [[tempDict valueForKey:kDETAILSTITLE] isEqualToString:URL_STRING] || [[tempDict valueForKey:kDETAILSTITLE] isEqualToString:PHONE_STRING]){
+        return UITableViewCellEditingStyleDelete;
+    }
+    return UITableViewCellEditingStyleNone;
+}
+
+
+
+//delete row with Edit tableview
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    id roleToDelete = nil;
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+      //[tableView beginUpdates];
+        
+        // Delete the role object that was swiped
+        NSDictionary *tempDict = [self.mArrDetilTitle objectAtIndex:indexPath.section];
+        if([[tempDict valueForKey:kDETAILSTITLE] isEqualToString:EMAIL_STRING]){
+            NSArray *emailsList = [[self.editMyAddObj relEmails] allObjects];
+           roleToDelete = [emailsList objectAtIndex:indexPath.row];
+            
+        }
+        else if([[tempDict valueForKey:kDETAILSTITLE] isEqualToString:URL_STRING]){
+            NSArray *emailsList = [[self.editMyAddObj relAllUrl] allObjects];
+            roleToDelete = [emailsList objectAtIndex:indexPath.row];
+            
+        }
+        else if([[tempDict valueForKey:kDETAILSTITLE] isEqualToString:ADDRESS_STRING]){
+            NSArray *emailsList = [[self.editMyAddObj relAllAddress] allObjects];
+            roleToDelete = [emailsList objectAtIndex:indexPath.row];
+            
+        }
+        else if([[tempDict valueForKey:kDETAILSTITLE] isEqualToString:PHONE_STRING]){
+            NSArray *emailsList = [[self.editMyAddObj relAllPhone] allObjects];
+            roleToDelete = [emailsList objectAtIndex:indexPath.row];
+            
+        }
+        
+        
+        [self.managedObjectContext deleteObject:roleToDelete];
+        NSError *error = nil;
+        [self.managedObjectContext save:&error];
+        if(error == nil){
+            [self.managedObjectContext refreshObject:[roleToDelete relMyAddressBook] mergeChanges:NO];
+            
+            
+            if([[tempDict valueForKey:kDETAILSTITLE] isEqualToString:EMAIL_STRING]){
+                [self.editMyAddObj relEmails];
+            }
+            else if([[tempDict valueForKey:kDETAILSTITLE] isEqualToString:URL_STRING]){
+                [self.editMyAddObj relAllUrl];
+            }
+            else if([[tempDict valueForKey:kDETAILSTITLE] isEqualToString:ADDRESS_STRING]){
+                [self.editMyAddObj relAllAddress];
+            }
+            else if([[tempDict valueForKey:kDETAILSTITLE] isEqualToString:PHONE_STRING]){
+                [self.editMyAddObj relAllPhone];
+            }
+            // Delete the (now empty) row on the table
+            [tableView beginUpdates];
+            [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+            [self dictDetailValue];
+            [tableView endUpdates];
+        }else{
+            NSLog(@"%@", [error description]);
+        }
+        //
+        
+    }
+}
+
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	if (tableView == tableIndustry)
@@ -738,7 +811,8 @@
         
         
 	}
-	
+
+    
 }
 
 -(void)btnFooterBackOrCancelTapped:(UIButton*)sender
@@ -753,7 +827,7 @@
 		
         if (self.editMyAddObj)
         {
-            [((AppDelegate*)CRM_AppDelegate).managedObjectContext refreshObject:self.editMyAddObj mergeChanges:NO];
+            [self.managedObjectContext refreshObject:self.editMyAddObj mergeChanges:NO];
         }
         else
         {
@@ -777,7 +851,7 @@
 		
         if (self.editMyAddObj)
         {
-            [((AppDelegate*)CRM_AppDelegate).managedObjectContext refreshObject:self.editMyAddObj mergeChanges:NO];
+            [self.managedObjectContext refreshObject:self.editMyAddObj mergeChanges:NO];
             if (self.aDelegate && [self.aDelegate respondsToSelector:@selector(refreshContactList)])
             {
                 [self.aDelegate performSelector:@selector(refreshContactList) withObject:nil];
@@ -894,7 +968,7 @@
     
     NSPredicate *_myPredicate = [NSPredicate predicateWithFormat:@"firstName == %@ AND lastName == %@", [global.dictMyAddressBook valueForKey:k_TextFiled_FirstName],[global.dictMyAddressBook valueForKey:k_TextFiled_LastName]];
     
-    NSArray *copyitemsearch = [CoreDataHelper searchObjectsForEntity:@"MyAddressBook" withPredicate:_myPredicate andSortKey:@"firstName" andSortAscending:YES andContext:((AppDelegate*)CRM_AppDelegate).managedObjectContext];
+    NSArray *copyitemsearch = [CoreDataHelper searchObjectsForEntity:@"MyAddressBook" withPredicate:_myPredicate andSortKey:@"firstName" andSortAscending:YES andContext:self.managedObjectContext];
     
     if([copyitemsearch count] && !self.editMyAddObj)
     {
@@ -1190,12 +1264,12 @@
 {
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"recordID == %@",recordId];
     
-    NSArray *previousEntry = [CoreDataHelper searchObjectsForEntity:@"MyAddressBook" withPredicate:predicate andSortKey:@"firstName" andSortAscending:YES andContext:((AppDelegate*)CRM_AppDelegate).managedObjectContext];
+    NSArray *previousEntry = [CoreDataHelper searchObjectsForEntity:@"MyAddressBook" withPredicate:predicate andSortKey:@"firstName" andSortAscending:YES andContext:self.managedObjectContext];
     NSLog(@"%@",previousEntry);
     
     if ([previousEntry count])
     {
-        NSArray * arr = [CoreDataHelper getObjectsForEntity:@"GroupList" withSortKey:nil andSortAscending:NO andContext:((AppDelegate*)CRM_AppDelegate).managedObjectContext];
+        NSArray * arr = [CoreDataHelper getObjectsForEntity:@"GroupList" withSortKey:nil andSortAscending:NO andContext:self.managedObjectContext];
         if([arr count])
         {
             GroupList *aGroup = [arr objectAtIndex:self.groupIndex];
@@ -1850,6 +1924,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
 			[dictEdit setValue:address.state forKey:k_TextFiled_State];
 			[dictEdit setValue:address.countryCode forKey:k_TextFiled_Country];
 			[dictEdit setValue:address.zipCode forKey:k_TextFiled_ZipCode];
+            [dictEdit setValue:address.addressType forKey:ADDRESS_TYPE_STRING];
 		}
         
 	}
@@ -2266,6 +2341,95 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
 				url = [NSEntityDescription insertNewObjectForEntityForName:@"AllUrl" inManagedObjectContext:appDelegate.managedObjectContext];
 			}
 		}
+        
+        /*
+         
+         if ([[dict objectForKey:kDETAILSTITLE] isEqualToString:ADDRESS_STRING]){
+         NSDictionary *tempDict = [self.dictDetailTitle objectForKey:ADDRESS_STRING];
+         NSArray *allAddressType = [tempDict allKeys];
+         
+         
+         
+         
+         NSMutableArray *allcity = [NSMutableArray array];
+         NSMutableArray *allcountry = [NSMutableArray array];
+         NSMutableArray *allstate = [NSMutableArray array];
+         NSMutableArray *allstreet = [NSMutableArray array];
+         NSMutableArray *allzip = [NSMutableArray array];
+         for(NSString *aKey in allAddressType){
+         NSArray *currentAddress = [tempDict objectForKey:aKey];
+         NSString *street = [currentAddress valueForKey:STREET_STRING];
+         NSString *city = [currentAddress valueForKey:CITY_STRING];
+         NSString *state = [currentAddress valueForKey:STATE_STRING];
+         NSString *zip = [currentAddress valueForKey:ZIP_STRING];
+         NSString *country = [currentAddress valueForKey:COUNTRY_STRING];
+         [allcity addObject:city];
+         [allcountry addObject:country];
+         [allstate addObject:state];
+         [allzip addObject:zip];
+         [allstreet addObject:street];
+         
+         }
+         
+         
+         [self.addressType setText:[allAddressType objectAtIndex:indexPathForCell.row]];
+         [self.addressCity setText:[allcity objectAtIndex:indexPathForCell.row]];
+         [self.addressCountry setText:[allcountry objectAtIndex:indexPathForCell.row]];
+         [self.addressState setText:[allstate objectAtIndex:indexPathForCell.row]];
+         [self.addressStreet setText:[allstreet objectAtIndex:indexPathForCell.row]];
+         [self.addressZip setText:[allzip objectAtIndex:indexPathForCell.row]];
+         
+         }
+         
+         */
+        //Address
+        //only edit exixting contact
+        {
+            AllAddress *address = nil;
+            if(self.editMyAddObj && [[self.editMyAddObj.relAllAddress allObjects] count]){
+                NSDictionary *tempDict = [self.dictDetailTitle objectForKey:ADDRESS_STRING];
+                NSArray *allAddressType = [tempDict allKeys];
+                
+                NSMutableArray *allcity = [NSMutableArray array];
+                NSMutableArray *allcountry = [NSMutableArray array];
+                NSMutableArray *allstate = [NSMutableArray array];
+                NSMutableArray *allstreet = [NSMutableArray array];
+                NSMutableArray *allzip = [NSMutableArray array];
+
+                for(NSString *aKey in allAddressType){
+                    NSArray *currentAddress = [tempDict objectForKey:aKey];
+                    NSString *street = [currentAddress valueForKey:STREET_STRING];
+                    NSString *city = [currentAddress valueForKey:CITY_STRING];
+                    NSString *state = [currentAddress valueForKey:STATE_STRING];
+                    NSString *zip = [currentAddress valueForKey:ZIP_STRING];
+                    NSString *country = [currentAddress valueForKey:COUNTRY_STRING];
+                    [allcity addObject:city];
+                    [allcountry addObject:country];
+                    [allstate addObject:state];
+                    [allzip addObject:zip];
+                    [allstreet addObject:street];
+                    
+                }
+                
+                for(int i=0; i<[allAddressType count]; i++)
+                {
+                    address = [[self.editMyAddObj.relAllAddress allObjects] objectAtIndex:i];
+                    
+                    [address setAddressType:[allAddressType objectAtIndex:i]];
+                    [address setCity:[allcity objectAtIndex:i]];
+                    [address setCountryCode:[allcountry objectAtIndex:i]];
+                    [address setState:[allstate objectAtIndex:i]];
+                    [address setStreet:[allstreet objectAtIndex:i]];
+                    [address setZipCode:[allzip objectAtIndex:i]];
+                    
+                    [address setRelMyAddressBook:addressBook];
+                }
+                
+            }
+        }
+        
+        
+        
         //phone
         //only edit existing contact
         {

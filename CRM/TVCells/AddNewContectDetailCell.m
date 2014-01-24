@@ -382,6 +382,7 @@
 
 #pragma mark - TextField Notifications
 - (void)addObserver_NotificationCenter{
+    //notification for title
     [[NSNotificationCenter defaultCenter] addObserver:self
 											 selector:@selector(textDidEndEditing:)
 												 name:UITextFieldTextDidEndEditingNotification object:self.txtTitle];
@@ -389,12 +390,54 @@
 											 selector:@selector(textDidBeginEditing:)
 												 name:UITextFieldTextDidBeginEditingNotification object:self.txtTitle];
     
+    //notification for field
     [[NSNotificationCenter defaultCenter] addObserver:self
 											 selector:@selector(textDidEndEditing:)
 												 name:UITextFieldTextDidEndEditingNotification object:self.txtdetail];
     [[NSNotificationCenter defaultCenter] addObserver:self
 											 selector:@selector(textDidBeginEditing:)
 												 name:UITextFieldTextDidBeginEditingNotification object:self.txtdetail];
+    
+    //-----------------------------notification for Address fields
+            //notification for Begin
+    [[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(textDidBeginEditingForAddress:)
+												 name:UITextFieldTextDidBeginEditingNotification object:self.addressType];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(textDidBeginEditingForAddress:)
+												 name:UITextFieldTextDidBeginEditingNotification object:self.addressStreet];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(textDidBeginEditingForAddress:)
+												 name:UITextFieldTextDidBeginEditingNotification object:self.addressCity];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(textDidBeginEditingForAddress:)
+												 name:UITextFieldTextDidBeginEditingNotification object:self.addressState];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(textDidBeginEditingForAddress:)
+												 name:UITextFieldTextDidBeginEditingNotification object:self.addressZip];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(textDidBeginEditingForAddress:)
+												 name:UITextFieldTextDidBeginEditingNotification object:self.addressCountry];
+            //notification for End
+    [[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(textDidEndEditingForAddress:)
+												 name:UITextFieldTextDidEndEditingNotification object:self.addressType];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(textDidEndEditingForAddress:)
+												 name:UITextFieldTextDidEndEditingNotification object:self.addressStreet];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(textDidEndEditingForAddress:)
+												 name:UITextFieldTextDidEndEditingNotification object:self.addressCity];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(textDidEndEditingForAddress:)
+												 name:UITextFieldTextDidEndEditingNotification object:self.addressState];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(textDidEndEditingForAddress:)
+												 name:UITextFieldTextDidEndEditingNotification object:self.addressZip];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(textDidEndEditingForAddress:)
+												 name:UITextFieldTextDidEndEditingNotification object:self.addressCountry];
+    
 }
 - (void)removeObserver_NotificationCenter
 {
@@ -404,6 +447,40 @@
 }
 
 #pragma mark - Notification Methods
+    //Notification for Address
+-(void)textDidEndEditingForAddress:(NSNotification*)notification{
+    
+    NSString *addressStreet = self.addressStreet.text;
+    NSString *addressCity = self.addressCity.text;
+    NSString *addressState = self.addressState.text;
+    NSString *addressZip = self.addressZip.text;
+    NSString *addressCountry = self.addressCountry.text;
+    NSString *addressType = self.addressType.text;
+    
+    NSMutableDictionary *editData = [NSMutableDictionary dictionary];
+    [editData setValue:addressStreet forKey:STREET_STRING];
+    [editData setValue:addressCity forKey:CITY_STRING];
+    [editData setValue:addressState forKey:STATE_STRING];
+    [editData setValue:addressZip forKey:ZIP_STRING];
+    [editData setValue:addressCountry forKey:COUNTRY_STRING];
+    
+    NSMutableDictionary *record = nil;
+    record = [NSMutableDictionary dictionary];
+    record = [self.dictDetailTitle objectForKey:ADDRESS_STRING];
+    [record removeObjectForKey:self.currentEditKey];
+    [record setObject:editData forKey:addressType];
+    [self.dictDetailTitle setObject:record forKey:ADDRESS_STRING];
+    
+    NSLog(@"dictionary :  %@",self.dictDetailTitle);
+}
+
+
+-(void)textDidBeginEditingForAddress:(NSNotification*)notification{
+    self.currentEditKey = self.addressType.text;
+    NSLog(@"Editing Filed : %@",self.currentEditKey);
+}
+
+    //Notification for other multivalue fields
 -(void)textDidBeginEditing:(NSNotification*)notification{
     
   self.currentEditKey = self.txtTitle.text;

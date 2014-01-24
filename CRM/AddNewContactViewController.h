@@ -53,7 +53,7 @@
 
 //@property (retain, nonatomic) MyAddressBook * myAddObj;
 @property (retain, nonatomic) MyAddressBook * editMyAddObj;
-
+@property (nonatomic, retain) NSManagedObjectContext *managedObjectContext;
 @property (assign, nonatomic) int groupIndex;
 @property (assign, nonatomic) int subGroupIndex;
 
