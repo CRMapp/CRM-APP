@@ -80,7 +80,7 @@
     }
     else if ([[dictData objectForKey:kDETAILSTITLE] isEqualToString:ADDRESS_STRING]){
         
-        
+        [self.lblDetailTitle setHidden:YES];
                 [self setAddressView];
                 self.addressCity.placeholder = [NSString stringWithFormat:@"City"];
                 self.addressCountry.placeholder = [NSString stringWithFormat:@"Country"];
@@ -665,63 +665,105 @@
         NSDictionary *tempDict = [self.dictDetailTitle objectForKey:EMAIL_STRING];
         NSArray *currentKeys = [tempDict allKeys];
         NSArray *currentValues = [tempDict allValues];
-        
-        [self.txtdetail setText:[currentValues objectAtIndex:indexPathForCell.row]];
-        [self.txtTitle setText:[currentKeys objectAtIndex:indexPathForCell.row]];
-        [self.lblDictTitle setText:EMAIL_STRING];
-        
+        int currentRow = indexPathForCell.row;
+        int numberOfRow = [currentKeys count];
+        if(currentRow == numberOfRow){
+            [self.lblDetailTitle setHidden:NO];
+            [self.lblDetailTitle setText:@"Add Email"];
+            [self.txtdetail setHidden:YES];
+            [self.txtTitle setHidden:YES];
+            
+        }
+        else{
+            [self.txtdetail setText:[currentValues objectAtIndex:indexPathForCell.row]];
+            [self.txtTitle setText:[currentKeys objectAtIndex:indexPathForCell.row]];
+            [self.lblDictTitle setText:EMAIL_STRING];
+        }
     }
     else if([[dict objectForKey:kDETAILSTITLE] isEqualToString:URL_STRING]){
         NSDictionary *tempDict = [self.dictDetailTitle objectForKey:URL_STRING];
         NSArray *currentKeys = [tempDict allKeys];
         NSArray *currentValues = [tempDict allValues];
-        [self.txtdetail setText:[currentValues objectAtIndex:indexPathForCell.row]];
-        [self.txtTitle setText:[currentKeys objectAtIndex:indexPathForCell.row]];
-        [self.lblDictTitle setText:URL_STRING];
+        int currentRow = indexPathForCell.row;
+        int numberOfRow = [currentKeys count];
+        if(currentRow == numberOfRow){
+            [self.lblDetailTitle setHidden:NO];
+            [self.lblDetailTitle setText:@"Add URL"];
+            [self.txtdetail setHidden:YES];
+            [self.txtTitle setHidden:YES];
+            
+        }
+        else{
+            [self.txtdetail setText:[currentValues objectAtIndex:indexPathForCell.row]];
+            [self.txtTitle setText:[currentKeys objectAtIndex:indexPathForCell.row]];
+            [self.lblDictTitle setText:URL_STRING];
+        }
     }
     else if ([[dict objectForKey:kDETAILSTITLE] isEqualToString:PHONE_STRING]){
         NSDictionary *tempDict = [self.dictDetailTitle objectForKey:PHONE_STRING];
         NSArray *currentKeys = [tempDict allKeys];
         NSArray *currentValues = [tempDict allValues];
-        [self.txtdetail setText:[currentValues objectAtIndex:indexPathForCell.row]];
-        [self.txtTitle setText:[currentKeys objectAtIndex:indexPathForCell.row]];
-        [self.lblDictTitle setText:PHONE_STRING];
+        int currentRow = indexPathForCell.row;
+        int numberOfRow = [currentKeys count];
+        if(currentRow == numberOfRow){
+            [self.lblDetailTitle setHidden:NO];
+            [self.lblDetailTitle setText:@"Add Phone"];
+            [self.txtdetail setHidden:YES];
+            [self.txtTitle setHidden:YES];
+            
+        }
+        else{
+            [self.txtdetail setText:[currentValues objectAtIndex:indexPathForCell.row]];
+            [self.txtTitle setText:[currentKeys objectAtIndex:indexPathForCell.row]];
+            [self.lblDictTitle setText:PHONE_STRING];
+        }
     }
     else if ([[dict objectForKey:kDETAILSTITLE] isEqualToString:ADDRESS_STRING]){
         NSDictionary *tempDict = [self.dictDetailTitle objectForKey:ADDRESS_STRING];
         NSArray *allAddressType = [tempDict allKeys];
-    
-        [self.addressType setText:[allAddressType objectAtIndex:indexPathForCell.row]];
-        
-        
-        NSMutableArray *allcity = [NSMutableArray array];
-        NSMutableArray *allcountry = [NSMutableArray array];
-        NSMutableArray *allstate = [NSMutableArray array];
-        NSMutableArray *allstreet = [NSMutableArray array];
-        NSMutableArray *allzip = [NSMutableArray array];
-        for(NSString *aKey in allAddressType){
-            NSArray *currentAddress = [tempDict objectForKey:aKey];
-            NSString *street = [currentAddress valueForKey:STREET_STRING];
-            NSString *city = [currentAddress valueForKey:CITY_STRING];
-            NSString *state = [currentAddress valueForKey:STATE_STRING];
-            NSString *zip = [currentAddress valueForKey:ZIP_STRING];
-            NSString *country = [currentAddress valueForKey:COUNTRY_STRING];
-            [allcity addObject:city];
-            [allcountry addObject:country];
-            [allstate addObject:state];
-            [allzip addObject:zip];
-            [allstreet addObject:street];
- 
+        int currentRow = indexPathForCell.row;
+        int numberOfRow = [allAddressType count];
+        if(currentRow == numberOfRow){
+            [self.lblAddAddress setHidden:NO];
+            [self.addressType setHidden:YES];
+            [self.addressCity setHidden:YES];
+            [self.addressCountry setHidden:YES];
+            [self.addressState setHidden:YES];
+            [self.addressStreet setHidden:YES];
+            [self.addressZip setHidden:YES];
+            
         }
+        else{
+            [self.addressType setText:[allAddressType objectAtIndex:indexPathForCell.row]];
+        
+            NSMutableArray *allcity = [NSMutableArray array];
+            NSMutableArray *allcountry = [NSMutableArray array];
+            NSMutableArray *allstate = [NSMutableArray array];
+            NSMutableArray *allstreet = [NSMutableArray array];
+            NSMutableArray *allzip = [NSMutableArray array];
+            for(NSString *aKey in allAddressType){
+                NSArray *currentAddress = [tempDict objectForKey:aKey];
+                NSString *street = [currentAddress valueForKey:STREET_STRING];
+                NSString *city = [currentAddress valueForKey:CITY_STRING];
+                NSString *state = [currentAddress valueForKey:STATE_STRING];
+                NSString *zip = [currentAddress valueForKey:ZIP_STRING];
+                NSString *country = [currentAddress valueForKey:COUNTRY_STRING];
+                [allcity addObject:city];
+                [allcountry addObject:country];
+                [allstate addObject:state];
+                [allzip addObject:zip];
+                [allstreet addObject:street];
+ 
+            }
         
         
-        
-        [self.addressCity setText:[allcity objectAtIndex:indexPathForCell.row]];
-        [self.addressCountry setText:[allcountry objectAtIndex:indexPathForCell.row]];
-        [self.addressState setText:[allstate objectAtIndex:indexPathForCell.row]];
-        [self.addressStreet setText:[allstreet objectAtIndex:indexPathForCell.row]];
-        [self.addressZip setText:[allzip objectAtIndex:indexPathForCell.row]];
-        
+            [self.lblAddAddress setHidden:YES];
+            [self.addressCity setText:[allcity objectAtIndex:indexPathForCell.row]];
+            [self.addressCountry setText:[allcountry objectAtIndex:indexPathForCell.row]];
+            [self.addressState setText:[allstate objectAtIndex:indexPathForCell.row]];
+            [self.addressStreet setText:[allstreet objectAtIndex:indexPathForCell.row]];
+            [self.addressZip setText:[allzip objectAtIndex:indexPathForCell.row]];
+        }
     }
     else{
 	if ([self.lblDetailTitle.text isEqualToString:key])

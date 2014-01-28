@@ -435,36 +435,20 @@
 
 - (NSInteger) numberOfRows:(NSString *) title{
     if([title isEqualToString:EMAIL_STRING]){
-        int rows = 0;
-        NSArray *emailslist = [[self.editMyAddObj relEmails] allObjects];
-        for (AllEmail *emails in emailslist){
-            rows++;
-        }
-        return rows;
+        NSArray *rows = [self.dictDetailTitle objectForKey:EMAIL_STRING];
+        return [rows count];
     }
     if([title isEqualToString:ADDRESS_STRING]){
-        int rows = 0;
-        NSArray *addList = [[self.editMyAddObj relAllAddress] allObjects];
-        for (int i =0 ; i <[addList count]; i++){
-            rows++;
-        }
-        return rows;
+        NSArray *rows = [self.dictDetailTitle objectForKey:ADDRESS_STRING];
+        return [rows count];
     }
     if([title isEqualToString:PHONE_STRING]){
-        int rows = 0;
-        NSArray *phoneslist = [[self.editMyAddObj relAllPhone] allObjects];
-        for (AllPhone *phones in phoneslist){
-            rows++;
-        }
-        return rows;
+        NSArray *rows = [self.dictDetailTitle objectForKey:PHONE_STRING];
+        return [rows count];
     }
     if([title isEqualToString:URL_STRING]){
-        int rows = 0;
-        NSArray *urlslist = [[self.editMyAddObj relAllUrl] allObjects];
-        for (AllUrl *aUrl in urlslist){
-            rows++;
-        }
-        return rows;
+        NSArray *rows = [self.dictDetailTitle objectForKey:URL_STRING];
+        return [rows count];
     }
     return 1;
 }
@@ -527,7 +511,7 @@
     NSDictionary * tempDict = [self.mArrDetilTitle objectAtIndex:section];
     NSString *currentSection = [tempDict valueForKey:@"DetailName"];
     if([currentSection isEqualToString:EMAIL_STRING] || [currentSection isEqualToString:ADDRESS_STRING] || [currentSection isEqualToString:PHONE_STRING] || [currentSection isEqualToString:URL_STRING])
-        return [self numberOfRows:currentSection];
+        return [self numberOfRows:currentSection]+1;
     
 	return 1;
     //return [self.mArrDetilTitle count];
@@ -630,8 +614,34 @@
 - (UITableViewCellEditingStyle)tableView:(UITableView *)aTableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
    
     // Detemine cell to be edited
+    int currentRow = indexPath.row;
     NSDictionary *tempDict = [self.mArrDetilTitle objectAtIndex:indexPath.section];
-    if([[tempDict valueForKey:kDETAILSTITLE] isEqualToString:EMAIL_STRING] || [[tempDict valueForKey:kDETAILSTITLE] isEqualToString:ADDRESS_STRING] || [[tempDict valueForKey:kDETAILSTITLE] isEqualToString:URL_STRING] || [[tempDict valueForKey:kDETAILSTITLE] isEqualToString:PHONE_STRING]){
+    if([[tempDict valueForKey:kDETAILSTITLE] isEqualToString:EMAIL_STRING]){
+        NSDictionary *tempDict = [self.dictDetailTitle objectForKey:EMAIL_STRING];
+        if(currentRow == [tempDict count]){
+            return UITableViewCellEditingStyleInsert;
+        }
+        return UITableViewCellEditingStyleDelete;
+    }
+    if([[tempDict valueForKey:kDETAILSTITLE] isEqualToString:PHONE_STRING]){
+        NSDictionary *tempDict = [self.dictDetailTitle objectForKey:PHONE_STRING];
+        if(currentRow == [tempDict count]){
+            return UITableViewCellEditingStyleInsert;
+        }
+        return UITableViewCellEditingStyleDelete;
+    }
+    if([[tempDict valueForKey:kDETAILSTITLE] isEqualToString:URL_STRING]){
+        NSDictionary *tempDict = [self.dictDetailTitle objectForKey:URL_STRING];
+        if(currentRow == [tempDict count]){
+            return UITableViewCellEditingStyleInsert;
+        }
+        return UITableViewCellEditingStyleDelete;
+    }
+    if([[tempDict valueForKey:kDETAILSTITLE] isEqualToString:ADDRESS_STRING]){
+        NSDictionary *tempDict = [self.dictDetailTitle objectForKey:ADDRESS_STRING];
+        if(currentRow == [tempDict count]){
+            return UITableViewCellEditingStyleInsert;
+        }
         return UITableViewCellEditingStyleDelete;
     }
     return UITableViewCellEditingStyleNone;
@@ -699,6 +709,45 @@
         //
         
     }
+    if(editingStyle == UITableViewCellEditingStyleInsert){
+        NSDictionary *tempDict = [self.mArrDetilTitle objectAtIndex:indexPath.section];
+        if([[tempDict valueForKey:kDETAILSTITLE] isEqualToString:EMAIL_STRING]){
+            NSMutableDictionary *dataDict = [self.dictDetailTitle objectForKey:EMAIL_STRING];
+            int nextRowCount = [dataDict count];
+            [dataDict setValue:@"" forKey:[NSString stringWithFormat:@"Email %i",nextRowCount+1]];
+            [self.dictDetailTitle setObject:dataDict forKey:EMAIL_STRING];
+        }
+        else if([[tempDict valueForKey:kDETAILSTITLE] isEqualToString:URL_STRING]){
+            NSMutableDictionary *dataDict = [self.dictDetailTitle objectForKey:URL_STRING];
+            int nextRowCount = [dataDict count];
+            [dataDict setValue:@"" forKey:[NSString stringWithFormat:@"URL %i",nextRowCount+1]];
+            [self.dictDetailTitle setObject:dataDict forKey:URL_STRING];
+            
+        }
+        else if([[tempDict valueForKey:kDETAILSTITLE] isEqualToString:ADDRESS_STRING]){
+            NSMutableDictionary *dataDict = [self.dictDetailTitle objectForKey:ADDRESS_STRING];
+            int nextRowCount = [dataDict count];
+            NSMutableDictionary *newRecord = [NSMutableDictionary dictionary];
+            [newRecord setValue:@"" forKey:STREET_STRING];
+            [newRecord setValue:@"" forKey:CITY_STRING];
+            [newRecord setValue:@"" forKey:STATE_STRING];
+            [newRecord setValue:@"" forKey:ZIP_STRING];
+            [newRecord setValue:@"" forKey:COUNTRY_STRING];
+            [dataDict setObject:newRecord forKey:[NSString stringWithFormat:@"Address %i",nextRowCount+1]];
+            [self.dictDetailTitle setObject:dataDict forKey:ADDRESS_STRING];
+            NSLog(@"%@",self.dictDetailTitle);
+        }
+        else if([[tempDict valueForKey:kDETAILSTITLE] isEqualToString:PHONE_STRING]){
+            NSMutableDictionary *dataDict = [self.dictDetailTitle objectForKey:PHONE_STRING];
+            int nextRowCount = [dataDict count];
+            [dataDict setValue:@"" forKey:[NSString stringWithFormat:@"Phone %i",nextRowCount+1]];
+            [self.dictDetailTitle setObject:dataDict forKey:PHONE_STRING];
+            
+        }
+        [tableView beginUpdates];
+        [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+        [tableView endUpdates];
+    }
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -727,6 +776,11 @@
 		return 120;
 	}
     else if ([text rangeOfString:@"address" options:NSCaseInsensitiveSearch].length){
+        int currentRow = indexPath.row;
+        NSDictionary *tempDict = [self.dictDetailTitle objectForKey:ADDRESS_STRING];
+        if(currentRow == [tempDict count]){
+            return 44;
+        }
         return 200;
     }
     
@@ -2317,76 +2371,77 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
 		*/
         
         //url
-        // only edit existing contact
+
 		{
 			AllUrl * url = nil;
-			if (self.editMyAddObj && [[self.editMyAddObj.relAllUrl allObjects] count])
-			{
+			if (self.editMyAddObj && [[self.editMyAddObj.relAllUrl allObjects] count]){
+                
+                int dataInDict = [[self.dictDetailTitle objectForKey:URL_STRING] count];
+                int dataInDB = [[self.editMyAddObj.relAllUrl allObjects] count];
+                
                 NSDictionary *allURL = [self.dictDetailTitle objectForKey:URL_STRING];
                 NSArray *allKeys = [allURL allKeys];
-                NSArray *allValues = [allURL allValues];
-                
-                for(int i=0; i<[allKeys count]; i++)
-                {
-                    url = [[self.editMyAddObj.relAllUrl allObjects] objectAtIndex:i];
-                    [url setUrlAddress:[allValues objectAtIndex:i]];
-                    [url setUrlTitle:[allKeys objectAtIndex:i]];
-                    
-                    [url setRelMyAddressBook:addressBook];
+                if(dataInDB == dataInDict){
+                    for(int i=0; i < dataInDB; i++){
+                        url = [[self.editMyAddObj.relAllUrl allObjects] objectAtIndex:i];
+                        [url setUrlAddress:[allURL valueForKey:[allKeys objectAtIndex:i]]];
+                        [url setUrlTitle:[allKeys objectAtIndex:i]];
+                        [url setRelMyAddressBook:addressBook];
+                    }
+                }
+                else{
+                    int i;
+                    for(i=0; i < dataInDB; i++){  //edit exixting data
+                        url = [[self.editMyAddObj.relAllUrl allObjects] objectAtIndex:i];
+                        [url setUrlAddress:[allURL valueForKey:[allKeys objectAtIndex:i]]];
+                        [url setUrlTitle:[allKeys objectAtIndex:i]];
+                        [url setRelMyAddressBook:addressBook];
+                    }
+                    while(i < dataInDict){  //create new fields
+                        url = [NSEntityDescription insertNewObjectForEntityForName:@"AllUrl" inManagedObjectContext:appDelegate.managedObjectContext];
+                        [url setUrlAddress:[allURL valueForKey:[allKeys objectAtIndex:i]]];
+                        [url setUrlTitle:[allKeys objectAtIndex:i]];
+                        [url setRelMyAddressBook:addressBook];
+                        NSError *error=nil;
+                        [self.managedObjectContext save:&error];
+                        [self.managedObjectContext refreshObject:[url relMyAddressBook] mergeChanges:NO];
+                        [self.editMyAddObj relAllUrl];
+                        i++;
+                    }
                 }
                 
 			}
 			else
 			{
-				url = [NSEntityDescription insertNewObjectForEntityForName:@"AllUrl" inManagedObjectContext:appDelegate.managedObjectContext];
+                AllUrl * url = nil;
+                int dataInDict = [[self.dictDetailTitle objectForKey:URL_STRING] count];
+                NSDictionary *allURL = [self.dictDetailTitle objectForKey:URL_STRING];
+                NSArray *allKeys = [allURL allKeys];
+                int i=0;
+				while(i < dataInDict){  //create new fields
+                    url = [NSEntityDescription insertNewObjectForEntityForName:@"AllUrl" inManagedObjectContext:appDelegate.managedObjectContext];
+                    [url setUrlAddress:[allURL valueForKey:[allKeys objectAtIndex:i]]];
+                    [url setUrlTitle:[allKeys objectAtIndex:i]];
+                    [url setRelMyAddressBook:addressBook];
+                    NSError *error=nil;
+                    [self.managedObjectContext save:&error];
+                    [self.managedObjectContext refreshObject:[url relMyAddressBook] mergeChanges:NO];
+                    [self.editMyAddObj relAllUrl];
+                    i++;
+                }
 			}
 		}
         
-        /*
-         
-         if ([[dict objectForKey:kDETAILSTITLE] isEqualToString:ADDRESS_STRING]){
-         NSDictionary *tempDict = [self.dictDetailTitle objectForKey:ADDRESS_STRING];
-         NSArray *allAddressType = [tempDict allKeys];
-         
-         
-         
-         
-         NSMutableArray *allcity = [NSMutableArray array];
-         NSMutableArray *allcountry = [NSMutableArray array];
-         NSMutableArray *allstate = [NSMutableArray array];
-         NSMutableArray *allstreet = [NSMutableArray array];
-         NSMutableArray *allzip = [NSMutableArray array];
-         for(NSString *aKey in allAddressType){
-         NSArray *currentAddress = [tempDict objectForKey:aKey];
-         NSString *street = [currentAddress valueForKey:STREET_STRING];
-         NSString *city = [currentAddress valueForKey:CITY_STRING];
-         NSString *state = [currentAddress valueForKey:STATE_STRING];
-         NSString *zip = [currentAddress valueForKey:ZIP_STRING];
-         NSString *country = [currentAddress valueForKey:COUNTRY_STRING];
-         [allcity addObject:city];
-         [allcountry addObject:country];
-         [allstate addObject:state];
-         [allzip addObject:zip];
-         [allstreet addObject:street];
-         
-         }
-         
-         
-         [self.addressType setText:[allAddressType objectAtIndex:indexPathForCell.row]];
-         [self.addressCity setText:[allcity objectAtIndex:indexPathForCell.row]];
-         [self.addressCountry setText:[allcountry objectAtIndex:indexPathForCell.row]];
-         [self.addressState setText:[allstate objectAtIndex:indexPathForCell.row]];
-         [self.addressStreet setText:[allstreet objectAtIndex:indexPathForCell.row]];
-         [self.addressZip setText:[allzip objectAtIndex:indexPathForCell.row]];
-         
-         }
-         
-         */
+  
         //Address
         //only edit exixting contact
         {
             AllAddress *address = nil;
             if(self.editMyAddObj && [[self.editMyAddObj.relAllAddress allObjects] count]){
+                
+                int dataInDict = [[self.dictDetailTitle objectForKey:ADDRESS_STRING] count];
+                int dataInDB = [[self.editMyAddObj.relAllAddress allObjects] count];
+                
                 NSDictionary *tempDict = [self.dictDetailTitle objectForKey:ADDRESS_STRING];
                 NSArray *allAddressType = [tempDict allKeys];
                 
@@ -2410,11 +2465,85 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
                     [allstreet addObject:street];
                     
                 }
-                
-                for(int i=0; i<[allAddressType count]; i++)
-                {
-                    address = [[self.editMyAddObj.relAllAddress allObjects] objectAtIndex:i];
+                if(dataInDB == dataInDict){
+                    for(int i=0; i<[allAddressType count]; i++)
+                    {
+                        address = [[self.editMyAddObj.relAllAddress allObjects] objectAtIndex:i];
                     
+                        [address setAddressType:[allAddressType objectAtIndex:i]];
+                        [address setCity:[allcity objectAtIndex:i]];
+                        [address setCountryCode:[allcountry objectAtIndex:i]];
+                        [address setState:[allstate objectAtIndex:i]];
+                        [address setStreet:[allstreet objectAtIndex:i]];
+                        [address setZipCode:[allzip objectAtIndex:i]];
+                    
+                        [address setRelMyAddressBook:addressBook];
+                    }
+                }
+                else{
+                    int i;
+                    for(i=0; i<dataInDB; i++)
+                    {
+                        address = [[self.editMyAddObj.relAllAddress allObjects] objectAtIndex:i];
+                        
+                        [address setAddressType:[allAddressType objectAtIndex:i]];
+                        [address setCity:[allcity objectAtIndex:i]];
+                        [address setCountryCode:[allcountry objectAtIndex:i]];
+                        [address setState:[allstate objectAtIndex:i]];
+                        [address setStreet:[allstreet objectAtIndex:i]];
+                        [address setZipCode:[allzip objectAtIndex:i]];
+                        
+                        [address setRelMyAddressBook:addressBook];
+                    }
+                    while(i < dataInDict){
+                        address = [NSEntityDescription insertNewObjectForEntityForName:@"AllAddress" inManagedObjectContext:appDelegate.managedObjectContext];
+                        [address setAddressType:[allAddressType objectAtIndex:i]];
+                        [address setCity:[allcity objectAtIndex:i]];
+                        [address setCountryCode:[allcountry objectAtIndex:i]];
+                        [address setState:[allstate objectAtIndex:i]];
+                        [address setStreet:[allstreet objectAtIndex:i]];
+                        [address setZipCode:[allzip objectAtIndex:i]];
+                        
+                        [address setRelMyAddressBook:addressBook];
+                        NSError *error=nil;
+                        [self.managedObjectContext save:&error];
+                        [self.managedObjectContext refreshObject:[address relMyAddressBook] mergeChanges:NO];
+                        [self.editMyAddObj relAllAddress];
+                        i++;
+                    }
+                }
+                
+            }
+            else{
+                AllAddress *address = nil;
+                int dataInDict = [[self.dictDetailTitle objectForKey:ADDRESS_STRING] count];
+                
+                NSDictionary *tempDict = [self.dictDetailTitle objectForKey:ADDRESS_STRING];
+                NSArray *allAddressType = [tempDict allKeys];
+                
+                NSMutableArray *allcity = [NSMutableArray array];
+                NSMutableArray *allcountry = [NSMutableArray array];
+                NSMutableArray *allstate = [NSMutableArray array];
+                NSMutableArray *allstreet = [NSMutableArray array];
+                NSMutableArray *allzip = [NSMutableArray array];
+                
+                for(NSString *aKey in allAddressType){
+                    NSArray *currentAddress = [tempDict objectForKey:aKey];
+                    NSString *street = [currentAddress valueForKey:STREET_STRING];
+                    NSString *city = [currentAddress valueForKey:CITY_STRING];
+                    NSString *state = [currentAddress valueForKey:STATE_STRING];
+                    NSString *zip = [currentAddress valueForKey:ZIP_STRING];
+                    NSString *country = [currentAddress valueForKey:COUNTRY_STRING];
+                    [allcity addObject:city];
+                    [allcountry addObject:country];
+                    [allstate addObject:state];
+                    [allzip addObject:zip];
+                    [allstreet addObject:street];
+                    
+                }
+                int i=0;
+                while(i < dataInDict){
+                    address = [NSEntityDescription insertNewObjectForEntityForName:@"AllAddress" inManagedObjectContext:appDelegate.managedObjectContext];
                     [address setAddressType:[allAddressType objectAtIndex:i]];
                     [address setCity:[allcity objectAtIndex:i]];
                     [address setCountryCode:[allcountry objectAtIndex:i]];
@@ -2423,62 +2552,142 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
                     [address setZipCode:[allzip objectAtIndex:i]];
                     
                     [address setRelMyAddressBook:addressBook];
+                    NSError *error=nil;
+                    [self.managedObjectContext save:&error];
+                    [self.managedObjectContext refreshObject:[address relMyAddressBook] mergeChanges:NO];
+                    [self.editMyAddObj relAllAddress];
+                    i++;
                 }
-                
             }
         }
         
         
         
         //phone
-        //only edit existing contact
+      
         {
 			AllPhone * phone = nil;
-			if (self.editMyAddObj && [[self.editMyAddObj.relAllPhone allObjects] count])
-			{
+			if (self.editMyAddObj && [[self.editMyAddObj.relAllPhone allObjects] count]){
+                
+                int dataInDict = [[self.dictDetailTitle objectForKey:PHONE_STRING] count];
+                int dataInDB = [[self.editMyAddObj.relAllPhone allObjects] count];
+                
                 NSDictionary *allPhone = [self.dictDetailTitle objectForKey:PHONE_STRING];
                 NSArray *allKeys = [allPhone allKeys];
-                NSArray *allValues = [allPhone allValues];
-                
-                for(int i=0; i<[allKeys count]; i++)
-                {
-                    phone = [[self.editMyAddObj.relAllPhone allObjects] objectAtIndex:i];
-                    [phone setPhoneNumber:[allValues objectAtIndex:i]];
-                    [phone setPhoneTitle:[allKeys objectAtIndex:i]];
-                    
-                    [phone setRelMyAddressBook:addressBook];
+                if(dataInDB == dataInDict){
+                    for(int i=0; i < dataInDB; i++){
+                        phone = [[self.editMyAddObj.relAllPhone allObjects] objectAtIndex:i];
+                        [phone setPhoneNumber:[allPhone valueForKey:[allKeys objectAtIndex:i]]];
+                        [phone setPhoneTitle:[allKeys objectAtIndex:i]];
+                        [phone setRelMyAddressBook:addressBook];
+                    }
                 }
+                else{
+                    int i;
+                    for(i=0; i < dataInDB; i++){  //edit exixting data
+                        phone = [[self.editMyAddObj.relAllPhone allObjects] objectAtIndex:i];
+                        [phone setPhoneNumber:[allPhone valueForKey:[allKeys objectAtIndex:i]]];
+                        [phone setPhoneTitle:[allKeys objectAtIndex:i]];
+                        [phone setRelMyAddressBook:addressBook];
+                    }
+                    while(i < dataInDict){  //create new fields
+                        phone = [NSEntityDescription insertNewObjectForEntityForName:@"AllPhone" inManagedObjectContext:appDelegate.managedObjectContext];
+                        [phone setPhoneNumber:[allPhone valueForKey:[allKeys objectAtIndex:i]]];
+                        [phone setPhoneTitle:[allKeys objectAtIndex:i]];
+                        [phone setRelMyAddressBook:addressBook];
+                        NSError *error=nil;
+                        [self.managedObjectContext save:&error];
+                        [self.managedObjectContext refreshObject:[phone relMyAddressBook] mergeChanges:NO];
+                        [self.editMyAddObj relAllPhone];
+                        i++;
+                    }
+                }
+                dataInDB = [[self.editMyAddObj.relAllPhone allObjects] count];
                 
 			}
 			else
 			{
-				phone = [NSEntityDescription insertNewObjectForEntityForName:@"AllPhone" inManagedObjectContext:appDelegate.managedObjectContext];
+                AllPhone * phone = nil;
+                int dataInDict = [[self.dictDetailTitle objectForKey:PHONE_STRING] count];
+                
+                NSDictionary *allPhone = [self.dictDetailTitle objectForKey:PHONE_STRING];
+                NSArray *allKeys = [allPhone allKeys];
+                int i = 0;
+				while(i < dataInDict){  //create new fields
+                    phone = [NSEntityDescription insertNewObjectForEntityForName:@"AllPhone" inManagedObjectContext:appDelegate.managedObjectContext];
+                    [phone setPhoneNumber:[allPhone valueForKey:[allKeys objectAtIndex:i]]];
+                    [phone setPhoneTitle:[allKeys objectAtIndex:i]];
+                    [phone setRelMyAddressBook:addressBook];
+                    NSError *error=nil;
+                    [self.managedObjectContext save:&error];
+                    [self.managedObjectContext refreshObject:[phone relMyAddressBook] mergeChanges:NO];
+                    [self.editMyAddObj relAllPhone];
+                    i++;
+                }
 			}
 		}
         //Email
         //only edit exixting contact
         {
 			AllEmail * email = nil;
-			if (self.editMyAddObj && [[self.editMyAddObj.relEmails allObjects] count])
-			{
+			if (self.editMyAddObj && [[self.editMyAddObj.relEmails allObjects] count]){
+                
+                int emailsInDict = [[self.dictDetailTitle objectForKey:EMAIL_STRING] count];
+                int emailsInDB = [[self.editMyAddObj.relEmails allObjects] count];
+                
                 NSDictionary *allEmail = [self.dictDetailTitle objectForKey:EMAIL_STRING];
                 NSArray *allKeys = [allEmail allKeys];
-                NSArray *allValues = [allEmail allValues];
-                
-                for(int i=0; i<[allKeys count]; i++)
-                {
-                    email = [[self.editMyAddObj.relEmails allObjects] objectAtIndex:i];
-                    [email setEmailURL:[allValues objectAtIndex:i]];
-                    [email setEmailTitle:[allKeys objectAtIndex:i]];
-                    
-                    [email setRelMyAddressBook:addressBook];
+                if(emailsInDB == emailsInDict){
+                    for(int i=0; i < emailsInDB; i++){
+                        email = [[self.editMyAddObj.relEmails allObjects] objectAtIndex:i];
+                        [email setEmailURL:[allEmail valueForKey:[allKeys objectAtIndex:i]]];
+                        [email setEmailTitle:[allKeys objectAtIndex:i]];
+                        [email setRelMyAddressBook:addressBook];
+                    }
                 }
+                else{
+                    int i;
+                    for(i=0; i < emailsInDB; i++){  //edit exixting data
+                        email = [[self.editMyAddObj.relEmails allObjects] objectAtIndex:i];
+                        [email setEmailURL:[allEmail valueForKey:[allKeys objectAtIndex:i]]];
+                        [email setEmailTitle:[allKeys objectAtIndex:i]];
+                        [email setRelMyAddressBook:addressBook];
+                    }
+                    while(i < emailsInDict){  //create new fields
+                        email = [NSEntityDescription insertNewObjectForEntityForName:@"AllEmail" inManagedObjectContext:appDelegate.managedObjectContext];
+                        [email setEmailURL:[allEmail valueForKey:[allKeys objectAtIndex:i]]];
+                        [email setEmailTitle:[allKeys objectAtIndex:i]];
+                        [email setRelMyAddressBook:addressBook];
+                        NSError *error=nil;
+                        [self.managedObjectContext save:&error];
+                         [self.managedObjectContext refreshObject:[email relMyAddressBook] mergeChanges:NO];
+                        [self.editMyAddObj relEmails];
+                        i++;
+                    }
+                }
+                emailsInDB = [[self.editMyAddObj.relEmails allObjects] count];
                 
 			}
 			else
 			{
-				email = [NSEntityDescription insertNewObjectForEntityForName:@"AllEmail" inManagedObjectContext:appDelegate.managedObjectContext];
+				AllEmail * email = nil;
+                int emailsInDict = [[self.dictDetailTitle objectForKey:EMAIL_STRING] count];
+                NSDictionary *allEmail = [self.dictDetailTitle objectForKey:EMAIL_STRING];
+                NSArray *allKeys = [allEmail allKeys];
+                int i=0;
+                while(i < emailsInDict){  //create new fields
+                    email = [NSEntityDescription insertNewObjectForEntityForName:@"AllEmail" inManagedObjectContext:appDelegate.managedObjectContext];
+                    [email setEmailURL:[allEmail valueForKey:[allKeys objectAtIndex:i]]];
+                    [email setEmailTitle:[allKeys objectAtIndex:i]];
+                    [email setRelMyAddressBook:addressBook];
+                    NSError *error=nil;
+                    [self.managedObjectContext save:&error];
+                    [self.managedObjectContext refreshObject:[email relMyAddressBook] mergeChanges:NO];
+                    [self.editMyAddObj relEmails];
+                    i++;
+                }
 			}
+
 		}
     
         

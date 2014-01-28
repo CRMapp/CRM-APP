@@ -74,6 +74,7 @@
 	IBOutlet UIView *vwRadio;
     IBOutlet UIView *addressEditView;
 	IBOutlet UIImageView *imgPhoto;
+    
 }
 
 //dict for my addressBook
@@ -101,7 +102,7 @@
 @property (retain, nonatomic) IBOutlet UITextField *addressState;
 @property (retain, nonatomic) IBOutlet UITextField *addressZip;
 @property (retain, nonatomic) IBOutlet UITextField *addressCountry;
-
+@property (retain, nonatomic) IBOutlet UILabel *lblAddAddress;
 @property (retain, nonatomic) UIImageView * imgfirstDropDown;
 @property (retain, nonatomic) UIImageView * imgSecondDropDown;
 @property (retain, nonatomic) IBOutlet UIButton *btnViewHistory;
