@@ -92,7 +92,7 @@
     }
     return self;
 }
-#pragma mark - View Life Cucle
+#pragma mark - View Life Cycle
 - (void)viewDidLoad
 {
     
@@ -637,7 +637,7 @@
                 
             }
             lastAddressType = address.addressType;
-            NSString *fullAddress = [NSString stringWithFormat:@"%@\n%@\n%@\n%@\n%@",addressStreet,addressCity,addressState,addressZip,addressCountry];
+            NSString *fullAddress = [NSString stringWithFormat:@"\n%@\n%@\n%@\n%@\n%@",addressStreet,addressCity,addressState,addressZip,addressCountry];
             [dict setObject:fullAddress forKey:addressTitle];
         }
     

@@ -42,6 +42,12 @@
 //Dict for myaddressBook
 @property (retain, nonatomic) NSMutableDictionary * dictM_MyaddressBook;
 @property (retain, nonatomic) NSMutableDictionary *dictDetailTitle;
+//array for Email, Url, Address, Phone
+
+@property (nonatomic, retain) NSMutableArray * arrayAddressList;
+@property (nonatomic, retain) NSMutableArray * arrayEmailList;
+@property (nonatomic, retain) NSMutableArray * arrayPhoneList;
+@property (nonatomic, retain) NSMutableArray * arrayUrlList;
 //array for Industry
 @property (nonatomic, retain) NSMutableArray * arrayIndustry;
 @property (retain , nonatomic) UIPopoverController *popoverindustry;

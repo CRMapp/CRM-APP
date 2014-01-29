@@ -281,8 +281,8 @@
                 [addressDictionary setObject:address.street         forKey:(NSString *)kABPersonAddressStreetKey];
             if(address.city)
                 [addressDictionary setObject:address.city           forKey:(NSString *)kABPersonAddressCityKey];
-            if(address.addressType)
-                [addressDictionary setObject:address.addressType    forKey:(NSString *)kABPersonAddressProperty];
+//            if(address.addressType)
+//                [addressDictionary setObject:address.addressType    forKey:(NSString *)kABPersonAddressProperty];
             if(address.state)
                 [addressDictionary setObject:address.state          forKey:(NSString *)kABPersonAddressStateKey];
             if(address.countryCode)

@@ -764,6 +764,10 @@
 		13F154BB174664CF00D3EF6D /* EventKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 13F154B9174664CF00D3EF6D /* EventKitUI.framework */; };
 		13F8BA7416DE3880000E6A9E /* SVProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 13F8BA7116DE3880000E6A9E /* SVProgressHUD.bundle */; };
 		13F8BA7516DE3880000E6A9E /* SVProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 13F8BA7316DE3880000E6A9E /* SVProgressHUD.m */; };
+		510CCBF91898BFB1001CD2C8 /* Privacy Policy.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 510CCBF41898BFB1001CD2C8 /* Privacy Policy.pdf */; };
+		510CCBFA1898BFB1001CD2C8 /* Terms and Conditions.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 510CCBF51898BFB1001CD2C8 /* Terms and Conditions.pdf */; };
+		510CCBFB1898BFB1001CD2C8 /* TermsAndConditionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 510CCBF71898BFB1001CD2C8 /* TermsAndConditionsViewController.m */; };
+		510CCBFC1898BFB1001CD2C8 /* TermsAndConditionsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 510CCBF81898BFB1001CD2C8 /* TermsAndConditionsViewController.xib */; };
 		51CA9E2D187D7298008DD404 /* AllPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = 51CA9E2C187D7298008DD404 /* AllPhone.m */; };
 		51CD5A421883C92C00CBF6DE /* AllEmail.m in Sources */ = {isa = PBXBuildFile; fileRef = 51CD5A411883C92C00CBF6DE /* AllEmail.m */; };
 		51CD5A451883E9A400CBF6DE /* AllUrl.m in Sources */ = {isa = PBXBuildFile; fileRef = 51CD5A441883E9A400CBF6DE /* AllUrl.m */; };
@@ -1696,6 +1700,11 @@
 		13F8BA7116DE3880000E6A9E /* SVProgressHUD.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = SVProgressHUD.bundle; sourceTree = "<group>"; };
 		13F8BA7216DE3880000E6A9E /* SVProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVProgressHUD.h; sourceTree = "<group>"; };
 		13F8BA7316DE3880000E6A9E /* SVProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVProgressHUD.m; sourceTree = "<group>"; };
+		510CCBF41898BFB1001CD2C8 /* Privacy Policy.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "Privacy Policy.pdf"; sourceTree = "<group>"; };
+		510CCBF51898BFB1001CD2C8 /* Terms and Conditions.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "Terms and Conditions.pdf"; sourceTree = "<group>"; };
+		510CCBF61898BFB1001CD2C8 /* TermsAndConditionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TermsAndConditionsViewController.h; sourceTree = "<group>"; };
+		510CCBF71898BFB1001CD2C8 /* TermsAndConditionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TermsAndConditionsViewController.m; sourceTree = "<group>"; };
+		510CCBF81898BFB1001CD2C8 /* TermsAndConditionsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TermsAndConditionsViewController.xib; sourceTree = "<group>"; };
 		51CA9E2B187D7298008DD404 /* AllPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllPhone.h; sourceTree = "<group>"; };
 		51CA9E2C187D7298008DD404 /* AllPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllPhone.m; sourceTree = "<group>"; };
 		51CD5A401883C92C00CBF6DE /* AllEmail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllEmail.h; sourceTree = "<group>"; };
@@ -2707,6 +2716,7 @@
 		13D2B61716BFAFD0008745E5 = {
 			isa = PBXGroup;
 			children = (
+				510CCBF31898BFB1001CD2C8 /* PDFs */,
 				13B3EAE2178D322A0003ABCB /* AES Encrypt */,
 				13D2B62C16BFAFD0008745E5 /* Classes */,
 				13A95E5816CCEE15007CE21B /* CoreData Classes */,
@@ -2771,6 +2781,9 @@
 				13A35AB4174A60D200DF2373 /* AddLinkedInContactVC.xib */,
 				13B04DD91717C7ED00F46493 /* AddNewContactViewController.h */,
 				13B04DDA1717C7ED00F46493 /* AddNewContactViewController.m */,
+				510CCBF61898BFB1001CD2C8 /* TermsAndConditionsViewController.h */,
+				510CCBF71898BFB1001CD2C8 /* TermsAndConditionsViewController.m */,
+				510CCBF81898BFB1001CD2C8 /* TermsAndConditionsViewController.xib */,
 				13B04DD81717C7ED00F46493 /* AddNewContactViewController.xib */,
 				13D2B63516BFAFD0008745E5 /* AppDelegate.h */,
 				13D2B63616BFAFD0008745E5 /* AppDelegate.m */,
@@ -2921,6 +2934,16 @@
 			);
 			name = SVPROGRESSHUD;
 			path = CRM/SVPROGRESSHUD;
+			sourceTree = "<group>";
+		};
+		510CCBF31898BFB1001CD2C8 /* PDFs */ = {
+			isa = PBXGroup;
+			children = (
+				510CCBF41898BFB1001CD2C8 /* Privacy Policy.pdf */,
+				510CCBF51898BFB1001CD2C8 /* Terms and Conditions.pdf */,
+			);
+			name = PDFs;
+			path = CRM/PDFs;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -3118,6 +3141,7 @@
 				13BF150916E4DEE800DDEB89 /* map-divider.png in Resources */,
 				13BF150A16E4DEE800DDEB89 /* map-divider@2x.png in Resources */,
 				13BF150D16E4DEE800DDEB89 /* map-filter-textbox-bg.png in Resources */,
+				510CCBFA1898BFB1001CD2C8 /* Terms and Conditions.pdf in Resources */,
 				13BF150E16E4DEE800DDEB89 /* map-filter-textbox-bg@2x.png in Resources */,
 				13BF150F16E4DEE800DDEB89 /* map-img.png in Resources */,
 				13BF151016E4DEE800DDEB89 /* map-img@2x.png in Resources */,
@@ -3342,6 +3366,7 @@
 				137EF11D171EE70000770D82 /* prospect.png in Resources */,
 				137EF11E171EE70000770D82 /* prospect_sel_p.png in Resources */,
 				137EF11F171EE70000770D82 /* prospect_sel_p@2x.png in Resources */,
+				510CCBFC1898BFB1001CD2C8 /* TermsAndConditionsViewController.xib in Resources */,
 				137EF120171EE70000770D82 /* prospect_sel@2x.png in Resources */,
 				137EF121171EE70000770D82 /* prospect_sel.png in Resources */,
 				137EF122171EE70000770D82 /* suspect_sel_p.png in Resources */,
@@ -3360,6 +3385,7 @@
 				137EF12F171EE70000770D82 /* proposal_p@2x.png in Resources */,
 				137EF130171EE70000770D82 /* proposal_sel_p.png in Resources */,
 				137EF131171EE70000770D82 /* proposal_p.png in Resources */,
+				510CCBF91898BFB1001CD2C8 /* Privacy Policy.pdf in Resources */,
 				137EF132171EE70000770D82 /* new_costmer_sel_p@2x.png in Resources */,
 				137EF133171EE70000770D82 /* new_costmer_p@2x.png in Resources */,
 				137EF134171EE70000770D82 /* new_costmer_sel_p.png in Resources */,
@@ -3656,6 +3682,7 @@
 				13B30A8316F2E33C00DABB01 /* Base64Transcoder.m in Sources */,
 				13B30A8416F2E33C00DABB01 /* HSK_CFUtilities.m in Sources */,
 				13B30A8516F2E33C00DABB01 /* NSData+Base64Additions.m in Sources */,
+				510CCBFB1898BFB1001CD2C8 /* TermsAndConditionsViewController.m in Sources */,
 				13B30A8616F2E33C00DABB01 /* NSStream+SKPSMTPExtensions.m in Sources */,
 				13B30A8716F2E33C00DABB01 /* SKPSMTPMessage.m in Sources */,
 				13B30A8D16F306F100DABB01 /* AllSms.m in Sources */,

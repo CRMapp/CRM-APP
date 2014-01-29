@@ -115,7 +115,7 @@
 @property (retain, nonatomic) UITextField * txtFirstRseponder;
 
 - (void)setlabeldetailTitleWithDict:(NSDictionary *)dictData andWithSize:(CGSize)size;
-- (void)getDataFromDict:(NSMutableDictionary *)dictMultiValue andDict:(NSDictionary *)dict;
+- (void)getDataFromDict:(NSMutableDictionary *)dictMultiValue andDict:(NSDictionary *)dict emailList:(NSMutableArray *)email urlList:(NSMutableArray *)url phoneList:(NSMutableArray *)phone addressList:(NSMutableArray *)address;
 - (void)addObserver_NotificationCenter;
 
 @end

@@ -59,4 +59,6 @@ extern BOOL showChangePassword;
 + (void)getAllCountryCodeWithCountry;
 + (void)getAllCurrency;
 - (void)insertFunnelStageList;
+
+- (void) termsAccepted;
 @end

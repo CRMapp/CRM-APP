@@ -357,11 +357,16 @@
 - (void) dictDetailValue{
     //==================Create a dictionary
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    self.arrayAddressList = [NSMutableArray array];
+    self.arrayEmailList = [NSMutableArray array];
+    self.arrayPhoneList = [NSMutableArray array];
+    self.arrayUrlList = [NSMutableArray array];
     self.dictDetailTitle =[NSMutableDictionary dictionary];
     //Email
     NSArray *emailsList = [[self.editMyAddObj relEmails] allObjects];
     for(AllEmail *emails in emailsList){
         [dict setValue:emails.emailURL forKey:emails.emailTitle];
+        [self.arrayEmailList addObject:emails.emailTitle];//Email List array
     }
     [self.dictDetailTitle setObject:dict forKey:EMAIL_STRING];
     dict = nil;
@@ -379,6 +384,7 @@
         [tempDict setObject:dict forKey:address.addressType];
         dict =nil;
         dict = [NSMutableDictionary dictionary];
+        [self.arrayAddressList addObject:address.addressType];//Address List array
     }
     [self.dictDetailTitle setObject:tempDict forKey:ADDRESS_STRING];
     dict = nil;
@@ -387,6 +393,7 @@
     NSArray *phone = [[self.editMyAddObj relAllPhone] allObjects];
     for(AllPhone *aphone in phone){
         [dict setValue:aphone.phoneNumber forKey:aphone.phoneTitle];
+        [self.arrayPhoneList addObject:aphone.phoneTitle];
     }
     [self.dictDetailTitle setObject:dict forKey:PHONE_STRING];
     dict = nil;
@@ -395,11 +402,11 @@
     NSArray *URL = [[self.editMyAddObj relAllUrl] allObjects];
     for(AllUrl *aURL in URL){
         [dict setValue:aURL.urlAddress forKey:aURL.urlTitle];
+        [self.arrayUrlList addObject:aURL.urlTitle];
     }
     [self.dictDetailTitle setObject:dict forKey:URL_STRING];
  
     //===================================================================================================
-    
 }
 
 -(NSArray *)createArrayForTable
@@ -578,7 +585,7 @@
 	[cell setSelectionStyle:UITableViewCellSelectionStyleNone];
 
     //set data in table view
-	[cell getDataFromDict:self.dictDetailTitle andDict:dict];
+	[cell getDataFromDict:self.dictDetailTitle andDict:dict emailList:self.arrayEmailList urlList:self.arrayUrlList phoneList:self.arrayPhoneList addressList:self.arrayAddressList];
 
 	
 	// dropDown First
@@ -659,7 +666,7 @@
         NSDictionary *tempDict = [self.mArrDetilTitle objectAtIndex:indexPath.section];
         if([[tempDict valueForKey:kDETAILSTITLE] isEqualToString:EMAIL_STRING]){
             NSArray *emailsList = [[self.editMyAddObj relEmails] allObjects];
-           roleToDelete = [emailsList objectAtIndex:indexPath.row];
+            roleToDelete = [emailsList objectAtIndex:indexPath.row];
             
         }
         else if([[tempDict valueForKey:kDETAILSTITLE] isEqualToString:URL_STRING]){
@@ -713,16 +720,17 @@
         NSDictionary *tempDict = [self.mArrDetilTitle objectAtIndex:indexPath.section];
         if([[tempDict valueForKey:kDETAILSTITLE] isEqualToString:EMAIL_STRING]){
             NSMutableDictionary *dataDict = [self.dictDetailTitle objectForKey:EMAIL_STRING];
-            int nextRowCount = [dataDict count];
+            int nextRowCount = [dataDict count]; 
             [dataDict setValue:@"" forKey:[NSString stringWithFormat:@"Email %i",nextRowCount+1]];
             [self.dictDetailTitle setObject:dataDict forKey:EMAIL_STRING];
+            [self.arrayEmailList addObject:[NSString stringWithFormat:@"Email %i",nextRowCount+1]];
         }
         else if([[tempDict valueForKey:kDETAILSTITLE] isEqualToString:URL_STRING]){
             NSMutableDictionary *dataDict = [self.dictDetailTitle objectForKey:URL_STRING];
             int nextRowCount = [dataDict count];
             [dataDict setValue:@"" forKey:[NSString stringWithFormat:@"URL %i",nextRowCount+1]];
             [self.dictDetailTitle setObject:dataDict forKey:URL_STRING];
-            
+            [self.arrayUrlList addObject:[NSString stringWithFormat:@"URL %i",nextRowCount+1]];
         }
         else if([[tempDict valueForKey:kDETAILSTITLE] isEqualToString:ADDRESS_STRING]){
             NSMutableDictionary *dataDict = [self.dictDetailTitle objectForKey:ADDRESS_STRING];
@@ -735,6 +743,7 @@
             [newRecord setValue:@"" forKey:COUNTRY_STRING];
             [dataDict setObject:newRecord forKey:[NSString stringWithFormat:@"Address %i",nextRowCount+1]];
             [self.dictDetailTitle setObject:dataDict forKey:ADDRESS_STRING];
+            [self.arrayAddressList addObject:[NSString stringWithFormat:@"Address %i",nextRowCount+1]];
             NSLog(@"%@",self.dictDetailTitle);
         }
         else if([[tempDict valueForKey:kDETAILSTITLE] isEqualToString:PHONE_STRING]){
@@ -742,6 +751,7 @@
             int nextRowCount = [dataDict count];
             [dataDict setValue:@"" forKey:[NSString stringWithFormat:@"Phone %i",nextRowCount+1]];
             [self.dictDetailTitle setObject:dataDict forKey:PHONE_STRING];
+            [self.arrayPhoneList addObject:[NSString stringWithFormat:@"Phone %i",nextRowCount+1]];
             
         }
         [tableView beginUpdates];

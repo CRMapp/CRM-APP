@@ -258,7 +258,7 @@
 	[self.txtdetail setHidden:YES];
 	[self.txtView setDelegate:nil];
 	[self.txtView setDelegate:self];
-	[self.txtView setFrame:CGRectMake(self.txtdetail.frame.origin.x, 5, self.txtdetail.frame.size.width, 36)];
+	[self.txtView setFrame:CGRectMake(self.txtdetail.frame.origin.x + 40, 5, self.txtdetail.frame.size.width, 36)];
 	
 	[self addSubview:self.txtView];
 }
@@ -268,7 +268,7 @@
 	// set images in cell
 	UIImage * image = [UIImage imageNamed:@"text_box_p.png"];
 	
-	UIImageView * img = [[UIImageView alloc]initWithFrame:CGRectMake(self.lblDetailTitle.frame.origin.x + self.lblDetailTitle.frame.size.width + 5, 0, image.size.width, image.size.height)];
+	UIImageView * img = [[UIImageView alloc]initWithFrame:CGRectMake(self.lblDetailTitle.frame.origin.x + self.lblDetailTitle.frame.size.width + 45, 0, image.size.width, image.size.height)];
 	[img setImage:image];
 	[img setAutoresizingMask:UIViewAutoresizingFlexibleRightMargin];
 	[img setCenter:CGPointMake(img.center.x, self.txtdetail.center.y)];
@@ -346,7 +346,7 @@
 	
 	image = [image stretchableImageWithLeftCapWidth:20 topCapHeight:20];
 	
-	UIImageView * img = [[UIImageView alloc]initWithFrame:CGRectMake(self.lblDetailTitle.frame.origin.x + self.lblDetailTitle.frame.size.width + 5, 0, image.size.width + 100, image.size.height)];
+	UIImageView * img = [[UIImageView alloc]initWithFrame:CGRectMake(self.lblDetailTitle.frame.origin.x + self.lblDetailTitle.frame.size.width + 45, 0, image.size.width + 100, image.size.height)];
 	[img setImage:image];
 	[img setAutoresizingMask:UIViewAutoresizingFlexibleRightMargin];
 	[img setCenter:CGPointMake(img.center.x, self.txtdetail.center.y)];
@@ -652,8 +652,9 @@
     
 }
 
--(void)getDataFromDict:(NSMutableDictionary *)dictMultiValue andDict:(NSDictionary *)dict
+-(void)getDataFromDict:(NSMutableDictionary *)dictMultiValue andDict:(NSDictionary *)dict emailList:(NSMutableArray *)email urlList:(NSMutableArray *)url phoneList:(NSMutableArray *)phone addressList:(NSMutableArray *)address
 {
+    
     if(self.dictDetailTitle == nil){
     self.dictDetailTitle = dictMultiValue;
     }
@@ -663,8 +664,7 @@
     if([[dict objectForKey:kDETAILSTITLE] isEqualToString:EMAIL_STRING])
     {
         NSDictionary *tempDict = [self.dictDetailTitle objectForKey:EMAIL_STRING];
-        NSArray *currentKeys = [tempDict allKeys];
-        NSArray *currentValues = [tempDict allValues];
+        NSArray *currentKeys = email;
         int currentRow = indexPathForCell.row;
         int numberOfRow = [currentKeys count];
         if(currentRow == numberOfRow){
@@ -675,15 +675,14 @@
             
         }
         else{
-            [self.txtdetail setText:[currentValues objectAtIndex:indexPathForCell.row]];
+            [self.txtdetail setText:[tempDict valueForKey:[currentKeys objectAtIndex:indexPathForCell.row]]];
             [self.txtTitle setText:[currentKeys objectAtIndex:indexPathForCell.row]];
             [self.lblDictTitle setText:EMAIL_STRING];
         }
     }
     else if([[dict objectForKey:kDETAILSTITLE] isEqualToString:URL_STRING]){
         NSDictionary *tempDict = [self.dictDetailTitle objectForKey:URL_STRING];
-        NSArray *currentKeys = [tempDict allKeys];
-        NSArray *currentValues = [tempDict allValues];
+        NSArray *currentKeys = url;
         int currentRow = indexPathForCell.row;
         int numberOfRow = [currentKeys count];
         if(currentRow == numberOfRow){
@@ -694,15 +693,14 @@
             
         }
         else{
-            [self.txtdetail setText:[currentValues objectAtIndex:indexPathForCell.row]];
+            [self.txtdetail setText:[tempDict valueForKey:[currentKeys objectAtIndex:indexPathForCell.row]]];
             [self.txtTitle setText:[currentKeys objectAtIndex:indexPathForCell.row]];
             [self.lblDictTitle setText:URL_STRING];
         }
     }
     else if ([[dict objectForKey:kDETAILSTITLE] isEqualToString:PHONE_STRING]){
         NSDictionary *tempDict = [self.dictDetailTitle objectForKey:PHONE_STRING];
-        NSArray *currentKeys = [tempDict allKeys];
-        NSArray *currentValues = [tempDict allValues];
+        NSArray *currentKeys = phone;
         int currentRow = indexPathForCell.row;
         int numberOfRow = [currentKeys count];
         if(currentRow == numberOfRow){
@@ -713,14 +711,14 @@
             
         }
         else{
-            [self.txtdetail setText:[currentValues objectAtIndex:indexPathForCell.row]];
+            [self.txtdetail setText:[tempDict valueForKey:[currentKeys objectAtIndex:indexPathForCell.row]]];
             [self.txtTitle setText:[currentKeys objectAtIndex:indexPathForCell.row]];
             [self.lblDictTitle setText:PHONE_STRING];
         }
     }
     else if ([[dict objectForKey:kDETAILSTITLE] isEqualToString:ADDRESS_STRING]){
         NSDictionary *tempDict = [self.dictDetailTitle objectForKey:ADDRESS_STRING];
-        NSArray *allAddressType = [tempDict allKeys];
+        NSArray *allAddressType = address;
         int currentRow = indexPathForCell.row;
         int numberOfRow = [allAddressType count];
         if(currentRow == numberOfRow){

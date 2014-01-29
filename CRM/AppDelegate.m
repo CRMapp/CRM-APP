@@ -13,6 +13,7 @@
 #import "HomeViewController.h"
 #import "CountryNCodeList.h"
 #import "Industries.h"
+#import "TermsAndConditionsViewController.h"
 
 #define BUNDLE_IDENTIFIER ([[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"])
 
@@ -26,6 +27,10 @@
 #import "SVProgressHUD.h"
 
 BOOL showChangePassword = NO;
+
+@interface AppDelegate ()
+@property (nonatomic) NSDictionary *launchOptns;
+@end
 
 @implementation AppDelegate
 @synthesize isAppLaunchedFirst;
@@ -59,6 +64,66 @@ BOOL showChangePassword = NO;
     return accessGroup;
 }
 
+- (void) termsAccepted{
+    self.fileManager = [NSFileManager defaultManager];
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"appAlreadyLoaded"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    if ([Global GetPasswordCreated])
+    {
+        self.viewController = [[[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:nil] autorelease];
+        self.navigation = [[[UINavigationController alloc]initWithRootViewController:self.viewController] autorelease];
+    }
+    else
+    {
+        HomeViewController *homeObj = [[[HomeViewController alloc] initWithNibName:@"HomeViewController" bundle:nil] autorelease];
+        self.navigation = [[[UINavigationController alloc]initWithRootViewController:homeObj] autorelease];
+    }
+    [self.window setRootViewController:self.navigation];
+    
+    //    As per client requirement changes we change concept of create first sales pipe line by saving YES to launch app
+    //    [Global SaveFirstLaunchAppFlag:YES];
+    //    self.isAppLaunchedFirst = YES;
+    //Remove above two lines to apply prevoius changes
+    
+    if (![Global GetFirstLaunchAppFlag])
+    {
+        self.isAppLaunchedFirst = YES;
+        //        [Global SaveFirstLaunchAppFlag:YES];
+    }
+    else
+    {
+        [Global SaveSalePipelineFlag:NO];
+    }
+    //Flurry
+	[Flurry startSession:kFlurryApplicationKey];
+    navigation.navigationBarHidden = YES;
+    UIApplication *application = [UIApplication sharedApplication];
+    application.applicationIconBadgeNumber = 0;
+	
+	// Handle launching from a local notification
+	UILocalNotification *localNotif =
+	[self.launchOptns objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
+    if (localNotif) {
+		NSLog(@"Recieved Notification %@",localNotif);
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Alert" message:@"Notify" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+        [alert show];
+        [alert release];
+        
+	}
+    
+    //iCloud Implementation begin here
+    [self managedObjectContext];
+    id currentToken = [self.fileManager ubiquityIdentityToken];
+    isSignedIntoICloud= (currentToken!=nil);
+    
+    [self persistICloudToken];
+    [[NSNotificationCenter defaultCenter]
+     addObserver: self  selector: @selector (iCloudChangesImported:)
+     name: NSPersistentStoreDidImportUbiquitousContentChangesNotification
+     object: nil];
+    [self requestPermissionToUseICloud];
+}
+
 - (void)dealloc
 {
     [_window release];
@@ -83,72 +148,16 @@ BOOL showChangePassword = NO;
 {
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
     // Override point for customization after application launch.
-    self.fileManager = [NSFileManager defaultManager];
-//    NSString *str = [self accessGroup];
-//    NSLog(@"%@",str);
-    //[AppDelegate insert_VCFCardToiOSAddressBook];
-    
-    // Another handy thing I had to search around for a little
-    // Get the value for the "Bundle version" from the Info.plist
-    
-    if ([Global GetPasswordCreated])
-    {
-        self.viewController = [[[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:nil] autorelease];
-        self.navigation = [[[UINavigationController alloc]initWithRootViewController:self.viewController] autorelease];
+    self.launchOptns = launchOptions;
+    BOOL alreadyLoaded = [[NSUserDefaults standardUserDefaults] boolForKey:@"appAlreadyLoaded"];
+    if (alreadyLoaded) {
+        [self termsAccepted];
+    }else{
+        TermsAndConditionsViewController *viewController = [[TermsAndConditionsViewController alloc] initWithNibName:NSStringFromClass([TermsAndConditionsViewController class]) bundle:nil];
+        self.navigation = [[[UINavigationController alloc]initWithRootViewController:viewController] autorelease];
+        [self.window setRootViewController:self.navigation];
     }
-    else
-    {
-        HomeViewController *homeObj = [[[HomeViewController alloc] initWithNibName:@"HomeViewController" bundle:nil] autorelease];
-        self.navigation = [[[UINavigationController alloc]initWithRootViewController:homeObj] autorelease];
-    }
-    
-    
-//    As per client requirement changes we change concept of create first sales pipe line by saving YES to launch app
-//    [Global SaveFirstLaunchAppFlag:YES];
-//    self.isAppLaunchedFirst = YES;
-    //Remove above two lines to apply prevoius changes
-
-    if (![Global GetFirstLaunchAppFlag])
-    {
-        self.isAppLaunchedFirst = YES;
-//        [Global SaveFirstLaunchAppFlag:YES];
-    }
-    else
-    {
-        [Global SaveSalePipelineFlag:NO];
-    }
-    //Flurry
-	[Flurry startSession:kFlurryApplicationKey];
-    
-    [self.window setRootViewController:self.navigation];
-    
     [self.window makeKeyAndVisible];
-    navigation.navigationBarHidden = YES;
-    
-    application.applicationIconBadgeNumber = 0;
-	
-	// Handle launching from a local notification
-	UILocalNotification *localNotif =
-	[launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
-    if (localNotif) {
-		NSLog(@"Recieved Notification %@",localNotif);
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Alert" message:@"Notify" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
-        [alert show];
-        [alert release];
-        
-	}
-    
-    //iCloud Implementation begin here
-    [self managedObjectContext];
-    id currentToken = [self.fileManager ubiquityIdentityToken];
-    isSignedIntoICloud= (currentToken!=nil);
-
-    [self persistICloudToken];
-    [[NSNotificationCenter defaultCenter]
-     addObserver: self  selector: @selector (iCloudChangesImported:)
-     name: NSPersistentStoreDidImportUbiquitousContentChangesNotification
-     object: nil];
-    [self requestPermissionToUseICloud];
     return YES;
 }
 - (void)application:(UIApplication *)app didReceiveLocalNotification:(UILocalNotification *)notif {
